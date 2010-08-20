@@ -1,0 +1,9 @@
+This repository hosts the LaTeX source for notes and slides written by Mark
+Holder for his graduate phylogenetic methods course.  I will post images that 
+I have generated (or have been given permission to post).  
+
+However, you may have trouble texing the source because of the lack of all image
+files.  I will try to be disciplined about putting all images that I have 
+borrowed from other people (usually Paul Lewis or Joe Felsenstein) in a separate
+directory so that it will be easy for users without those directories to find 
+(and comment out) all references to those files.
