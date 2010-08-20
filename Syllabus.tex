@@ -1,0 +1,135 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\textwidth = 6.5 in
+\textheight = 8 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.05 in
+\parskip = 0.0in
+\parindent = 0.20in
+\renewcommand{\labelitemi}{$\cdot$}
+\pagestyle{empty}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{definition}{Definition}
+\usepackage{tipa}
+\usepackage{enumitem}
+% Use the natbib package for the bibliography
+%\usepackage[round]{natbib}
+%\bibliographystyle{holdercv}
+
+% Keep hyperref last among includes
+\usepackage{hyperref}
+\hypersetup{backref,  pdfpagemode=FullScreen,  urlcolor=blue, colorlinks=true, hyperindex=true}
+
+\renewcommand{\refname}{\sf Papers}
+\newcommand{\exampleMacro}[1]{\mu_{#1}}
+\setitemize{leftmargin=*} 
+\begin{document}
+{\center
+\Large
+\textsc{Biology 848: Phylogenetic Methods}\\
+\vskip 1cm
+\large Syllabus for Fall, 2010 \hskip 6cm Last Modified: {\tt  \today}
+}
+
+
+\vskip 1cm
+\noindent{\bf Lecture location and time: }\par Haworth 2025. MWF 9:00-9:50\\
+\noindent{\bf Computer lab: }\par Budig 10B. W. 10:00 AM - noon.\\
+
+\vskip 2mm
+\noindent Mark Holder -- 6031 Haworth Hall. 864-5789. \href{mailto:mtholder@ku.edu}{mtholder@ku.edu}\\
+Office hours: Tuesday 10:00-11:00 and by appointment.\\
+Email is (by far) the best way to contact me.  If I am not available via email, it is very unlikely that I will be reachable by phone.
+
+\vskip 2mm
+\noindent{\bf Source of course info:}\par
+	Course reading materials will be available on a website that is accessible through the Blackboard system: \url{http://phylo.bio.ku.edu/courses/phylomethods}\\
+
+\vskip 2mm
+\noindent{\bf Recommended Text:}\\
+Joseph Felsenstein. 2004. {\it Inferring Phylogenies}. Sinauer Associates, Inc. Sunderland, MA.\par
+
+\vskip 2mm
+\noindent{\bf Course goals:}
+This course covers state-of-the-art methods for reconstructing phylogenies. We will cover the theoretical basis for different phylogenetic analyses and learn how to use some of the software packages available for conducting these analyses. Inferences that rely heavily on phylogenetic trees (eg. analyses of character evolution, divergence time estimation, and studies of diversification rates) will also be covered.
+
+\vskip 2mm\noindent{\bf Grading:}\par
+Your grade will be determined by homework assignments and a project that will be due the last week of class.
+The term paper will make up 40\% of your grade.
+The project can consist of a new phylogenetic analysis (of your own data or published data) or a paper reviewing a research topic in phylogenetic analysis. 
+Please talk to me about your planned project before spending too much time so that we can agree that the scope is appropriate.
+
+\vskip 2mm
+\noindent{\bf Plagiarism:}\par
+No form of plagiarism will be tolerated in this course.
+This includes copying material from another student, but also includes failing to cite sources.
+See the writing guides posted at:\\
+\url{http://www.writing.ku.edu/students/guides.shtml}\\
+for a discussion of types of plagiarism. 
+
+The homework assignments should be worked on your own. 
+
+\newpage
+\noindent{\bf Students with Disabilities:}\par
+The staff of Services for Students with Disabilities coordinates accommodations and services for KU courses. Their contact information is:\\ 
+\url{http://www.disability.ku.edu/index.shtml}\\
+Room 22 Strong Hall,  \\
+(785) 864-2620 (v/tty) \\ 
+If you have a disability for which you may request accommodation in KU classes and have not contacted them, please do as soon as possible. 
+Please also see me privately in regard to this course. 
+ 
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|l|p{1.9in}|}
+\hline
+ {\bf Lecture topics} & {\bf Software} \\
+\hline
+Intro,  Statistical inference, tree terminology & \\
+\hline
+Hennigian Inference & \\
+\hline
+Compatibility/Parsimony & UNIX, text editors \\
+\hline
+Parsimony & PAUP$\ast$\\
+\hline
+Distance-based tree estimation & FastME, FastTree \\
+\hline
+Distance methods/Searching & \\
+\hline
+Models and Model selection & PAUP$\ast$\\
+\hline
+Maximum likelihood & PAUP$\ast$, GARLI, RAxML \\
+\hline
+Rate heterogeneity & \\
+\hline 
+Consistency & seq-gen \\
+\hline
+Topology testing & PAUP / CONSEL \\
+\hline
+Branch Support &  \\
+\hline
+Bayesian Phylogenetics & MrBayes \& PhyloBayes \\
+\hline
+ Ancestral character state reconstruction & Mesquite; Simmap \\
+\hline
+Comparative methods & Mesquite \\
+\hline
+Divergence time estimation & r8s, \& BEAST \\
+\hline
+Multiple Sequence Alignment & MAFFT, SAT\'e, Prank, FSA\\
+\hline
+Coalescent & LAMARC, Migrate\\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+It is {\em very} likely that we will run out of time, and not be able to cover all of these topics; so please, speak up and give me some feedback about what topics are most important to you!
+\end{document}
