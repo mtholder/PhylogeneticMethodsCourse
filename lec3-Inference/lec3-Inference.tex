@@ -1,0 +1,442 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+\begin{center}
+{\Large Many of the  slides that I'll use have been borrowed from Dr.\ Paul Lewis, Dr.\ Joe Felsenstein. Thanks!}
+\vskip 15mm
+\large Paul has many great tools for teaching phylogenetics at his web site: \\
+\url{http://hydrodictyon.eeb.uconn.edu/people/plewis}
+\end{center}
+
+
+\myNewSlide
+\section*{Genealogies within a population}
+\unitlength=1mm
+\begin{picture}(0,0)(0,0)  \put(15,-55){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../nonfreeimages/joe/wright10.pdf}
+}}
+\put(65,5){Present}
+\put(70,-120){Past}
+\put(-20,-135){Biparental inheritance would make the picture messier, but the genealogy}
+\put(-10,-145){of the gene copies would still form a tree (if there is no recombination).}
+\end{picture}
+
+\myNewSlide
+\section*{terminology: genealogical trees within population or species trees}
+It is tempting to refer to the tips of these gene trees as alleles or haplotypes.
+\begin{compactitem}
+	\item allele -- an alternative form a gene. 
+	\item haplotype -- a linked set of alleles
+\end{compactitem}
+But both of these terms require a differences in sequence.
+
+The gene trees that we draw depict genealogical relationships -- regardless of whether or not nucleotide differences distinguish the ``gene copies'' at the tips of the tree.
+
+
+\myNewSlide
+\unitlength=1mm
+\begin{picture}(0,0)(0,0)  \put(-55,-70){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/gene_tree_sp_tree_one_sp1.pdf}}}
+\end{picture}
+
+\myNewSlide
+\unitlength=1mm
+\begin{picture}(0,0)(0,0)  \put(-55,-70){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/gene_tree_sp_tree_one_sp2.pdf}}}
+\end{picture}
+
+\myNewSlide
+
+\section*{A ``gene tree'' within a species tree}
+\unitlength=1mm
+\begin{picture}(0,0)(0,0)  \put(-55,-70){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/gene_tree_sp_tree.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{terminology: genealogical trees within population or species trees}
+\begin{itemize}
+	\item coalescence -- merging of the genealogy of multiple gene copies into their common ancestor.  ``Merging'' only makes sense when viewed {\em backwards in time}.
+	\item ``deep coalescence'' or ``incomplete lineage sorting'' refer to the {\em failure} of gene copies to coalesce within the duration of the species -- the lineages coalesce in an ancestral species
+\end{itemize}
+
+
+\myNewSlide
+\section*{terminology: genealogical trees within population or species trees}
+\begin{itemize}
+	\item coalescence -- merging of the genealogy of multiple gene copies into their common ancestor.  ``Merging'' only makes sense when viewed {\em backwards in time}.
+	\item ``deep coalescence'' or ``incomplete lineage sorting'' refer to the {\em failure} of gene copies to coalesce within the duration of the species -- the lineages coalesce in an ancestral species
+\end{itemize}
+
+
+
+
+\myNewSlide
+\section*{A ``gene family tree''}
+%\unitlength=1mm
+\begin{picture}(0,0)(0,0)
+  \put(-15,-60){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../nonfreeimages/other/OpazoHS2008Fig1.pdf}}}
+\put(170,-55){\small Opazo, Hoffmann and Storz}
+\put(170,-63){\small``Genomic evidence for}
+\put(170,-71){\small independent origins of $\beta$-like}
+\put(170,-79){\small globin genes in monotremes }
+\put(170,-88){\small and therian mammals''}
+\put(170,-97){\small PNAS {\bf 105(5)} 2008}
+\end{picture}
+
+
+\myNewSlide
+\unitlength=1mm
+\begin{picture}(0,0)(0,0)
+  \put(15,-60){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../nonfreeimages/other/OpazoHS2008Fig4.pdf}}}
+\put(-15,-150){\small Opazo, Hoffmann and Storz ``Genomic evidence for independent origins of $\beta$-like}
+\put(-15,-158){\small globin genes in monotremes and therian mammals'' PNAS {\bf 105(5)} 2008}
+\end{picture}
+
+\myNewSlide
+\section*{terminology: trees of gene families}
+\begin{itemize}
+	\item duplication -- the creation of a new copy of a gene within the same genome.
+	\item homologous -- descended from a common ancestor.
+	\item paralogous --  homologous, but resulting from a gene duplication in the common ancestor. 
+	\item orthologous -- homologous, and resulting from a speciation event at the common ancestor.
+\end{itemize}
+
+
+\myNewSlide
+Multiple contexts for tree estimation (again):
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|p{5cm}|p{5cm}|p{11cm}|}
+& {\bf The cause of splitting} & {\bf Important caveats} \\
+\hline
+``Gene tree'' & DNA replication & recombination is usually ignored \\
+\hline
+Species tree Phylogeny & speciation & recombination, hybridization, and deep coalescence cause conflict in the data we use to estimate phylogenies\\
+\hline
+Gene family tree & speciation or duplication & recombination (eg. domain swapping) is not tree-like \\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+
+
+\myNewSlide
+\section*{The main subject of this course: estimating a tree from character data}
+Tree construction:
+\begin{compactitem}
+	\item strictly algorithmic approaches - use a ``recipe'' to construct a tree
+	\item optimality based approaches - choose a way to ``score'' a trees and then search for the tree that has the best score.
+\end{compactitem}
+Expressing support for aspects of the tree:
+\begin{compactitem}
+	\item bootstrapping,
+	\item testing competing trees against each other,
+	\item posterior probabilities (in Bayesian approaches).
+\end{compactitem}
+
+\myNewSlide
+\large 
+Phylogeny with complete genome + ``phenome'' as colors:\\
+\normalsize 
+\begin{picture}(0,0)(20,0)
+	\put(30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/InstantSpWithFixation.pdf}}}
+	\put(-0,-110){This figure:}
+	\put(0,-120){dramatically underestimates}
+	\put(5,-130){ polymorphism}
+	\put(0,-140){ignore geographic aspects}
+	\put(5,-150){of speciation and character evolution}
+\end{picture}
+
+
+\myNewSlide
+\large 
+Extant species are just a thin slice of the phylogeny:\\
+\begin{picture}(0,0)(20,0)
+	\put(30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/InstantSpFinalSp.pdf}}}
+\end{picture}
+
+\myNewSlide
+\large 
+Our exemplar specimens are a subset of the current diversity:\\
+\begin{picture}(0,0)(20,0)
+	\put(30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/InstantSpData.pdf}}}
+\end{picture}
+
+\myNewSlide
+\large 
+The phylogenetic inference problem:\\
+\begin{picture}(0,0)(20,0)
+	\put(30,-120){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/InstantSpInferenceProblem.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)
+	\put(10,-60){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/InstantSpWithFixationTS.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)
+	\put(10,-160){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/InstantSpWithFixTSSimple.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)
+	\put(10,-100){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/InstantSpWithFixTSSimpleInfer.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)
+	\put(10,-100){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/InstantSpWithFixTSRejectInfer.pdf}}}
+	\put(-20,-120){Multiple origins}
+	\put(-20,-130){of the yellow state}
+	\put(-20,-140){violates our assumption}
+	\put(-20,-150){that the state codes in}
+	 \put(-20,-160){our transformation scheme}
+	 \put(-20,-170){represent homologous states}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)
+	\put(-95,-160){\makebox(0,0)[l]{\includegraphics[scale=2.0]{../images/InstantSpWithFixTSComplex.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+Character matrices:\\
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+&  & \multicolumn{6}{c|}{Characters} \\
+& & 1 & 2 & 3 & 4 & 5 & 6 \\
+\hline
+\multirow{3}{*}{Taxa} & {\em Homo sapiens} & 0.13 & A & A & rounded & 1 & 1610 - 1755 \\
+ & {\em Pan paniscus} & 0.34 & A & G & flat & 2 & 0621 - 0843 \\
+  & {\em Gorilla gorilla} & 0.46 & C & G & pointed & 1 & 795 - 1362\\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
+Characters (aka ``transformation series'') are the columns.\\
+The values in the cells are character states (aka ``characters'').\\
+
+\myNewSlide
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+&  & \multicolumn{6}{c|}{Characters} \\
+& & 1 & 2 & 3 & 4 & 5 & 6 \\
+\hline
+\multirow{3}{*}{Taxa} & {\em Homo sapiens} & 0.13 & A & A & rounded & 1 & 1610 - 1755 \\
+ & {\em Pan paniscus} & 0.34 & A & G & flat & 2 & 0621 - 0843 \\
+  & {\em Gorilla gorilla} & 0.46 & C & G & pointed & 1 & 795 - 1362\\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
+Character coding:
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+&  & \multicolumn{6}{c|}{Characters} \\
+& & 1 & 2 & 3 & 4 & 5 & 6 \\
+\hline
+\multirow{3}{*}{Taxa} & {\em Homo sapiens} & 0 & A & A & 0 & 1 & 4 \\
+ & {\em Pan paniscus} & 2 & A & G & 1 & 2 & 0,1 \\
+  & {\em Gorilla gorilla} & 3 & C & G & 2 & 1 & 1,2\\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
+
+\myNewSlide
+\Large
+The meaning of homology ({\bf very roughly}):
+\begin{compactenum}
+	\item comparable (when applied to characters) 
+	\item identical by descent (when applied to character states) 
+\end{compactenum}
+
+Ideally, each possible character state would arise once in the 
+entire history of life on earth.
+
+\myNewSlide
+\large
+Instances of the filled character state are homologous\\
+Instances of the hollow character state are homologous\\
+\begin{picture}(0,0)(20,0)  \put(30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.]{../nonfreeimages/pol/monophyletic.pdf}}}
+\end{picture}
+
+\myNewSlide
+Instances of the filled character state are homologous\\
+Instances of the hollow character state are NOT homologous\\
+\begin{picture}(0,0)(0,0)
+	\put(30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/paraphyletic.pdf}}}
+\end{picture}
+
+\myNewSlide
+Instances of the filled character state are NOT homologous\\
+Instances of the hollow character state are homologous\\
+\begin{picture}(0,0)(0,0)
+	\put(30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/polyphyletic.pdf}}}
+\end{picture}
+
+
+
+\myNewSlide
+\section*{Inference}
+``deriving a conclusion based solely on what one already knows''\footnote{definition from Wikipedia, so it must be correct!}
+\begin{compactitem}
+	\item logical
+	\item statistical
+\end{compactitem}
+
+\myNewSlide
+\section*{Logical Inference}
+Deductive reasoning:
+\begin{compactenum}
+	\item start from premises
+	\item apply proper rules
+	\item arrive at statements that were not obviously contained in the premises.
+\end{compactenum}
+If the rules are valid (logically sound) and the premises are true, then the conclusions are {\em guaranteed} to be true.
+
+\myNewSlide
+\section*{Deductive reasoning}
+\begin{verbatim}
+All men are mortal.
+Socrates is a man.
+-------------------
+Therefore Socrates is mortal. 
+\end{verbatim}
+\vskip 3cm
+Can we infer phylogenies from character data using deductive reasoning?
+
+\myNewSlide
+\section*{Logical approach to phylogenetics}
+Premise: The following character matrix is correctly coded (character states are 
+homologous in the strict sense):\\
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{l|c}
+ & {1} \\
+\hline
+{taxon A} & Z\\
+{taxon B}  & Y \\
+{taxon C}  & Y \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
+
+Is there a valid set of rules that will generate the tree
+as a conclusion?
+
+\myNewSlide
+\section*{Logical approach to phylogenetics (cont)}
+Rule: Two taxa that share a character state must be more closely
+related to each other than either is to a taxon that displays
+a different state.
+
+Is this a valid rule?
+
+\myNewSlide
+\section*{Invalid rule}
+Here is an example in which we are confident that the homology statements
+are correct, but our rule implies two conflicting trees:
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{l|c|c}
+ & {\begin{sideways}\parbox{15mm}{placenta}\end{sideways}} & {\begin{sideways}\parbox{35mm}{vertebra}\end{sideways}}\\
+\hline
+{\em Homo sapiens} & Z & A \\
+{\em Rana catesbiana}  & Y & A \\
+{\em Drosophila melanogaster}  & Y & B \\
+
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
+
+\myNewSlide
+\section*{Hennigian logical analysis}
+The German entomologist Willi Hennig (in addition to 
+providing strong arguments for phylogenetic classifications)
+clarified the logic of phylogenetic inference.
+
+Hennig's correction to our rule: Two taxa that share a 
+{\bf derived} character state must be more closely
+related to each other than either is to a taxon that 
+displays the {\bf primitive} state.
+
+
+
+\myNewSlide
+\section*{Hennig's logic is valid}
+Here we will use 0 for the primitive state, and 1 for the derived state.
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{l|c|c}
+ & {\begin{sideways}\parbox{15mm}{placenta}\end{sideways}} & {\begin{sideways}\parbox{35mm}{vertebra}\end{sideways}}\\
+\hline
+{\em Homo sapiens} & 1 & 1 \\
+{\em Rana catesbiana}  & 0 & 1 \\
+{\em Drosophila melanogaster}  & 0 & 0 \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
+Now the character ``placenta'' does not provide a grouping, but ``vertebra''
+groups human and frog as sister taxa.
+
+\myNewSlide
+\section*{Hennigian terminology}
+prefixes:
+\begin{compactitem}
+	\item ``apo'' - refers to the new or derived state
+	\item ``plesio'' - refers to the primitive state
+    \item ``syn'' or ``sym'' - used to indicate shared between taxa
+    \item ``aut'' - used to indicate a state being unique to one taxon
+\end{compactitem}
+
+\myNewSlide
+\section*{Hennigian rules}
+\begin{compactitem}
+	\item synapomorphy - shared, derived states. Used to diagnose monophyletic groups.
+	\item symplesiomorphy - shared, primitive states. Diagnose icky, unwanted paraphyletic groups.
+	 \item autapomorphy -- a unique derived state. {\bf No} evidence of phylogenetic relationships.
+	 \item constant characters -- columns in a matrix with no variability between taxa. {\bf No} evidence of phylogenetic relationships.
+\end{compactitem}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)
+	\put(-10,-60){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/ppmphyletic.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\section*{Hennigian inference}
+When we create a character matrix for Hennig's system, it is crucial that:
+\begin{compactitem}
+	\item traits assigned the same state represent homologous states (trace back to the MRCA)
+	\item we correctly identify the directionality of the transformations (which state is plesiomorphic and which is apomorphic).
+	The process of identifying the direction of change is called polarization.
+\end{compactitem}
+
+Polarization could be done based on developmental considerations, paleontological evidence, or biogeographic considerations, but the most common technique is outgroup polarization.
+
+\end{document}
+
+
+\myNewSlide
+\bibliography{../phylo848}
+\end{document}
