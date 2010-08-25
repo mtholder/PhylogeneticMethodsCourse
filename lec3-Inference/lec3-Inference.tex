@@ -299,6 +299,43 @@ Instances of the hollow character state are homologous\\
 	\item statistical
 \end{compactitem}
 
+
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data0.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data0_5.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-173){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-173){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data2.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data3.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data4.pdf}}}
+\end{picture}
+
+
+
 \myNewSlide
 \section*{Logical Inference}
 Deductive reasoning:
@@ -434,7 +471,475 @@ When we create a character matrix for Hennig's system, it is crucial that:
 
 Polarization could be done based on developmental considerations, paleontological evidence, or biogeographic considerations, but the most common technique is outgroup polarization.
 
+
+
+\myNewSlide
+\begin{table}[htdp]
+\begin{center}
+\label{coloredPerfect}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+ & \multicolumn{10}{c|}{Character \#} \\ 
+Taxon &\color{blue} 1 & \color{blue} 2 & \color{blue} 3 & \color{blue} 4 & \color{blue} 5 & \color{green} 6 & \color{green} 7 & \color{green} 8 & \color{green} 9 & \color{red} 10  \\ 
+\hline 
+A &    \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{green} 0 & \color{green} 0 & \color{green} 0 & \color{green} 0 & \color{red} 0 \\
+B &    \color{blue} 1 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 1 \\
+C &    \color{blue} 0 & \color{blue} 1 & \color{blue} 1 & \color{blue} 1 & \color{blue} 0 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 1 \\
+D &    \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 0 \\
+\hline 
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\begin{center}
+\begin{picture}(-90,0)(20,20)
+	\thicklines
+	\put(-26,17){B} 
+	\put(14,-53){C} 
+	\put(-46,-93){D}
+	\put(-50,20){\line(1,0){20}} 
+	\put(-50,-50){\line(1,0){60}} 
+	\put(-50,-50){\line(0,1){70}} 
+	\put(-70,-10){\line(1,0){20}} 
+	\put(-70,-90){\line(1,0){20}} 
+	\put(-70,-90){\line(0,1){80}} 
+	\put(-150,-50){\line(1,0){80}}
+	\put(-150,-120){\line(1,0){10}} 
+	\put(-150,-120){\line(0,1){70}} 
+	\put(-136,-123){A} 
+	\put(50,7){B C} 
+	\put(-40,17){\color{blue} \line(0,1){6}}
+	\put(-42,7){\color{blue}1}
+	\put(-33,-53){\color{blue} \line(0,1){6}}
+	\put(-24,-53){\color{blue} \line(0,1){6}}
+	\put(-15,-53){\color{blue} \line(0,1){6}}
+	\put(-35,-63){\color{blue}2 3 4}
+	\put(-60,-93){\color{blue} \line(0,1){6}}
+	\put(-62,-103){\color{blue}5}
+	\put(-60,-13){\color{red} \line(0,1){6}}
+	\put(-66,-23){\color{red}10}
+	\put(-123,-53){\color{green} \line(0,1){6}}
+	\put(-113,-53){\color{green} \line(0,1){6}}
+	\put(-104,-53){\color{green} \line(0,1){6}}
+	\put(-95,-53){\color{green} \line(0,1){6}}
+	\put(-125,-63){\color{green}6 7 8 9}
+	\put(55,10){\oval(30,20)} 
+	\put(55,-10){D} 
+	\put(65,5){\oval(60,40)} 
+	\put(55,-27){A}
+\end{picture}
+\end{center}
+
+\myNewSlide
+Interestingly, without polarization Hennig's method
+can infer unrooted trees.
+We can get the tree topology, but be unable to tell 
+paraphyletic from monophyletic groups.
+
+The outgroup method amounts to inferring an unrooted
+tree and then rooting the tree on the branch that
+leads to an outgroup.
+
+\myNewSlide
+\begin{center}
+\begin{picture}(-90,0)(20,20)
+	\thicklines
+	\put(-26,17){B} 
+	\put(14,-53){C} 
+	\put(-99,17){D}
+	\put(-50,20){\line(1,0){20}} 
+	\put(-50,-50){\line(1,0){60}} 
+	\put(-50,-50){\line(0,1){70}} 
+	\put(-70,-10){\line(1,0){20}} 
+	\put(-90,20){\line(1,0){20}} 
+	\put(-70,-50){\line(0,1){70}} 
+	\put(-140,-50){\line(1,0){70}}
+	\put(-150,-55){A} 
+	\put(50,7){B}
+	\put(50,-20){A}
+ 	\put(35,-5){\color{red}\line(1,0){70}} 
+	\put(80,7){C} 
+	 \put(80,-20){D} 
+	\put(-40,17){\color{blue} \line(0,1){6}}
+	\put(-42,7){\color{blue}1}
+	\put(-33,-53){\color{blue} \line(0,1){6}}
+	\put(-24,-53){\color{blue} \line(0,1){6}}
+	\put(-15,-53){\color{blue} \line(0,1){6}}
+	\put(-35,-63){\color{blue}2 3 4}
+	\put(-80,17){\color{blue} \line(0,1){6}}
+	\put(-82,7){\color{blue}5}
+	\put(-60,-13){\color{red} \line(0,1){6}}
+	\put(-66,-23){\color{red}10}
+	\put(-123,-53){\color{green} \line(0,1){6}}
+	\put(-113,-53){\color{green} \line(0,1){6}}
+	\put(-104,-53){\color{green} \line(0,1){6}}
+	\put(-95,-53){\color{green} \line(0,1){6}}
+	\put(-125,-63){\color{green}6 7 8 9}
+\end{picture}
+\end{center}
+
+
+\myNewSlide
+\section*{Inadequacy of logic}
+Unfortunately, though Hennigian logic is valid we quickly find that we
+do not have a reliable method of generating accurate homology statements.
+
+The logic is valid, but we don't know that the premises are true.  
+
+In fact, we almost always find that it is impossible for all of our premises to be true.
+
+
+\myNewSlide
+\section*{Character conflict}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{l|l}
+ &  \\
+\hline
+{\em Homo sapiens} & {\tt A{\color{red} G}TTCAAG{\color{green} T}} \\
+{\em Rana catesbiana}  & {\tt A{\color{red} A}TTCAAG{\color{green} T}} \\
+{\em Drosophila melanogaster}  & {\tt A{\color{red} G}TTCAAG{\color{green} C}} \\
+{\em C. elegans}  & {\tt A{\color{red} A}TTCAAG{\color{green} C}} \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
+The red character implies that either ({\em Homo + Drosophila}) is a group (if G is derived) and/or
+({\em Rana + C. elegans}) is a group.\\
+The green character implies that either ({\em Homo + Rana}) is a group (if T is derived) and/or
+({\em Drosophila + C. elegans}) is a group.\\
+The green and red character cannot both be correct.
+
+
+\myNewSlide
+\begin{table}[htdp]
+\begin{center}
+\label{coloredHomoplasy}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+ & \multicolumn{12}{c|}{Character \#} \\ 
+Taxon &\color{blue} 1 & \color{blue} 2 & \color{blue} 3 & \color{blue} 4 & \color{blue} 5 & \color{green} 6 & \color{green} 7 & \color{green} 8 & \color{green} 9 & \color{red} 10 & \color{red} 11 &  \color{red} 12   \\ 
+\hline 
+A & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{green} 0 & \color{green} 0 & \color{green} 0 & \color{green} 0 & \color{red} 0 & \color{red} 0 & \color{red} 0  \\
+B & \color{blue} 1 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 1 & \color{red} 1 & \color{red} 1 \\
+C &    \color{blue} 0 & \color{blue} 1 & \color{blue} 1 & \color{blue} 1 & \color{blue} 0 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 1 & \color{red} 1 & \color{red} 0\\
+D &    \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 0 & \color{red} 0 & \color{red} 1\\
+\hline 
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\label{mpnesting}
+\begin{picture}(0,0)(20,20)
+	\thicklines
+	\put(15,-35){C} 
+	\put(-45,-35){B} 
+	\put(-45,-75){D} 
+	\put(19,-32){{\color{blue}\oval(40,40)}} 
+	\put(19,-32){{\color{blue}\oval(30,30)}} 
+	\put(19,-32){{\color{blue}\oval(20,20)}} 
+	\put(-41,-72){{\color{blue}\oval(20,20)}} 
+	\put(-41,-32){{\color{blue}\oval(20,20)}} 
+	\put(-40,-52){{\color{red}\oval(30,70)}} 
+	\put(-10,-32){{\color{red}\oval(120,45)}} 
+	\put(-10,-32){{\color{red}\oval(125,52)}} 
+	\put(15,-47){{\color{green}\oval(180,95)}} 
+	\put(15,-47){{\color{green}\oval(185,102)}} 
+	\put(15,-47){{\color{green}\oval(190,109)}} 
+	\put(15,-47){{\color{green}\oval(195,116)}} 
+	\put(135,-30){A} 
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+
+\myNewSlide
+\section*{Character conflict}
+Two characters are compatible if they can both be mapped on the 
+same tree so that all of the character states displayed could 
+be homologous.
+
+Incompatible characters are evidence of {\em homoplasy} in the data
+
+Homoplasy literally means the ``same change'' has occurred more than 
+once in the evolutionary history of the group.
+
+The presence of homoplasy undermines Hennigian analyses.
+
+
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/all_matrices.pdf}}}
+	\put(-20,-50){white = space}
+	\put(-15,-60){of all possible}	
+	\put(-15,-70){matrices}	
+\end{picture}
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/110_matrices.pdf}}}
+	\put(-23,-50){blue = space}
+	\put(-23,-60){of matrices with}	
+	\put(-23,-70){the pattern:}	
+	\put(-10,-85){{\tt A B C D}}	
+	\put(-10,-95){{\tt - * * -}}	
+\end{picture}
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/101_matrices.pdf}}}
+	\put(-23,-50){red = space}
+	\put(-23,-60){of matrices with}	
+	\put(-23,-70){the pattern:}	
+	\put(-10,-85){{\tt A B C D}}	
+	\put(-10,-95){{\tt - * - *}}	
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/011_matrices.pdf}}}
+	\put(-23,-50){yellow = space}
+	\put(-23,-60){of matrices with}	
+	\put(-23,-70){the pattern:}	
+	\put(-10,-85){{\tt A B C D}}	
+	\put(-10,-95){{\tt - - * *}}	
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/all_matrices_partitioned.pdf}}}
+	\put(-23,-50){all eight}
+	\put(-23,-60){categories of}	
+	\put(-23,-70){matrices}	
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/treeAB_matrices.pdf}}}
+	\put(-23,-50){blue = space}
+	\put(-23,-60){of matrices }	
+	\put(-23,-70){compatible}	
+	\put(-23,-80){with tree:}	
+	\put(-20,-95){{\tt (A,(B,C),D)}}	
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/treeAC_matrices.pdf}}}
+	\put(-23,-50){blue = space}
+	\put(-23,-60){of matrices }	
+	\put(-23,-70){compatible}	
+	\put(-23,-80){with tree:}	
+	\put(-20,-95){{\tt (A,C,(B,D))}}	
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/treeBC_matrices.pdf}}}
+	\put(-23,-50){blue = space}
+	\put(-23,-60){of matrices }	
+	\put(-23,-70){compatible}	
+	\put(-23,-80){with tree:}	
+	\put(-20,-95){{\tt (A,B,(C,D))}}	
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0) 
+	\put(35,-113){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/inference_from_matrices.pdf}}}
+	\put(-25,-20){Hennigian:}
+	\put(-25,-30){grey = any tree}
+	\put(-25,-40){blue = B+C}
+	\put(-25,-50){red = B+D}
+	\put(-25,-60){yellow = C+D}
+	\put(-25,-70){white = no tree }
+	\put(-20,-80){(conflicting }
+	\put(-20,-90){characters) }
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-173){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/3trees_to_data.pdf}}}
+\end{picture}
+
+\myNewSlide
+What can we do if our data end up in the white (character conflict) or grey (uninformative characters only) zone?
+
+\begin{itemize}
+	\item can we detect character conflict?
+	\item is there a logic-based solution to the problem of character conflict?
+\end{itemize}
+
+\myNewSlide
+\section*{Detecting character conflict in binary characters}
+Consider the four possible combinations of states in a two-character matrix.
+
+The characters are incompatible {\em iff} (when you look across all taxa) you see all four state combinations.
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|lc|c|c|}
+\hline
+& & \multicolumn{2}{c|}{Char 1} \\
+& & 0 & 1\\
+\hline
+\multirow{2}{*}{Char 2} & 0 & $\times$ & $\times$ \\
+& 1 & $\times$ & $\times$ \\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
+
+\myNewSlide
+What can we do if our data end up in the white (character conflict) or grey (uninformative characters only) zone?
+
+\begin{itemize}
+	\item {\color{grey} Can we detect character conflict? Yes}
+	\item Is there a logic-based solution to the problem of character conflict?
+	\begin{itemize}
+		\item recoding characters? 
+	   \item ``reciprocal illumination''?
+	\end{itemize}	
+\end{itemize}
+
+\myNewSlide
+What can we do if our data end up in the white (character conflict) or grey (uninformative characters only) zone?
+
+\begin{itemize}
+	\item {\color{grey} Can we detect character conflict? Yes}
+	\item Is there a logic-based solution to the problem of character conflict? No, nothing purely based on logic (and the suggestions are in danger of leading to unreproducible analyses).
+	\item What can we do?
+\end{itemize}
+We must have an ``error model''
+
+\myNewSlide
+\section*{Statistical inference}
+There are many ways to derive estimators, we are going 
+to talk about maximum likelihood estimation:
+\Large
+\begin{eqnarray*}
+	\theta & \in & \Theta \\
+	X & \in & \mathcal{X} \\
+	x & \sim & \Pr(X=x|\theta)\\
+	\mathcal{L}(\theta) & = & \Pr(X=x|\theta)\\ 
+	\hat{\theta} & = & \arg\max \mathcal{L}(\theta)
+\end{eqnarray*}
+
+
+
+\myNewSlide
+\huge
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data0.pdf}}}
+	\put(150,-35){$\Theta$}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data0_5.pdf}}}
+	\put(150,-35){$\theta\in\Theta$}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-173){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/data_of_tree_to_data.pdf}}}
+	\put(170,-55){$\mathcal{X}$}
+\end{picture}
+
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-173){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data1_5.pdf}}}
+	\put(170,-55){$\Pr(X=x|\theta)$}
+\end{picture}
+
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-173){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data2.pdf}}}
+	\put(160,-55){$x \sim \Pr(X=x|\theta)$}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data2_5.pdf}}}
+	\put(60,-70){$x$ represents}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data3.pdf}}}
+	\put(20,10){$\theta_1$}
+	\put(20,-60){$\theta_2$}
+	\put(20,-130){$\theta_3$}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data3_5.pdf}}}
+	\put(20,10){$\theta_1$}
+	\put(20,-60){$\theta_2$}
+	\put(20,-130){$\theta_3$}
+	\put(120,10){$\Pr(x|\theta_1) = 0.00024$}
+	\put(115,-30){\large $0.00024$}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data3_5.pdf}}}
+	\put(20,10){$\theta_1$}
+	\put(20,-60){$\theta_2$}
+	\put(20,-130){$\theta_3$}
+	\put(120,10){$\Pr(x|\theta_2) = 0.0002$}
+	\put(115,-30){\large $0.00024$}
+	\put(97,-70){\large $0.0002$}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data3_5.pdf}}}
+	\put(20,10){$\theta_1$}
+	\put(20,-60){$\theta_2$}
+	\put(20,-130){$\theta_3$}
+	\put(120,10){$\Pr(x|\theta_3) = 0.00022$}
+	\put(115,-30){\large $0.00024$}
+	\put(97,-70){\large $0.0002$}
+	\put(115,-110){\large $0.00022$}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(20,20)
+	\put(35,-153){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/tree_to_data4.pdf}}}
+	\put(120,-5){$\hat{\theta} = \arg\max \mathcal{L}(\theta)$}
+\end{picture}
+
+
+\myNewSlide
+\section*{ML Estimation}
+\large
+\begin{itemize}
+	\item Flexible form of inference
+	\item Requires a model: $\Pr(X=x|\theta)$
+\end{itemize}
+Under mild conditions, ML estimation is asymptotically:
+\begin{itemize}
+	\item unbiased,
+	\item efficient
+\end{itemize}
+How can we come up with a model?
 \end{document}
+
+
+
+
+
+
+
 
 
 \myNewSlide
