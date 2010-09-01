@@ -1,29 +1,58 @@
-\documentclass[landscape]{foils} 
-\input{../common-preamble-start}
-\input{../preamble.tex}
-\input{../common-preamble-end}
+\documentclass[11pt]{article}
+%\usepackage{graphicx}
+%\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\pagestyle{empty}
+\usepackage{paralist} %compactenum
+
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{definition}{Definition}
+\usepackage{tipa}
+\usepackage{amsfonts}
+\usepackage[mathscr]{eucal}
+
+\newcommand{\exampleMacro}[1]{\mu_{#1}}
+
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{backref,  pdfpagemode=FullScreen,  linkcolor=blue, citecolor=red, colorlinks=true, hyperindex=true}
+
 \begin{document}
-\pagecolor{white}
-\unitlength=1mm
-\myNewSlide
 \section*{Homework 2 -- Due Wed.~Sept.~1}
+{
+\Large
 Find the tree that displays the greatest number of splits ({\em not} the set of most strongly supported splits) from the table shown below.
 Write the tree in Newick notation with the `Freq' shown as the branch length.
 \begin{center}
 {\tt 
 \begin{tabular}{|lp{0.1cm}r|}
 \hline
-123456789 & & Freq \\
+{\tt 123456789} & & Freq \\
 \hline
-...*..*.. & & 60 \\
-*......*. & & 55 \\
-*..*..**. & & 45 \\
-*..***.** & & 21 \\
-.****.*.. & & 15 \\
+{\tt ...*..*..} & & 60 \\
+{\tt *......*.} & & 55 \\
+{\tt *..*..**.} & & 45 \\
+{\tt *..***.**} & & 21 \\
+{\tt .****.*..} & & 15 \\
 \hline
 \end{tabular}
 }
 \end{center}
-
-
+The recommended route to a solution is to:
+\begin{compactenum}
+	\item Construct a split compatibility graph (the nodes represent splits and you put an edge to connect each pair of nodes if those nodes are compatible).
+	\item Identify the largest clique in the graph (the largest subgraph in which each node is adjacent to every other node).
+	\item Construct the tree that contains the splits that are represented by the nodes in the maximal clique.
+	\item Label the edges of the tree with the frequency value that corresponds to the split that the edge maps to.
+\end{compactenum}
+}
 \end{document}
