@@ -18,7 +18,7 @@ A PyQT-dependent library that can depict simple trees, the pattern frequencies i
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          # -*- Extra requirements: -*-
+        # 'PyQt4', # we do depend on PyQt4, but they are not setuptools-friendly
       ],
       entry_points="""
       # -*- Entry points: -*-

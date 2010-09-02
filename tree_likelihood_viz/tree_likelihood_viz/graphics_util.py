@@ -1,10 +1,13 @@
-#!/usr/bin/env python
-__all__ = ['cfn.py',
-           'histo_window.py',
-           'simple_tree_drawing.py',
-           'simple_tree.py',
-           'utility'
-           ]
+try:
+    from PyQt4 import QtGui, QtCore
+except:
+    sys.stderr.write("PyQt4 must be installed!")
+    raise
+
+class TopologyDisplay:
+    colors = [QtCore.Qt.red, QtCore.Qt.blue, QtCore.Qt.green]
+    txt_fmt = ['<font color="red">%s</font>', '<font color="blue">%s</font>', '<font color="green">%s</font>']
+    best_txt_fmt = ['<font color="red"><u>%s</u></font>', '<font color="blue"><u>%s</u></font>', '<font color="green"><u>%s</u></font>']
 ################################################################################
 # tree_likelihood_viz is a small package for creating interactive graphical
 #   depictions of quantities related to the calculation of likelihood on

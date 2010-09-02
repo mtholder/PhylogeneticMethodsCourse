@@ -9,3 +9,6 @@ lec*/*.pdf
 homework*/*.pdf
 prevSemester
 images
+*.pyc
+tree_likelihood_viz/build
+tree_likelihood_viz/dist
