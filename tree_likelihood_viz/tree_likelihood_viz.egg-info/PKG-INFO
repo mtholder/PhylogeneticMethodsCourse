@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: tree-likelihood-viz
+Version: 0.0dev
+Summary: Visualizations of the likelihood on trees using a few simple models of character evolution
+Home-page: http://github.com/mtholder/PhylogeneticMethodsCourse
+Author: Mark T. Holder
+Author-email: mtholder@gmail.com
+License: GPL
+Description: A PyQT-dependent library that can depict simple trees, the pattern frequencies implied by simpl e models and likelihoods.
+Keywords: phylogenetics teaching likelihood
+Platform: UNKNOWN
