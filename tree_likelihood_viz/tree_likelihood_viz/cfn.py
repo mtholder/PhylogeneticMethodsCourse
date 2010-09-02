@@ -62,13 +62,13 @@ class BranchLengthModel(Model):
     SEPARATE_LENGTH, EQUAL_LENGTHS = (0,1)
     PROB_CHANGE, EXPECTED_NUM_CHANGES = (0,1)
     def __init__(self, param_list, interpretation=PROB_CHANGE):
-        Model.__init___(self, param_list)
+        Model.__init__(self, param_list)
         self.interpretation = interpretation
 
 class CharModel(Model):
     def __init__(self, param_list=None, **kwargs):
-        Model.__init___(self, param_list)
-        branch_length_mode = kwargs.get('branch_length_mode', PROB_CHANGE) 
+        Model.__init__(self, param_list)
+        self.branch_length_mode = kwargs.get('branch_length_mode', BranchLengthModel.PROB_CHANGE) 
         self.conditioning = DataConditioning.NONE
 
     def get_num_states(self):
@@ -78,6 +78,7 @@ class CharModel(Model):
         if self.branch_length_mode == BranchLengthModel.PROB_CHANGE:
             return float(self.num_states - 1) / self.num_states 
         return float('inf')
+    max_branch_length = property(get_max_branch_length)
 
 
 class CFN(CharModel):

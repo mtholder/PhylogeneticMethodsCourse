@@ -18,19 +18,19 @@ char_model = CFN()
 class CFNLikelihoodApp(QtGui.QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
-        self.setWindowTitle('tree likelihood visualizer')
+        self.setWindowTitle('CFN Tree likelihood visualizer')
         sb = self.statusBar()
-        blm = generate_branch_length_model(topology=TopologyEnum.AB, char_model)
-        self.abTree = Tree(topology=TopologyEnum.AB, char_model, blm)
+        blm = generate_branch_length_model(topology=TopologyEnum.AB, char_model=char_model)
+        self.abTree = Tree(topology=TopologyEnum.AB, char_model=char_model, branch_length_model=blm)
         self.abTreeW = TreeWorkspace(self.abTree)
 
-        blm = generate_branch_length_model(topology=TopologyEnum.AC, char_model)
-        self.acTree = Tree(topology=TopologyEnum.AC, char_model, blm)
+        blm = generate_branch_length_model(topology=TopologyEnum.AC, char_model=char_model)
+        self.acTree = Tree(topology=TopologyEnum.AC, char_model=char_model, branch_length_model=blm)
         self.acTreeW = TreeWorkspace(self.acTree)
 
-        blm = generate_branch_length_model(topology=TopologyEnum.AD, char_model)
-        self.adTree = Tree(topology=TopologyEnum.AD, char_model, blm)
-        self.adTreeW = TreeWorkspace(self.acTree)
+        blm = generate_branch_length_model(topology=TopologyEnum.AD, char_model=char_model)
+        self.adTree = Tree(topology=TopologyEnum.AD, char_model=char_model, branch_length_model=blm)
+        self.adTreeW = TreeWorkspace(self.adTree)
 
         self.lnL = LnLWorkspace(prob_sources=[self.abTree, self.acTree, self.adTree])
         self.abTreeW.lnLPanel = self.lnL
@@ -40,6 +40,7 @@ class CFNLikelihoodApp(QtGui.QMainWindow):
         self.abTreeW.move(500,20)
         self.acTreeW.move(520,40)
         self.adTreeW.move(530,50)
+
     def show(self):
         self.acTreeW.show()
         self.abTreeW.show()

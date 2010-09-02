@@ -1,12 +1,16 @@
 #!/usr/bin/env python
+import math, sys
+
 SHOW_DATA_BARS = [True, True, True, True]
 try:
-    from PyQt4 import QtGui
+    from PyQt4 import QtGui, QtCore
 except:
     sys.stderr.write("PyQt4 must be installed!")
     raise
 
 from tree_likelihood_viz.graphics_util import TopologyDisplay
+from tree_likelihood_viz.utility import debug
+from tree_likelihood_viz.optimizer import calc_ln_L_from_counts
 
 class MultiBarWidget(QtGui.QWidget):
     def __init__(self, parent):
@@ -43,7 +47,10 @@ class LnLWorkspace(QtGui.QDialog):
         QtGui.QWidget.__init__(self, parent)
         assert(len(prob_sources) == 3)
         self.prob_sources = prob_sources
-        abp, acp, adp = [i.calc_pat_probs() for i in self.prob_sources]
+        abp, acp, adp = [i.calc_pat_probs(False) for i in self.prob_sources]
+        for i, p in enumerate(self.prob_sources):
+            f = lambda : self.prob_vec_updated(i)
+
         self.setWindowTitle("Data and Likelihoods")
         gridLayout = QtGui.QGridLayout()
         dheader = QtGui.QLabel("Data (counts)")
@@ -106,8 +113,12 @@ class LnLWorkspace(QtGui.QDialog):
             else:
                 SHOW_DATA_BARS[n] = False
         self.repaint()
+    def prob_vec_updated(self, prob_vec_index):
+        debug("prob_vec_updated(%d)" % prob_vec_index)
+        self.repaint()
+
     def counts_changed(self):
-        abp, acp, adp = [i.calc_pat_probs() for i in self.prob_sources]
+        abp, acp, adp = [i.calc_pat_probs(False) for i in self.prob_sources]
         c = [float(i.text() or 0) for i in self.data_counts]
         #print c
         t = sum(c)
@@ -167,18 +178,7 @@ class LnLWorkspace(QtGui.QDialog):
     def calc_ln_L(self):
         c = self.get_counts()
         freqs = [i.calc_pat_probs() for i in self.prob_sources]
-        return [self.calc_ln_L_from_counts(c, f) for f in freqs]
-    def calc_ln_L_from_counts(self, counts, freqs):
-        sum = 0.0
-        for n, c in enumerate(counts):
-            if c > 0:
-                f = freqs[n]
-                try:
-                    char_ln_l = c*math.log(f)
-                except ValueError:
-                    return float('-inf')
-                sum += char_ln_l
-        return sum
+        return [calc_ln_L_from_counts(c, f) for f in freqs]
     def set_counts(self, pattern_count_data):
         for n, x in enumerate(pattern_count_data):
             try:

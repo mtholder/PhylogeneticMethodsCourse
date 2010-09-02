@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import sys
 import os
 import random
 def randomly_choose_indices(p, n):
@@ -39,11 +40,16 @@ def obtain_initial_pattern_counts(num_patterns):
 
     if pattern_count_filename:
         try:
-            pattern_count_data = parse_counts_from_fn(pattern_count_filename)
+            pattern_count_data = parse_counts_from_fn(pattern_count_filename, num_patterns)
         except:
             sys.exit("Expecting %s to be a file of pattern counts (one-per line)." % pattern_count_filename)
     else:
         pattern_count_data = [0]*num_patterns
+    return pattern_count_data
+
+def debug(msg):
+    sys.stderr.write('debug: %s\n' % msg)
+
 ################################################################################
 # tree_likelihood_viz is a small package for creating interactive graphical
 #   depictions of quantities related to the calculation of likelihood on

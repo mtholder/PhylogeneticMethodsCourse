@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 import math
 try:
-    from PyQt4 import QtGui
+    from PyQt4 import QtGui, QtCore
 except:
     sys.stderr.write("PyQt4 must be installed!")
     raise
 
 
-
 from tree_likelihood_viz.simple_tree import BranchEnum, TopologyEnum
-from tree_likelihood_viz.utility import randomly_choose_indices
+from tree_likelihood_viz.utility import randomly_choose_indices, debug
 from tree_likelihood_viz.graphics_util import TopologyDisplay
-
+from tree_likelihood_viz.optimizer import TOL, TreeLikelihoodFunc, do_opt
 # ratios of dimensions for 45 degree lines
 HYP_OVER_HORIZ = math.sqrt(2)
 HORIZ_OVER_HYP = 1/HYP_OVER_HORIZ
@@ -19,7 +18,7 @@ HYP_OVER_VERT = math.sqrt(2)
 VERT_OVER_HYP = 1/HYP_OVER_VERT
 
 
-TOL = 0.000001
+
 
 
 class TreeWorkspace(QtGui.QDialog):
@@ -29,7 +28,7 @@ class TreeWorkspace(QtGui.QDialog):
     def __init__(self, tree, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.tree = tree
-        self.lnLPanel = None
+        self._lnLPanel = None
         
         self.setWindowTitle(self.tree.name)
 
@@ -39,7 +38,7 @@ class TreeWorkspace(QtGui.QDialog):
         self.free_parameters = []
         self.opt_buttons = []
         self.opt_all_callbacks = []
-
+        self.MAX_BRANCH_LEN = 0.0
         for i, p in enumerate(self.tree.branch_length_list):
             lab = QtGui.QLabel("length of '%s'" % p.name)
             self.labels.append(lab)
@@ -47,11 +46,13 @@ class TreeWorkspace(QtGui.QDialog):
 
             sb = QtGui.QDoubleSpinBox()
             sb.setRange(p.min_val, p.max_val)
+            self.MAX_BRANCH_LEN = max(self.MAX_BRANCH_LEN, p.max_val)
             sb.setDecimals(4)
             sb.setSingleStep(float(p.max_val - p.min_val)/100.0)
             sb.setValue(p.value)
             
             if self.tree.branch_is_free(p):
+                debug("FREE param")
                 sb.setEnabled(True)
                 gridLayout.addWidget(sb, i, 1)
                 self.spinboxes.append(sb)
@@ -64,8 +65,10 @@ class TreeWorkspace(QtGui.QDialog):
                 self.opt_all_callbacks.append(opt_callback)
                 self.free_parameters.append(p)
             else:
+                debug("NON-FREE param")
                 sb.setEnabled(False)
                 self.free_parameters.append(None)
+            p.setValueListeners.append(self)
             p.setValueListeners.append(sb)
 
         opt = QtGui.QPushButton("Optimize all")
@@ -95,8 +98,8 @@ class TreeWorkspace(QtGui.QDialog):
         gridLayout.setRowMinimumHeight(6, 250)
         gridLayout.addWidget(self.treeCanvas, 6, 0, 1, 5)
         self.treePaintX, self.treePaintY = (50, 300)
-        self.treePaintScaler = 300
-        self.treePen = QtGui.QPen(TopologyDisplay.colors[self.topology], 2, QtCore.Qt.SolidLine)
+        self.treePaintScaler = 290
+        self.treePen = QtGui.QPen(TopologyDisplay.colors[self.tree.topology], 2, QtCore.Qt.SolidLine)
         sim = QtGui.QPushButton("Simulate...")
         self.load_data_button = QtGui.QPushButton("Load Data")
         gridLayout.addWidget(sim, 9, 0)
@@ -114,6 +117,15 @@ class TreeWorkspace(QtGui.QDialog):
         self.setLayout(gridLayout)
         self.resize(570, 400)
 
+    def get_lnL_panel(self):
+        return self._lnLPanel
+    def set_lnL_panel(self, p):
+        self._lnLPanel = p
+    lnLPanel = property(get_lnL_panel, set_lnL_panel)
+
+
+    def setValue(self, ignored_val):
+        self.repaint()
     def simulate(self):
         if not self.lnLPanel:
             return
@@ -144,48 +156,16 @@ class TreeWorkspace(QtGui.QDialog):
                     sys.stderr.write("Error reading data from %s" % pattern_count_filename)
 
 
-    def do_opt(self, parameter, curr_step=0.04):
+    def call_opt(self, parameter, curr_step=0.04):
         calc = self.lnLPanel
         if not calc:
             return
         data = calc.get_counts()
         if sum(data) == 0.0:
             return
-        curr_pat_p = self.tree.calc_pat_probs()
-        curr_v = parameter.value
-        curr_lnL = calc.calc_ln_L_from_counts(data, curr_pat_p)
-        best_v, best_lnL = curr_v, curr_lnL
-        lower_lnL = None
-        lower_v = curr_v
-        higher_lnL = None
-        higher_v = curr_v
-        while True:
-            if lower_lnL is not None and lower_lnL - TOL > curr_lnL:
-                curr_v, curr_lnL = lower_v, lower_lnL
-                parameter.value = curr_v
-            elif higher_lnL is not None and  higher_lnL - TOL > curr_lnL:
-                curr_v, curr_lnL = higher_v, higher_lnL
-            else:
-                if (higher_lnL is not None) and (lower_lnL is not None):
-                    if (abs(lower_lnL - curr_lnL) < TOL) and (abs(lower_lnL - curr_lnL) < TOL):
-                        parameter.value = curr_v
-                        self.repaint()
-                        return curr_v, curr_lnL
-                    if curr_lnL == float('-inf'):
-                        return curr_v, curr_lnL
-                curr_step /= 2
-            best_v, best_lnL = curr_v, curr_lnL
-            lower_v = parameter.restrict_to_legal_range(curr_v - curr_step)
-            parameter.value = lower_v
-            p = self.calc_pat_probs()
-            lower_lnL = calc.calc_ln_L_from_counts(data, p)
-            self.repaint()
-            higher_v = parameter.restrict_to_legal_range(curr_v + curr_step)
-            parameter.value = higher_v
-            p = self.calc_pat_probs()
-            higher_lnL = calc.calc_ln_L_from_counts(data, p)
-            self.repaint()
-
+        to_optimize = TreeLikelihoodFunc(self.tree, data, parameter)
+        return do_opt(to_optimize, parameter, curr_step=curr_step)
+    
     def opt_all(self):
         if not self.opt_all_callbacks:
             return
@@ -194,7 +174,6 @@ class TreeWorkspace(QtGui.QDialog):
         v, prev_lnl = first_callback(curr_step=curr_step)
         same_score_count = 0
         while True:
-            curr_lnl = prev_lnl
             for curr_callback in self.opt_all_callbacks:
                 v, curr_lnl = curr_callback(curr_step=curr_step)
             if abs(prev_lnl - curr_lnl) < TOL:
@@ -206,15 +185,20 @@ class TreeWorkspace(QtGui.QDialog):
             prev_lnl = curr_lnl
             curr_step /= 10
     def opt_A(self,curr_step=0.04):
-        return self.do_opt(self.free_parameters[BranchEnum.A], curr_step=curr_step)
+        debug('opt_A')
+        return self.call_opt(self.free_parameters[BranchEnum.A], curr_step=curr_step)
     def opt_B(self,curr_step=0.04):
-        return self.do_opt(self.free_parameters[BranchEnum.B], curr_step=curr_step)
+        debug('opt_B')
+        return self.call_opt(self.free_parameters[BranchEnum.B], curr_step=curr_step)
     def opt_Internal(self,curr_step=0.04):
-        return self.do_opt(self.free_parameters[BranchEnum.INTERNAL], curr_step=curr_step)
+        debug('opt_Internal')
+        return self.call_opt(self.free_parameters[BranchEnum.INTERNAL], curr_step=curr_step)
     def opt_C(self,curr_step=0.04):
-        return self.do_opt(self.free_parameters[BranchEnum.C], curr_step=curr_step)
+        debug('opt_C')
+        return self.call_opt(self.free_parameters[BranchEnum.C], curr_step=curr_step)
     def opt_D(self,curr_step=0.04):
-        return self.do_opt(self.free_parameters[BranchEnum.D], curr_step=curr_step)
+        debug('opt_D')
+        return self.call_opt(self.free_parameters[BranchEnum.D], curr_step=curr_step)
     def param_changed(self):
         for i, p in enumerate(self.free_parameters):
             if p is not None:
@@ -237,8 +221,8 @@ class TreeWorkspace(QtGui.QDialog):
         paint = QtGui.QPainter()
         paint.begin(self)
         scaler = self.treePaintScaler
-        abAncX = (self.treePaintX + MAX_BRANCH_LEN*scaler*HORIZ_OVER_HYP)
-        abAncY = (self.treePaintY+ MAX_BRANCH_LEN*scaler*VERT_OVER_HYP)
+        abAncX = (self.treePaintX + self.MAX_BRANCH_LEN*scaler*HORIZ_OVER_HYP)
+        abAncY = (self.treePaintY+ self.MAX_BRANCH_LEN*scaler*VERT_OVER_HYP)
         a_len, b_len, int_len, c_len, d_len = self.tree.get_funky_ordered_br_lens()
         cdAncX = abAncX + scaler*int_len
         cdAncY = abAncY

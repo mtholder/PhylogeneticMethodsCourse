@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from tree_likelihood_viz.cfn import Parameter, CharModel, DataConditioning
+from tree_likelihood_viz.cfn import Parameter, CharModel, DataConditioning, BranchLengthModel
 class BranchEnum:
     A, B, INTERNAL, C, D = 0, 1, 2, 3, 4
     names = ["A", "B", "Internal", "C", "D"]
@@ -11,11 +11,11 @@ class TopologyEnum:
 
 PATTERN_NAMES = ('0000', '0001', '0010', '0011', '0100', '0101', '0110', '0111')
 
-def generate_branch_length_model(topology, subst_model):
+def generate_branch_length_model(topology, char_model):
     mn = 0.0
-    mx = subst_model.max_branch_length
+    mx = char_model.max_branch_length
     assert (mn <= mx)
-    mode = subst_model.branch_length_mode
+    mode = char_model.branch_length_mode
     value = mn + 0.1
     if value > mx:
         value = max(mn, mn + (mx-mn)/2.0)
@@ -28,13 +28,14 @@ class Tree(object):
         self.num_branches = 5 # currently only fully resolved, unrooted trees are supported
         self.branch_length_model = branch_length_model
         self.branch_length_list = branch_length_model.param_list
-        assert(len(branch_length_model) == self.num_branches)
+        assert(len(branch_length_model.param_list) == self.num_branches)
        
         # figure out what sets of branch lengths are free to vary
         self.indep_branches, self.branch_len_to_indep_ind = branch_length_model.find_independent_params()
  
         self.char_model = char_model
         self.indep_subst_params, self.subst_param_to_ind = char_model.find_independent_params()
+        self.pat_prob_calc_callbacks = []
             
     def get_name(self):
         return TopologyEnum.names[self.topology]
@@ -44,7 +45,7 @@ class Tree(object):
         return p in self.branch_len_to_indep_ind
 
     def get_br_lens(self):
-        return [i.value() for i in self.branch_length_list]
+        return [i.value for i in self.branch_length_list]
 
 
     def get_funky_ordered_br_lens(self):
@@ -70,7 +71,7 @@ class Tree(object):
             return (0, 1, 1, 2, 1, 1, 2, 1)
         return (0, 1, 1, 2, 1, 2, 1, 1)
 
-    def calc_pat_probs(self):
+    def calc_pat_probs(self, alert_pat_prob_listener=True):
         """Pattern likelihoods returned in order (assumes CFN with A=0),
         A  00000000
         B  00001111
@@ -145,7 +146,11 @@ class Tree(object):
             b0c0d0 , b0c0d1 , b0c1d0 , b0c1d1 , b1c0d0 , b1c0d1 , b1c1d0 , b1c1d1 = (b0c0d0 , b1c0d0 , b0c0d1 , b1c0d1 , b0c1d0 , b1c1d0 , b0c1d1 , b1c1d1)
         # return with d = ones bit, c = 2's bit, d = 4's bit
         v = (b0c0d0 , b0c0d1 , b0c1d0 , b0c1d1 , b1c0d0 , b1c0d1 , b1c1d0 , b1c1d1)
-        return self.apply_conditioning_to_prob_vector(v)
+        x = self.apply_conditioning_to_prob_vector(v)
+        if alert_pat_prob_listener:
+            for listener in self.pat_prob_calc_callbacks:
+                listener()
+        return x
 
     def apply_conditioning_to_prob_vector(self, v):
         if self.char_model.conditioning == DataConditioning.NONE:
