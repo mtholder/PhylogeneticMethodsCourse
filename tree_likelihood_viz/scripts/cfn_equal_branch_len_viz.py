@@ -19,7 +19,7 @@ for branch_set_model in branches:
     fixed_params.append(fpset)
     first_branch.value = 0.1
 
-runApp(title='CFN Equal Branch Length Tree likelihood visualizer', 
+runApp(title='CFN Equal-Branch Length Tree likelihood visualizer', 
        char_models=models,
        branches=branches,
        fixed_params=fixed_params)

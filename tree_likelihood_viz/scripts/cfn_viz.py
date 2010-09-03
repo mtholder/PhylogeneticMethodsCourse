@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 from tree_likelihood_viz.model import CFN
 from tree_likelihood_viz.app_for_model import runApp
+from tree_likelihood_viz.simple_tree import TopologyEnum, generate_branch_length_model
+import itertools
 
-runApp(title='CFN Tree likelihood visualizer', char_model=CFN())
+models = [CFN() for i in TopologyEnum.order]
+branches = [generate_branch_length_model(t, m) for m, t in itertools.izip(models, TopologyEnum.order)]
+
+runApp(title='CFN  Tree likelihood visualizer', 
+       char_models=models,
+       branches=branches)
 
 ################################################################################
 # tree_likelihood_viz is a small package for creating interactive graphical
