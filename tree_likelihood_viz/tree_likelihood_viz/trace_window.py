@@ -141,7 +141,7 @@ class LnLTrace(QtGui.QDialog):
                 (((left_axis_x + right_axis_x)/2 - 3*font_x_offset, lower_axis_y + 3*font_y_offset), self.param_list[0].name),
                 ((left_axis_x - 3*font_x_offset, lower_axis_y - font_y_offset), "lnL"),
                 ((2, mle_y + font_y_offset), "%6.2f" % (best_best[1])),
-                ((mle_x - 2*font_x_offset, lower_axis_y + 5*font_y_offset), "%6.2f" % (best_best[0])),
+                ((mle_x - 2*font_x_offset, lower_axis_y + 5*font_y_offset), "%6.4f" % (best_best[0])),
                 ]
 
             # add lines for the other trees if they are above near the lower axis
@@ -152,7 +152,7 @@ class LnLTrace(QtGui.QDialog):
                     self.axes_lines.append(((left_axis_x, sub_mle_y),(sub_mle_x, sub_mle_y)))
                     self.axes_lines.append(((sub_mle_x, lower_axis_y + (3*i + 4)*font_y_offset),(sub_mle_x, sub_mle_y)))
                     self.axes_text.append(((2, sub_mle_y + font_y_offset), "%6.2f" % (sub_opt[1])))
-                    self.axes_text.append(((sub_mle_x - 2*font_x_offset, lower_axis_y + (3*i + 8)*font_y_offset), "%6.2f" % (sub_opt[0])))
+                    self.axes_text.append(((sub_mle_x - 2*font_x_offset, lower_axis_y + (3*i + 8)*font_y_offset), "%6.4f" % (sub_opt[0])))
         self.repaint()
 
     def paintEvent(self, event):
