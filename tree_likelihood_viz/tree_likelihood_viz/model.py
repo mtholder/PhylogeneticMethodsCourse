@@ -8,7 +8,7 @@ class Parameter(object):
         self._value = value
         self.min_val = min_val
         self.max_val = max_val
-        self.setValueListeners = []
+        self.set_value_listeners = []
     def assert_legal(self, x):
         if x < self.min_val:
             raise ValueError("Value %(x)f is below the minimum %(m)s" % {'x':x, 'm':self.min_val})
@@ -24,8 +24,8 @@ class Parameter(object):
     def set_value(self, x):
         self.assert_legal(x)
         self._value = x
-        for v in self.setValueListeners:
-            v.setValue(x)
+        for v in self.set_value_listeners:
+            v(x)
     def get_value(self):
         return self._value
     value = property(get_value, set_value)

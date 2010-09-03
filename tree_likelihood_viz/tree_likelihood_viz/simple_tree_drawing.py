@@ -51,25 +51,23 @@ class TreeWorkspace(QtGui.QDialog):
             sb.setSingleStep(float(p.max_val - p.min_val)/100.0)
             sb.setValue(p.value)
             
+            gridLayout.addWidget(sb, i, 1)
+            self.spinboxes.append(sb)
+            self.connect(sb,  QtCore.SIGNAL('valueChanged(double)'), self.param_changed)
+            opt = QtGui.QPushButton("Optimize")
+            self.opt_buttons.append(opt)
+            gridLayout.addWidget(opt, i, 0)
             if self.tree.branch_is_free(p):
-                debug("FREE param")
                 sb.setEnabled(True)
-                gridLayout.addWidget(sb, i, 1)
-                self.spinboxes.append(sb)
-                self.connect(sb,  QtCore.SIGNAL('valueChanged(double)'), self.param_changed)
-                opt = QtGui.QPushButton("Optimize")
-                self.opt_buttons.append(opt)
-                gridLayout.addWidget(opt, i, 0)
+                self.free_parameters.append(p)
                 opt_callback = getattr(self, "opt_" + p.name)
                 self.connect(opt,  QtCore.SIGNAL('clicked()'), opt_callback)
                 self.opt_all_callbacks.append(opt_callback)
-                self.free_parameters.append(p)
             else:
-                debug("NON-FREE param")
                 sb.setEnabled(False)
                 self.free_parameters.append(None)
-            p.setValueListeners.append(self)
-            p.setValueListeners.append(sb)
+            p.set_value_listeners.append(self.setValue)
+            p.set_value_listeners.append(sb.setValue)
 
         opt = QtGui.QPushButton("Optimize all")
         self.opt_buttons.append(opt)
@@ -175,7 +173,8 @@ class TreeWorkspace(QtGui.QDialog):
         same_score_count = 0
         while True:
             for curr_callback in self.opt_all_callbacks:
-                v, curr_lnl = curr_callback(curr_step=curr_step)
+                if curr_callback is not None:
+                    v, curr_lnl = curr_callback(curr_step=curr_step)
             if abs(prev_lnl - curr_lnl) < TOL:
                 same_score_count += 1
             else:

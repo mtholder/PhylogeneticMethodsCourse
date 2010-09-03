@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from tree_likelihood_viz.cfn import Parameter, CharModel, DataConditioning, BranchLengthModel
+from tree_likelihood_viz.model import Parameter, CharModel, DataConditioning, BranchLengthModel
 class BranchEnum:
     A, B, INTERNAL, C, D = 0, 1, 2, 3, 4
     names = ["A", "B", "Internal", "C", "D"]
@@ -7,6 +7,7 @@ class BranchEnum:
 
 class TopologyEnum:
     AB, AC, AD = 0, 1, 2
+    order = [0, 1, 2]
     names = ["AB | CD", "AC | BD", "AD | BC"]
 
 PATTERN_NAMES = ('0000', '0001', '0010', '0011', '0100', '0101', '0110', '0111')

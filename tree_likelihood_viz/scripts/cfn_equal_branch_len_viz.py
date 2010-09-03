@@ -1,9 +1,28 @@
 #!/usr/bin/env python
 from tree_likelihood_viz.model import CFN
 from tree_likelihood_viz.app_for_model import runApp
+from tree_likelihood_viz.simple_tree import TopologyEnum, generate_branch_length_model
+import itertools
 
+models = [CFN() for i in TopologyEnum.order]
+branches = [generate_branch_length_model(t, m) for m, t in itertools.izip(models, TopologyEnum.order)]
 
-runApp(title='CFN Tree likelihood visualizer', char_model=CFN())
+# the following code makes all of the branches "listen" to value changes to the first for each tree
+fixed_params = []
+for branch_set_model in branches:
+    fpset = []
+    branch_set = branch_set_model.param_list
+    first_branch = branch_set[0]
+    for branch in branch_set[1:]:
+        first_branch.set_value_listeners.append(branch.set_value)
+        fpset.append(branch)
+    fixed_params.append(fpset)
+    first_branch.value = 0.1
+
+runApp(title='CFN Equal Branch Length Tree likelihood visualizer', 
+       char_models=models,
+       branches=branches,
+       fixed_params=fixed_params)
 
 ################################################################################
 # tree_likelihood_viz is a small package for creating interactive graphical
@@ -27,4 +46,3 @@ runApp(title='CFN Tree likelihood visualizer', char_model=CFN())
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ################################################################################
-

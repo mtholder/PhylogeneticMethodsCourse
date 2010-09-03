@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from tree_likelihood_viz.cfn import CFN
+from tree_likelihood_viz.model import CFN
 from tree_likelihood_viz.app_for_model import runApp
 
 runApp(title='CFN Tree likelihood visualizer', char_model=CFN())

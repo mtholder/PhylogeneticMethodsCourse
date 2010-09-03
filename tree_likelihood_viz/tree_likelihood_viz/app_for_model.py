@@ -14,43 +14,56 @@ from tree_likelihood_viz.histo_window import LnLWorkspace
 class GenericLikelihoodApp(QtGui.QMainWindow):
     def __init__(self, 
                  title,
-                 char_model,
-                 branch_length_generator=generate_branch_length_model,
+                 char_model_source,
+                 branch_length_source=generate_branch_length_model,
                  fixed_params=None):
         QtGui.QMainWindow.__init__(self)
         self.setWindowTitle(title)
         sb = self.statusBar()
-        blm = branch_length_generator(topology=TopologyEnum.AB, char_model=char_model)
-        self.abTree = Tree(topology=TopologyEnum.AB, char_model=char_model, branch_length_model=blm, fixed_params=fixed_params)
-        self.abTreeW = TreeWorkspace(self.abTree)
+        self.trees = []
+        self.treeWindows = []
+        for i, topo in enumerate([TopologyEnum.AB, TopologyEnum.AC, TopologyEnum.AD]):
+            if callable(branch_length_source):
+                branches = branch_length_source(topo, char_model=char_model)
+            else:
+                branches = branch_length_source[i]
 
-        blm = branch_length_generator(topology=TopologyEnum.AC, char_model=char_model)
-        self.acTree = Tree(topology=TopologyEnum.AC, char_model=char_model, branch_length_model=blm, fixed_params=fixed_params)
-        self.acTreeW = TreeWorkspace(self.acTree)
+            if callable(fixed_params):
+                fixed = fixed_params(topo, char_model=char_model)
+            elif fixed_params is None:
+                fixed = []
+            else: 
+                fixed = fixed_params[i]
 
-        blm = branch_length_generator(topology=TopologyEnum.AD, char_model=char_model)
-        self.adTree = Tree(topology=TopologyEnum.AD, char_model=char_model, branch_length_model=blm, fixed_params=fixed_params)
-        self.adTreeW = TreeWorkspace(self.adTree)
+            t = Tree(topology=topo,
+                     char_model=char_model_source[i],
+                     branch_length_model=branches, 
+                     fixed_params=fixed)
+            w = TreeWorkspace(t)
+            self.trees.append(t)
+            self.treeWindows.append(w)
 
-        self.lnL = LnLWorkspace(prob_sources=[self.abTree, self.acTree, self.adTree])
-        self.abTreeW.lnLPanel = self.lnL
-        self.acTreeW.lnLPanel = self.lnL
-        self.adTreeW.lnLPanel = self.lnL
+        self.lnL = LnLWorkspace(prob_sources=self.trees)
+        for w in self.treeWindows:
+            w.lnLPanel = self.lnL
         self.lnL.move(0,0)
-        self.abTreeW.move(500,20)
-        self.acTreeW.move(520,40)
-        self.adTreeW.move(530,50)
+        for i, w in enumerate(self.treeWindows):
+            w.move(500 + 15*i,20 + 15*i)
 
     def show(self):
-        self.acTreeW.show()
-        self.abTreeW.show()
-        self.adTreeW.show()
+        for w in self.treeWindows:
+            w.show()
         self.lnL.show()
         QtGui.QMainWindow.show(self)
 
-def runApp(title, char_model):
+def runApp(title, char_models, branches=None, fixed_params=None):
+    if branches is None:
+        branches = generate_branch_length_model
     app = QtGui.QApplication(sys.argv)
-    qb = GenericLikelihoodApp(title=title, char_model=char_model)
+    qb = GenericLikelihoodApp(title=title, 
+                              char_model_source=char_models,
+                              branch_length_source=branches,
+                              fixed_params=fixed_params)
     qb.show()
     pattern_count_data = obtain_initial_pattern_counts(num_patterns=8)
     qb.lnL.set_counts(pattern_count_data)
