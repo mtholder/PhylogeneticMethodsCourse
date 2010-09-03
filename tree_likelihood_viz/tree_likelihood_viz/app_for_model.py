@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import sys
 try:
     from PyQt4 import QtGui
@@ -6,30 +5,31 @@ except:
     sys.stderr.write("PyQt4 must be installed!")
     raise
 
+#!/usr/bin/env python
 from tree_likelihood_viz.utility import obtain_initial_pattern_counts
-from tree_likelihood_viz.cfn import CFN
 from tree_likelihood_viz.simple_tree_drawing import TreeWorkspace
 from tree_likelihood_viz.simple_tree import TopologyEnum, generate_branch_length_model, Tree
 from tree_likelihood_viz.histo_window import LnLWorkspace
 
-
-char_model = CFN()
-
-class CFNLikelihoodApp(QtGui.QMainWindow):
-    def __init__(self):
+class GenericLikelihoodApp(QtGui.QMainWindow):
+    def __init__(self, 
+                 title,
+                 char_model,
+                 branch_length_generator=generate_branch_length_model,
+                 fixed_params=None):
         QtGui.QMainWindow.__init__(self)
-        self.setWindowTitle('CFN Tree likelihood visualizer')
+        self.setWindowTitle(title)
         sb = self.statusBar()
-        blm = generate_branch_length_model(topology=TopologyEnum.AB, char_model=char_model)
-        self.abTree = Tree(topology=TopologyEnum.AB, char_model=char_model, branch_length_model=blm)
+        blm = branch_length_generator(topology=TopologyEnum.AB, char_model=char_model)
+        self.abTree = Tree(topology=TopologyEnum.AB, char_model=char_model, branch_length_model=blm, fixed_params=fixed_params)
         self.abTreeW = TreeWorkspace(self.abTree)
 
-        blm = generate_branch_length_model(topology=TopologyEnum.AC, char_model=char_model)
-        self.acTree = Tree(topology=TopologyEnum.AC, char_model=char_model, branch_length_model=blm)
+        blm = branch_length_generator(topology=TopologyEnum.AC, char_model=char_model)
+        self.acTree = Tree(topology=TopologyEnum.AC, char_model=char_model, branch_length_model=blm, fixed_params=fixed_params)
         self.acTreeW = TreeWorkspace(self.acTree)
 
-        blm = generate_branch_length_model(topology=TopologyEnum.AD, char_model=char_model)
-        self.adTree = Tree(topology=TopologyEnum.AD, char_model=char_model, branch_length_model=blm)
+        blm = branch_length_generator(topology=TopologyEnum.AD, char_model=char_model)
+        self.adTree = Tree(topology=TopologyEnum.AD, char_model=char_model, branch_length_model=blm, fixed_params=fixed_params)
         self.adTreeW = TreeWorkspace(self.adTree)
 
         self.lnL = LnLWorkspace(prob_sources=[self.abTree, self.acTree, self.adTree])
@@ -47,12 +47,14 @@ class CFNLikelihoodApp(QtGui.QMainWindow):
         self.adTreeW.show()
         self.lnL.show()
         QtGui.QMainWindow.show(self)
-app = QtGui.QApplication(sys.argv)
-qb = CFNLikelihoodApp()
-qb.show()
-pattern_count_data = obtain_initial_pattern_counts(num_patterns=8)
-qb.lnL.set_counts(pattern_count_data)
-sys.exit(app.exec_())
+
+def runApp(title, char_model):
+    app = QtGui.QApplication(sys.argv)
+    qb = GenericLikelihoodApp(title=title, char_model=char_model)
+    qb.show()
+    pattern_count_data = obtain_initial_pattern_counts(num_patterns=8)
+    qb.lnL.set_counts(pattern_count_data)
+    sys.exit(app.exec_())
 
 ################################################################################
 # tree_likelihood_viz is a small package for creating interactive graphical

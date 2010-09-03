@@ -23,13 +23,15 @@ def generate_branch_length_model(topology, char_model):
     return BranchLengthModel(p, interpretation=mode)
 
 class Tree(object):
-    def __init__(self, topology, char_model, branch_length_model):
+    def __init__(self, topology, char_model, branch_length_model, fixed_params=None):
         self.topology = topology
         self.num_branches = 5 # currently only fully resolved, unrooted trees are supported
         self.branch_length_model = branch_length_model
         self.branch_length_list = branch_length_model.param_list
         assert(len(branch_length_model.param_list) == self.num_branches)
-       
+        self.fixed_params = []
+        if fixed_params:
+            self.fixed_params.extend(fixed_params)
         # figure out what sets of branch lengths are free to vary
         self.indep_branches, self.branch_len_to_indep_ind = branch_length_model.find_independent_params()
  
@@ -42,7 +44,7 @@ class Tree(object):
     name = property(get_name)
 
     def branch_is_free(self, p):
-        return p in self.branch_len_to_indep_ind
+        return (p in self.branch_len_to_indep_ind) and (p not in self.fixed_params)
 
     def get_br_lens(self):
         return [i.value for i in self.branch_length_list]
