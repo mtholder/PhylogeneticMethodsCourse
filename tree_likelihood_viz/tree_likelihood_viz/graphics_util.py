@@ -3,7 +3,9 @@ try:
 except:
     sys.stderr.write("PyQt4 must be installed!")
     raise
-
+font_x_offset = 10
+font_y_offset = 5
+        
 class TopologyDisplay:
     colors = [QtCore.Qt.red, QtCore.Qt.blue, QtCore.Qt.green]
     txt_fmt = ['<font color="red">%s</font>', '<font color="blue">%s</font>', '<font color="green">%s</font>']

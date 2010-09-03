@@ -197,7 +197,7 @@ class Tree(object):
             sub_list = [v[3], v[5], v[6]]
         s = sum(sub_list)
         t = tuple([i/s for i in sub_list])
-        debug('conditioned = %s' % str(t))
+        #debug('conditioned = %s' % str(t))
         return t
     def get_pat_names(self):
         if self.char_model.conditioning == DataConditioning.NONE:

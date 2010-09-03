@@ -56,4 +56,4 @@ def do_opt(f, parameter, curr_step):
         lower_lnL = f(lower_v)
         higher_v = parameter.restrict_to_legal_range(curr_v + curr_step)
         higher_lnL = f(higher_v)
-        debug('In do_opt curr = %s lower = %s higher %s' % (str((curr_v, curr_lnL)), str((lower_v, lower_lnL)), str((higher_v, higher_lnL))))
+        #debug('In do_opt curr = %s lower = %s higher %s' % (str((curr_v, curr_lnL)), str((lower_v, lower_lnL)), str((higher_v, higher_lnL))))

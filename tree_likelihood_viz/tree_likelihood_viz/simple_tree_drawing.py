@@ -9,7 +9,8 @@ except:
 
 from tree_likelihood_viz.simple_tree import BranchEnum, TopologyEnum
 from tree_likelihood_viz.utility import randomly_choose_indices, debug
-from tree_likelihood_viz.graphics_util import TopologyDisplay
+from tree_likelihood_viz.graphics_util import TopologyDisplay, font_x_offset, font_y_offset
+        
 from tree_likelihood_viz.optimizer import TOL, TreeLikelihoodFunc, do_opt
 # ratios of dimensions for 45 degree lines
 HYP_OVER_HORIZ = math.sqrt(2)
@@ -270,8 +271,6 @@ class TreeWorkspace(QtGui.QDialog):
         cY = cdAncY - scaler*VERT_OVER_HYP*c_len
         dX = cdAncX + scaler*HORIZ_OVER_HYP*d_len
         dY = cdAncY + scaler*VERT_OVER_HYP*d_len
-        font_x_offset = 10
-        font_y_offset = 5
         if self.tree.topology == TopologyEnum.AB:
             b_text, c_text, d_text = "B", "C", "D"
         elif self.tree.topology == TopologyEnum.AC:

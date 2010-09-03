@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 try:
     from PyQt4 import QtGui
@@ -5,11 +6,11 @@ except:
     sys.stderr.write("PyQt4 must be installed!")
     raise
 
-#!/usr/bin/env python
 from tree_likelihood_viz.utility import obtain_initial_pattern_counts
 from tree_likelihood_viz.simple_tree_drawing import TreeWorkspace
 from tree_likelihood_viz.simple_tree import TopologyEnum, generate_branch_length_model, Tree
-from tree_likelihood_viz.histo_window import LnLWorkspace, LnLTrace
+from tree_likelihood_viz.histo_window import LnLWorkspace
+from tree_likelihood_viz.trace_window import LnLTrace
 
 class GenericLikelihoodApp(QtGui.QMainWindow):
     def __init__(self, 
@@ -49,10 +50,11 @@ class GenericLikelihoodApp(QtGui.QMainWindow):
             w.lnLPanel = self.lnL
         self.lnL.move(0,0)
         for i, w in enumerate(self.treeWindows):
-            w.move(500 + 15*i,20 + 15*i)
+            w.move(500 + 15*i, 20 + 15*i)
         if to_trace:
             assert(len(to_trace) == 3)
             self.trace_window = LnLTrace(self.lnL, to_trace, self.trees)
+            self.trace_window.move(560, 80)
         else:
             self.trace_window = None
             
@@ -61,6 +63,7 @@ class GenericLikelihoodApp(QtGui.QMainWindow):
             w.show()
         if self.trace_window:
             self.trace_window.show()
+            self.trace_window.trace()
         self.lnL.show()
         QtGui.QMainWindow.show(self)
 
