@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from tree_likelihood_viz.model import Parameter, CharModel, DataConditioning, BranchLengthModel
+from tree_likelihood_viz.utility import debug
+from tree_likelihood_viz.model import Parameter, CharModel, DataConditioning, BranchLengthModel, CFN, CompatModel
 class BranchEnum:
     A, B, INTERNAL, C, D = 0, 1, 2, 3, 4
     names = ["A", "B", "Internal", "C", "D"]
@@ -46,6 +47,8 @@ class Tree(object):
 
     def branch_is_free(self, p):
         return (p in self.branch_len_to_indep_ind) and (p not in self.fixed_params)
+    def model_param_is_free(self, p):
+        return (p in self.subst_param_to_ind) and (p not in self.fixed_params)
 
     def get_br_lens(self):
         return [i.value for i in self.branch_length_list]
@@ -75,6 +78,34 @@ class Tree(object):
         return (0, 1, 1, 2, 1, 2, 1, 1)
 
     def calc_pat_probs(self, alert_pat_prob_listener=True):
+        if isinstance(self.char_model, CFN):
+            return self.calc_pat_probs_cfn(alert_pat_prob_listener=alert_pat_prob_listener)
+        elif isinstance(self.char_model, CompatModel):
+            return self.calc_pat_probs_compat(alert_pat_prob_listener=alert_pat_prob_listener)
+    def calc_pat_probs_compat(self, alert_pat_prob_listener=True):
+        assert(self.char_model.conditioning == DataConditioning.VARIABLE)
+        pars_scores = self.calc_pat_p_scores()
+        params = self.char_model.param_list
+        assert(len(params) == 1)
+        epsilon = params[0].value
+        noisy_char_prob = 1/7.0 # assuming binary characters, and only variable sites
+        perfect_prob = 0.2 # assuming binary, 4-leaf tree
+        prob_list = [0.0]
+        incompat_prob = epsilon*noisy_char_prob
+        compat_prob = (1.0 - epsilon)*perfect_prob + incompat_prob
+        for pars_score in pars_scores[1:]:
+            if pars_score == 1:
+                prob_list.append(compat_prob)
+            else:
+                prob_list.append(incompat_prob)
+        x = self.apply_conditioning_to_prob_vector(prob_list)
+        if alert_pat_prob_listener:
+            for listener in self.pat_prob_calc_callbacks:
+                listener()
+        return x
+
+
+    def calc_pat_probs_cfn(self, alert_pat_prob_listener=True):
         """Pattern likelihoods returned in order (assumes CFN with A=0),
         A  00000000
         B  00001111
@@ -165,7 +196,9 @@ class Tree(object):
             assert(self.char_model.conditioning == DataConditioning.PARSIMONY_INFORMATIVE)
             sub_list = [v[3], v[5], v[6]]
         s = sum(sub_list)
-        return tuple([i/s for i in sub_list])
+        t = tuple([i/s for i in sub_list])
+        debug('conditioned = %s' % str(t))
+        return t
     def get_pat_names(self):
         if self.char_model.conditioning == DataConditioning.NONE:
             return PATTERN_NAMES

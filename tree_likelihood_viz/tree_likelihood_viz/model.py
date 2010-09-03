@@ -86,6 +86,11 @@ class CFN(CharModel):
     def __init__(self, **kwargs):
         CharModel.__init__(self, **kwargs)
 
+class CompatModel(CharModel):
+    NUM_STATES = 2
+    def __init__(self, param_list, **kwargs):
+        CharModel.__init__(self, param_list=param_list, **kwargs)
+        self.conditioning = DataConditioning.VARIABLE
 
 class TreeModel(Model):
     def __init__(self, char_model, branch_length_model):

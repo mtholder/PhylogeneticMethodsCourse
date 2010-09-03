@@ -56,7 +56,7 @@ class GenericLikelihoodApp(QtGui.QMainWindow):
         self.lnL.show()
         QtGui.QMainWindow.show(self)
 
-def runApp(title, char_models, branches=None, fixed_params=None):
+def runApp(title, char_models, branches=None, fixed_params=None, num_possible_patterns=8):
     if branches is None:
         branches = generate_branch_length_model
     app = QtGui.QApplication(sys.argv)
@@ -65,7 +65,7 @@ def runApp(title, char_models, branches=None, fixed_params=None):
                               branch_length_source=branches,
                               fixed_params=fixed_params)
     qb.show()
-    pattern_count_data = obtain_initial_pattern_counts(num_patterns=8)
+    pattern_count_data = obtain_initial_pattern_counts(num_patterns=num_possible_patterns)
     qb.lnL.set_counts(pattern_count_data)
     sys.exit(app.exec_())
 

@@ -68,10 +68,43 @@ class TreeWorkspace(QtGui.QDialog):
                 self.free_parameters.append(None)
             p.set_value_listeners.append(self.setValue)
             p.set_value_listeners.append(sb.setValue)
+        num_branches = len(self.tree.branch_length_list)
 
+        char_model = self.tree.char_model
+        for i, p in enumerate(char_model.param_list):
+            lab = QtGui.QLabel(p.name)
+            self.labels.append(lab)
+            gridLayout.addWidget(lab, num_branches + i, 2)
+
+            sb = QtGui.QDoubleSpinBox()
+            sb.setRange(p.min_val, p.max_val)
+            self.MAX_BRANCH_LEN = max(self.MAX_BRANCH_LEN, p.max_val)
+            sb.setDecimals(4)
+            sb.setSingleStep(float(p.max_val - p.min_val)/100.0)
+            sb.setValue(p.value)
+            
+            gridLayout.addWidget(sb, num_branches + i, 1)
+            self.spinboxes.append(sb)
+            self.connect(sb,  QtCore.SIGNAL('valueChanged(double)'), self.param_changed)
+            opt = QtGui.QPushButton("Optimize")
+            self.opt_buttons.append(opt)
+            gridLayout.addWidget(opt, num_branches + i, 0)
+            if self.tree.model_param_is_free(p):
+                sb.setEnabled(True)
+                self.free_parameters.append(p)
+                opt_callback = lambda curr_step=0.04: self.opt_model_param(p, curr_step=curr_step)
+                self.connect(opt,  QtCore.SIGNAL('clicked()'), opt_callback)
+                self.opt_all_callbacks.append(opt_callback)
+            else:
+                sb.setEnabled(False)
+                self.free_parameters.append(None)
+            p.set_value_listeners.append(self.setValue)
+            p.set_value_listeners.append(sb.setValue)
+        num_slots = len(self.free_parameters)
+        print "num_slots = ", num_slots
         opt = QtGui.QPushButton("Optimize all")
         self.opt_buttons.append(opt)
-        gridLayout.addWidget(opt, 5, 0)
+        gridLayout.addWidget(opt, num_slots, 0)
         self.connect(opt, QtCore.SIGNAL('clicked()'), self.opt_all)
 
         pat_pr = self.tree.calc_pat_probs()
@@ -93,23 +126,24 @@ class TreeWorkspace(QtGui.QDialog):
             gridLayout.setColumnStretch(1, .5)
 
         self.treeCanvas = QtGui.QFrame()
-        gridLayout.setRowMinimumHeight(6, 250)
-        gridLayout.addWidget(self.treeCanvas, 6, 0, 1, 5)
+        canvas_row = num_slots + 1
+        gridLayout.setRowMinimumHeight(canvas_row, 300)
+        gridLayout.addWidget(self.treeCanvas, canvas_row, 0, 1, 5)
         self.treePaintX, self.treePaintY = (50, 300)
         self.treePaintScaler = 290
         self.treePen = QtGui.QPen(TopologyDisplay.colors[self.tree.topology], 2, QtCore.Qt.SolidLine)
         sim = QtGui.QPushButton("Simulate...")
         self.load_data_button = QtGui.QPushButton("Load Data")
-        gridLayout.addWidget(sim, 9, 0)
-        gridLayout.addWidget(self.load_data_button, 10, 0)
+        gridLayout.addWidget(sim, canvas_row + 3, 0)
+        gridLayout.addWidget(self.load_data_button, canvas_row+4, 0)
         self.num_chars_edit = QtGui.QLineEdit()
         num_char_validator = QtGui.QIntValidator(self)
         num_char_validator.setBottom(0)
         self.num_chars_edit.setText("500")
         self.num_chars_edit.setValidator(num_char_validator)
-        gridLayout.addWidget(self.num_chars_edit, 9, 1)
+        gridLayout.addWidget(self.num_chars_edit, canvas_row + 3, 1)
         lab = QtGui.QLabel("... characters")
-        gridLayout.addWidget(lab, 9, 2)
+        gridLayout.addWidget(lab, canvas_row + 3, 2)
         self.connect(sim,  QtCore.SIGNAL('clicked()'), self.simulate)
         self.connect(self.load_data_button,  QtCore.SIGNAL('clicked()'), self.load_data)
         self.setLayout(gridLayout)
@@ -198,6 +232,9 @@ class TreeWorkspace(QtGui.QDialog):
     def opt_D(self,curr_step=0.04):
         debug('opt_D')
         return self.call_opt(self.free_parameters[BranchEnum.D], curr_step=curr_step)
+    def opt_model_param(self, param, curr_step=0.04):
+        debug('opt_model')
+        return self.call_opt(param, curr_step=curr_step)
     def param_changed(self):
         for i, p in enumerate(self.free_parameters):
             if p is not None:

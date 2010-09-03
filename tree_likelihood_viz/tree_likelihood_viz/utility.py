@@ -29,7 +29,7 @@ def parse_counts_from_fn(pattern_count_filename, num_patterns):
     assert len(pcd) >=num_patterns
     for i in pcd:
         assert i >= 0.0
-    return pcd
+    return pcd[:num_patterns]
 
 
 def obtain_initial_pattern_counts(num_patterns):

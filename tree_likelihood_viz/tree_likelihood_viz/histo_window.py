@@ -74,8 +74,10 @@ class LnLWorkspace(QtGui.QDialog):
         self.data_labels = []
         self.data_counts = []
         self.plot_widget_list = []
-        for i, bits in enumerate(['000', '001', '010', '011', '100', '101', '110', '111']):
-            lab = QtGui.QLabel("0 %s" % " ".join(bits))
+        pattern_names = prob_sources[0].get_pat_names()
+        for i, pat_name in enumerate(pattern_names):
+            spaced_pat_name = " ".join(list(pat_name))
+            lab = QtGui.QLabel(spaced_pat_name)
             vlab = QtGui.QLineEdit()
             vlab.setMaximumWidth(100)
             vlab.setText("0")
