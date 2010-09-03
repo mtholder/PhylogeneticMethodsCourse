@@ -10,7 +10,7 @@ except:
 
 from tree_likelihood_viz.graphics_util import TopologyDisplay
 from tree_likelihood_viz.utility import debug
-from tree_likelihood_viz.optimizer import calc_ln_L_from_counts
+from tree_likelihood_viz.optimizer import calc_ln_L_from_counts, TreeLikelihoodFunc
 
 class MultiBarWidget(QtGui.QWidget):
     def __init__(self, parent):
@@ -38,6 +38,86 @@ class MultiBarWidget(QtGui.QWidget):
             y += self.bar_dim + self.bar_skip
         paint.end()
 
+class LnLTrace(QtGui.QDialog):
+    def __init__(self, data_source, parameters, trees, parent=None):
+        QtGui.QWidget.__init__(self, parent)
+        self.data_source = data_source
+        self.param_list = parameters
+        self.trees = trees
+        self.rescaled = []
+        self.setWindowTitle("Trace of lnL of %s" % parameters[0].name)
+        gridLayout = QtGui.QGridLayout()
+        self.trace_button = QtGui.QPushButton("Trace")
+        gridLayout.addWidget(self.trace_button, 0, 0)
+
+        self.traceCanvas = QtGui.QFrame()
+        self.height_pix = 300
+        self.drawable_height = 250
+        gridLayout.setRowMinimumHeight(1, self.height_pix)
+        gridLayout.addWidget(self.traceCanvas, 1, 0, 1, 5)
+        self.tracePaintX, self.tracePaintY = (50, self.height_pix)
+        self.pen_list = [QtGui.QPen(TopologyDisplay.colors[i], 2, QtCore.Qt.SolidLine) for i in range(len(parameters))]
+        self.connect(self.trace_button,  QtCore.SIGNAL('clicked()'), self.trace)
+        self.setLayout(gridLayout)
+        self.resize(570, 400)
+        
+    def trace(self):
+        debug("Trace called")
+        data = self.data_source.get_counts()
+        if sum(data) == 0.0:
+            return
+        mn = self.param_list[0].min_val
+        mx = self.param_list[0].max_val
+        stride = (mx - mn)/250
+        score_lists = []
+        maxima = []
+        for i, parameter in enumerate(self.param_list):
+            tree = self.trees[i]
+            to_optimize = TreeLikelihoodFunc(tree, data, parameter)
+            prev = parameter.value
+            curr = mn
+            sc = []
+            while curr < mx:
+                sc.append(to_optimize(curr))
+                curr += stride
+            to_optimize(prev)
+            m = max(sc)
+            maxima.append(m)
+            score_lists.append(sc)
+        max_lnL = max(maxima)
+        worst_best = min(maxima)
+        diff = max_lnL - worst_best
+        height_in_lnL = 2*diff
+        offset = worst_best - diff
+        scale = -self.drawable_height/(height_in_lnL)
+        self.rescaled = []
+        for sc in score_lists:
+            rsc = [self.height_pix + scale*(i - offset) for i in sc]
+            self.rescaled.append(rsc)
+        print score_lists
+        print self.rescaled
+        self.repaint()
+
+    def paintEvent(self, event):
+        if not self.rescaled:
+            return
+
+        paint = QtGui.QPainter()
+        paint.begin(self)
+        for i, rsc in enumerate(self.rescaled):
+            pen = self.pen_list[i]
+            paint.setPen(pen)
+            fy = rsc[0]
+            fx = 0
+            for x, sy in enumerate(rsc[1:]):
+                sx = 1 + 2*x
+                try:
+                    paint.drawLine(30 + int(fx), int(fy), 30 + int(sx), int(sy))
+                except:
+                    pass
+                fx = sx
+                fy = sy
+        paint.end()
 
 class LnLWorkspace(QtGui.QDialog):
     """Internally the tree calculations are done as if we have a AB|CD tree.

@@ -9,10 +9,12 @@ branches = [generate_branch_length_model(t, m) for m, t in itertools.izip(models
 
 # the following code makes all of the branches "listen" to value changes to the first for each tree
 fixed_params = []
+first_params = []
 for branch_set_model in branches:
     fpset = []
     branch_set = branch_set_model.param_list
     first_branch = branch_set[0]
+    first_params.append(first_branch)
     for branch in branch_set[1:]:
         first_branch.set_value_listeners.append(branch.set_value)
         fpset.append(branch)
@@ -22,7 +24,8 @@ for branch_set_model in branches:
 runApp(title='CFN Equal-Branch Length Tree likelihood visualizer', 
        char_models=models,
        branches=branches,
-       fixed_params=fixed_params)
+       fixed_params=fixed_params,
+       to_trace=first_params)
 
 ################################################################################
 # tree_likelihood_viz is a small package for creating interactive graphical

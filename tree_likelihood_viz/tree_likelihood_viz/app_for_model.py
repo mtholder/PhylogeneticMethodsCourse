@@ -9,14 +9,15 @@ except:
 from tree_likelihood_viz.utility import obtain_initial_pattern_counts
 from tree_likelihood_viz.simple_tree_drawing import TreeWorkspace
 from tree_likelihood_viz.simple_tree import TopologyEnum, generate_branch_length_model, Tree
-from tree_likelihood_viz.histo_window import LnLWorkspace
+from tree_likelihood_viz.histo_window import LnLWorkspace, LnLTrace
 
 class GenericLikelihoodApp(QtGui.QMainWindow):
     def __init__(self, 
                  title,
                  char_model_source,
                  branch_length_source=generate_branch_length_model,
-                 fixed_params=None):
+                 fixed_params=None,
+                 to_trace=None):
         QtGui.QMainWindow.__init__(self)
         self.setWindowTitle(title)
         sb = self.statusBar()
@@ -49,21 +50,34 @@ class GenericLikelihoodApp(QtGui.QMainWindow):
         self.lnL.move(0,0)
         for i, w in enumerate(self.treeWindows):
             w.move(500 + 15*i,20 + 15*i)
-
+        if to_trace:
+            assert(len(to_trace) == 3)
+            self.trace_window = LnLTrace(self.lnL, to_trace, self.trees)
+        else:
+            self.trace_window = None
+            
     def show(self):
         for w in self.treeWindows:
             w.show()
+        if self.trace_window:
+            self.trace_window.show()
         self.lnL.show()
         QtGui.QMainWindow.show(self)
 
-def runApp(title, char_models, branches=None, fixed_params=None, num_possible_patterns=8):
+def runApp(title, 
+           char_models,
+           branches=None,
+           fixed_params=None,
+           num_possible_patterns=8,
+           to_trace=None):
     if branches is None:
         branches = generate_branch_length_model
     app = QtGui.QApplication(sys.argv)
     qb = GenericLikelihoodApp(title=title, 
                               char_model_source=char_models,
                               branch_length_source=branches,
-                              fixed_params=fixed_params)
+                              fixed_params=fixed_params,
+                              to_trace=to_trace)
     qb.show()
     pattern_count_data = obtain_initial_pattern_counts(num_patterns=num_possible_patterns)
     qb.lnL.set_counts(pattern_count_data)

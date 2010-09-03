@@ -25,7 +25,8 @@ runApp(title='CFN Equal-Branch Length Tree likelihood visualizer',
        char_models=models,
        branches=branches,
        fixed_params=fixed_params,
-       num_possible_patterns=7)
+       num_possible_patterns=7,
+       to_trace=epsilon_list)
 
 ################################################################################
 # tree_likelihood_viz is a small package for creating interactive graphical
