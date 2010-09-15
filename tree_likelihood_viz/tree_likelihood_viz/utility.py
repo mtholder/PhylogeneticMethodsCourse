@@ -37,6 +37,8 @@ def obtain_initial_pattern_counts(num_patterns):
     as a count of patterns (one float per line).
     '''
     pattern_count_filename = os.environ.get("PATTERN_COUNT_FILE")
+    if not pattern_count_filename and len(sys.argv) == 2:
+        pattern_count_filename = sys.argv[1]
 
     if pattern_count_filename:
         try:

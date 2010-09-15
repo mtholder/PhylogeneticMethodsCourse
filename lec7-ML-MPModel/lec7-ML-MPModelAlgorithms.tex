@@ -1,0 +1,1253 @@
+\documentclass[11pt]{article}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\input{../common-preamble-start}
+\input{../common-preamble-end}
+\parindent 1cm
+\parskip 0.2cm
+\oddsidemargin = -0.35 in
+\evensidemargin = -0.35 in
+
+
+\begin{document}
+\begin{table}[htdp]
+\begin{center}
+\caption{An approximation of the probability of data patterns on the tree shown in figure \ref{ablabeledTree} made
+by dropping terms that do not have the minimal exponent for $p$.
+Terms that were dropped are shown in red; Table \ref{ABoneBranchLikelihood} shows the full (non approximate) probabilities.
+The final column provides an even rougher approximation by setting $1-p\approx 1$.
+}\label{lowPLikelihoods}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline 
+             & \multicolumn{4}{c|}{Internal state (E,F)} &  & \\ 
+$d_i$ & (0,0) & (0,1) & (1,0) & (1,1) &  $\lim_{p\rightarrow 0}\Pr(d_i|T_{AB})$ & $\approx \lim_{p\rightarrow 0}\Pr(d_i|T_{AB})$ \\ 
+\hline
+0000  & {\color{black}$(1-p)^5 $ } & {\color{red}$(1-p)^2 p^3 $ } & {\color{red}$(1-p)^2 p^3 $ } & {\color{red}$(1-p) p^4 $  }      & $(1-p)^5$ & $1$ \\
+0001  & {\color{black}$(1-p)^4 p $ } & {\color{red}$(1-p)^3 p^2 $ } & {\color{red}$(1-p) p^4 $ } & {\color{red}$(1-p)^2 p^3 $ }     & $(1-p)^4 p$  & $p$ \\
+0010  & {\color{black}$(1-p)^4 p $ } & {\color{red}$(1-p)^3 p^2 $ } & {\color{red}$(1-p) p^4 $ } & {\color{red}$(1-p)^2 p^3 $ }     & $(1-p)^4 p$ & $p$ \\
+0011  & {\color{red}$(1-p)^3 p^2 $ } & {\color{black}$(1-p)^4 p $ } & {\color{red}$p^5 $ } & {\color{red}$(1-p)^3 p^2 $ }           & $(1-p)^4 p$ & $p$ \\
+0100  & {\color{black}$(1-p)^4 p $ } & {\color{red}$(1-p) p^4 $ } & {\color{red}$(1-p)^3 p^2 $ } & {\color{red}$(1-p)^2 p^3 $ }     & $(1-p)^4 p$ & $p$ \\
+0101  & {\color{black}$(1-p)^3 p^2 $ } & {\color{red}$(1-p)^2 p^3 $ } & {\color{red}$(1-p)^2 p^3 $ } & {\color{black}$(1-p)^3 p^2 $ } & $2 (1-p)^3 p^2$ & $2p^2$ \\
+0110  & {\color{black}$(1-p)^3 p^2 $ } & {\color{red}$(1-p)^2 p^3 $ } & {\color{red}$(1-p)^2 p^3 $ } & {\color{black}$(1-p)^3 p^2 $ } & $2 (1-p)^3 p^2$ & $2p^2$ \\
+0111  & {\color{red}$(1-p)^2 p^3 $ } & {\color{red}$(1-p)^3 p^2 $ } & {\color{red}$(1-p) p^4 $ } & {\color{black}$(1-p)^4 p $ }     & $(1-p)^4 p$ & $p$ \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\section*{Is the equal branch length model a parsimony model?}
+As we just discussed, when the probability of change is low, the likelihood under our
+equal-branch length model is dominated by the number of changes.
+Because we take the product over all patterns to get a dataset's likelihood,
+the likelihood will be dominated by the sum of the number of steps required
+to explain the data.
+This seems to lead us to the conclusion that the parsimony criterion: prefer the tree
+with the fewest number of steps needed to explain the data is an ML estimator under the
+equal branch length model.
+
+This is not true -- but for almost all datasets that you would encounter it is quite likely
+that the most parsimonious tree will maximize the equal branch length model.
+A simple counterexample showing that the MP and ML-equal-branch lengths are not the
+same is given in table \ref{eqBranchNotMP}.
+In this example there is a synapormorphy supporting each tree, and there are two partially scored 
+characters that indicate a difference between A and C and A and D, respectively.
+The first three characters (taken together) do not support any tree, but the divergent character states
+from A to C and to D are easier to explain on the AB tree.
+Note that if we ignore higher order terms (when $p$ close to 0) the likelihood for the last two characters are:
+\begin{eqnarray}
+	\Pr(0?1?|T_{AB})	= \Pr(0??1|T_{AB}) & \approx &  3p \\
+	\Pr(0?1?|T_{AC})	& \approx & 2p \\
+    \Pr(0??1|T_{AC}) & \approx & 3p \\
+	\Pr(0?1?|T_{AD})	& \approx & 3p \\
+	\Pr(0??1|T_{AD}) & \approx & 2p 
+\end{eqnarray}
+This reflects that fact that there are three branches that could display a change on the AB tree on characters
+that resemble a character shown in figure \ref{threeBranchesForAChange},
+but only two branches that provide an opportunity for a change for characters \ref{twoBranchesForAChange}
+
+\begin{table}[htdp]
+\begin{center}
+\caption{A data set for which ML under the equal-branch model prefers tree A+B, but MP does not prefer a tree.
+In the table, $p_{syn} = (1-p)^4 p+2 (1-p)^3 p^2+p^5$, this is the probability of a synapomorphy that is 
+compatible with the tree.
+The probability of a incompatible character pattern is $p_{inc} = 2 (1-p)^3 p^2+2 (1-p)^2 p^3$
+}\label{eqBranchNotMP}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline 
+ & & \multicolumn{5}{c|}{Characters} \\ 
+\hline
+\multirow{4}{*}{Taxon}& A  & 0 & 0 & 0 & 0 & 0  \\
+                      & B  & 0 & 1 & 1 & ? & ?  \\
+                      & C  & 1 & 0 & 1 & 1 & ?  \\
+                      & D  & 1 & 1 & 0 & ? & 1  \\
+\hline
+& Tree & & & & & \\
+\hline
+\multirow{3}{*}{Prob.}& $T_{AB}$ & $p_{syn}$ & $p_{inc}$ & $p_{inc}$ & $3p(1-p)^2+p^3$ & $3p(1-p)^2+p^3$ \\
+                      & $T_{AC}$ & $p_{inc}$ & $p_{syn}$ & $p_{inc}$ & $2p(1-p)$ & $3p(1-p)^2+p^3$ \\
+                      & $T_{AD}$ & $p_{inc}$ & $p_{inc}$ & $p_{syn}$ & $3p(1-p)^2+p^3$ &  $2p(1-p)$\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The example in table \ref{twoBranchesForAChange} is simple but artificial.  
+It is tempting to think that, perhaps if we are given enough data then parsimony and ML under the equal branch length model will always converge to the same tree.
+In fact this is not the case (for general values of $p$). 
+\citet{Kim1996} shows an example of an (admittedly unrealistic) tree shape which has equal branch lengths.
+Given an unlimited amount of data parsimony recovers one tree (not the correct tree), but ML methods would recover the true tree.
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{A character that could be explained by one change on one of three branches.}
+\label{threeBranchesForAChange}
+\begin{picture}(0,0)(20,20)
+	\thicklines
+	\put(-105,3){0}
+	\put(-105,-99){?}
+	\put(70,3){?}
+	\put(70,-99){1}
+	\put(-95,0){\color{red}\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\color{red}\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\color{red}\line(1,-1){45}}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{A character that could be explained by one change on one of two branches.}
+\label{twoBranchesForAChange}
+\begin{picture}(0,0)(20,20)
+	\thicklines
+	\put(-105,3){0}
+	\put(-105,-99){1}
+	\put(70,3){?}
+	\put(70,-99){?}
+	\put(-95,0){\color{red}\line(1,-1){45}}
+	\put(-95,-90){\color{red}\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+\newpage
+
+\citet{Goldman1990} pointed out that if you use ML to infer not just the tree, but also
+the set of ancestral character states, then you will always prefer the same tree as parsimony.
+This amounts to using just one possible set of internal nodes assignments for each character.
+
+If the parsimony length of character $i$ is $s_i(T)$, then the reconstruction with the highest 
+likelihood will be one of the reconstructions with the probability of $p^{s_i(T)}(1-p)^{2N-3 - s_i(T)}$.
+The overall likelihood will be:
+\begin{eqnarray}
+	S(T) & = & \sum_{i=1}^{M}s_i(T) \\
+	\Pr(X|T) & = & p^{S(T)}(1-p)^{(2NM-3M-S(T))}
+\end{eqnarray}
+Because $0 < p< (1-p) < 1$ and $N$ and $M$ are constant across all trees, minimizing $S(T)$ will maximize the
+likelihood.
+
+
+
+
+\newpage
+
+Table \ref{charPScores} shows the parsimony score for each character in Data matrix.
+Note that only the last three characters have scores that vary between the trees.
+These characters have scores shown in red.  
+They are the ones that display potential synapomorphies within the ingroup, so they are the potentially informative characters in a Henngian character analysis.
+They are referred to as {\em parsimony-informative} because when we are using parsimony to evaluate trees, it is only characters like these that carry information for inferring the relationships between taxa.
+
+Note that parsimony would prefer the tree that groups B+C together, because it has the smallest score (13) -- the minimum number of character state changes required to explain the data.
+This is not too surprising: the B+C character had only one character (\#12) for which we need to invoke homoplasy to explain the characters.
+In contrast, the B+D tree only requires one change for character \#12, but requires two changes for characters \#10 and \#11.
+The C+D tree is the worst explanation, according to parsimony -- no character shows a synapomorhy uniting C and D, and three characters (\#10,\#11, and \#12) require multiple events to explain the character state distributions.
+\begin{table}[htdp]
+\caption{Data}
+\begin{center}
+\label{charPScores}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+ & \multicolumn{12}{c|}{Character \#} & \\ 
+Taxon &\color{blue} 1 & \color{blue} 2 & \color{blue} 3 & \color{blue} 4 & \color{blue} 5 & \color{green} 6 & \color{green} 7 & \color{green} 8 & \color{green} 9 & \color{red} 10 & \color{red} 11 &  \color{red} 12 &  \\ 
+\hline 
+A & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{green} 0 & \color{green} 0 & \color{green} 0 & \color{green} 0 & \color{red} 0 & \color{red} 0 & \color{red} 0  &\\
+B & \color{blue} 1 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 1 & \color{red} 1 & \color{red} 1 &\\
+C &    \color{blue} 0 & \color{blue} 1 & \color{blue} 1 & \color{blue} 1 & \color{blue} 0 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 1 & \color{red} 1 & \color{red} 0 &\\
+D &    \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 0 & \color{blue} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{green} 1 & \color{red} 0 & \color{red} 0 & \color{red} 1 & \\
+\hline
+Tree & \multicolumn{12}{c|}{Character Score} & Total Score\\
+B+C & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \color{red} 1 & \color{red}1 &\color{red} 2 & 13\\
+B+D & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \color{red}2 & \color{red}2 & \color{red}1 & 14\\
+C+D & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \color{red}2 &\color{red} 2 & \color{red}2 & 15\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection*{Fitch optimization}
+In the last section, I told you the minimal \# of changes required for each character -- but how did I know this number?
+
+A brute force method would be to assign character states to all of the internal nodes of the tree.
+If we have a tree with internal states assignments, then the number of changes required is easy to calculate
+
+\subsection*{A bit about sets}
+Walter Fitch's (1970 and 1971) algorithms for calculating the parsimony score of a tree use a bit of set notation. 
+A {\bf set} is a collection of objects.  
+The objects are usually referred to as {\bf elements} of the set.
+The common notation for a set is a pair of curly braces - \{\}.
+
+The operations on sets used in Fitch's algorithm are the intersection and the union.
+
+The {\bf union} of two sets is a set that contains all of the elements that are in either sets. The union is denote $\cup$. For example:
+\[\{ 2,5, 6, 9 \}\cup\{ 1,5, 7, 9, 10 \} = \{1,2,5,6,7,9\}\]
+
+The {\bf intersection} of two sets is a set that contains only elements that are in {\em both} sets.
+The $\cap$ is used to represent an intersection.
+For example
+\[\{ 2,5, 6, 9 \}\cap\{ 1,5, 7, 9, 10 \} = \{5,9\}\]
+
+An empty set, denote with a  $\emptyset$, is a set that contains no elements. For example:
+\[\{ 2, 6, 9 \}\cap\{ 1,5, 7, 10 \} = \{\} = \emptyset\]
+
+\subsection*{Fitch down-pass}
+Walter Fitch showed that you can calculate the best possible parsimony score for a character on a tree (the fewest number of changes-of-state that explain the data), using
+a single pass down the tree from the leaves to the root.
+
+\begin{algorithm} 
+\caption{Fitch Down Pass}
+\begin{algorithmic}[1]
+	\STATE {\sf score} = 0
+	 \WHILE{There are still unvisited nodes}
+	 	 \STATE choose a node, $a$, that has not been visited, but all of the node's children must be  leaves or nodes that have already been visited.
+		 \STATE Let $d_a$ denote the down-pass state set of the ancestral node.  Since we did not observe this species, $d_a$ is unknown.
+		 \STATE Let $d_L$ denote the state set of the left descendant (this will be known or inferred in a previous round).
+		 \STATE Let $d_R$ denote the state set of the right descendant (this will be known or inferred in a previous round).
+		 \STATE $d_i = d_L\cap d_R$ 
+		 \IF{$d_i = \emptyset$}
+		 	\STATE $d_a = d_L\cup d_R$
+			\STATE add 1 to the {\sf score}
+		 \ELSE
+		 	\STATE $d_a = d_L\cap d_R$
+		 \ENDIF
+	\ENDWHILE
+\end{algorithmic}
+\end{algorithm} 
+
+Fitch's down pass algorithm is shown in a box. You can think of the logic of the algorithm as: 
+\begin{enumerate}
+	\item ``if the two descendants show the same states, then assume that the ancestor had the states that are in common'' -- this is the part in which you assign $d_A = d_L\cap d_R$ if $d_L\cap d_R \neq \emptyset$.
+	\item ``if the two descendants have different states, then assume that the ancestor could have had {\em any} state that is in at least one of the children.  If this is the case, then we know that we will need to have one change-of-state in this part of the tree, so we add one to the score'' -- this is the part in which we augment the score, and assign $d_A = d_L\cup d_R$.
+\end{enumerate}
+Important note: this down-pass of the Fitch algorithm only gives us the parsimony score of the character on the tree.  It does not (necessarily) give us the most-parsimonious ancestral character state reconstructions for each node.  Technically the ancestral state sets are referred to as the {\em preliminary} state sets for the nodes. 
+
+To evaluate trees using parsimony we do not need to know all of the ancestral character state assignments, we just need the score. So the ``down-pass'' of Fitch's algorithm gives us what we need to score a tree using parsimony.
+
+Figures \ref{Fitch1}-\ref{FitchLast} give an example of how the down-pass of the Fitch algorithm works.
+
+\subsection*{Fitch up-pass}
+If we do want to know the possible most parsimonious character state reconstructions, then we have to complete an
+up-pass. The up-pass algorithm is shown in a box, and 
+figures \ref{Fitchup1}-\ref{FitchupLast} give an example of how the up-pass of the Fitch algorithm works.
+
+\begin{algorithm} 
+\caption{Fitch Up Pass}
+\begin{algorithmic}[1]
+	 \STATE start at the root
+	 \STATE \label{initUp} make the root's up-pass set identical to the down-pass set: $u_r = d_r$
+	 \WHILE{There are still unvisited nodes}
+	 	 \STATE choose the node $n$ that is closest to the root, but has not been visited yet.
+		 \STATE Let $u_n$ and denote the up-pass state set of a node $n$. 
+		 \STATE Let $d_n$ denote the down-pass state set of  node $n$.
+		 \STATE Let $u_p$ denote the up-pass state set of the node $n$'s parent node. 
+		 \STATE Let $d_L$ and $d_R$ denote the  down-pass state sets of node $n$'s children
+		 \IF{$d_n\cap u_p = u_p$}
+		 	\label{restrictUp} \STATE $u_n = d_n \cap u_p$
+		 \ELSIF{$d_L\cap d_R = \emptyset$}
+		 		\label{unionUp}  \STATE  $u_n = d_n\cup u_p$
+			\ELSE
+				\label{addSharedUp} \STATE $u_n = d_n \cup (u_p \cap (d_L \cup d_R))$
+		 \ENDIF
+	\ENDWHILE
+\end{algorithmic}
+\end{algorithm} 
+
+Fitch's up pass gives the final state set at each node -- the list of possible states that exist in any most parsimonious reconstruction.
+But,  if we want to know what changes exist in a most parsimonious reconstruction, we can {\bf not} simply consider all possible connections between states that are in the final (up-pass) sets.
+Once again, \citet{Fitch1971} provides an algorithm
+
+\begin{algorithm} 
+\caption{Most parsimonious changes across branches}
+\begin{algorithmic}[1]
+	\REQUIRE Perform the Fitch Down Pass and then the Fitch Up Pass for the tree.  Then for any edge $e$ you can use this algorithm.
+	\STATE let $c$ be the child node of the edge
+	\STATE let $p$ be the parent node of the edge
+	\FOR{each state $s$ in the up-pass set of $p$ (for each $s\in u_p$)}
+		\IF{$s$ is in the down-pass set of $c$ (if $s\in d_c$)}
+			\STATE $s\rightarrow s$ is a state-to-state transition across branch $e$ in a MPR.
+		\ELSE
+		\FOR{each state $t$ in the down-pass set of $c$ (for each $t\in d_c$)}
+			\STATE $s\rightarrow t$ is a state-to-state transition across branch $e$ in a MPR.
+		\ENDFOR
+		\IF{$s$ is in the up-pass set of $c$ (if $s\in u_c$)}
+			\STATE $s\rightarrow s$ is a state-to-state transition across branch $e$ in a MPR.
+		\ENDIF
+		\ENDIF
+	\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+
+\section*{Examples of various steps of Fitch's algorithms}
+
+
+\begin{table}[htdp]
+\caption{A tree and Fitch's down-pass and up-pass algorithms.  
+Step numbers refer to the number of the steps in the ``Fitch Up Pass'' box.  This figure demonstrates the need for steps \ref{restrictUp} and \ref{unionUp} of the algorithm (note that the down-pass set for the two internals is not complete and the up-pass is needed to reveal the full set of possible mpr). }
+\begin{center}
+\begin{tabular}{p{8mm}|p{7mm}c|c|l}
+\multicolumn{2}{c}{G} & Down-pass & Up-pass & Up-pass step \# \\
+& & & \\
+C --- & &$\{C,G	\}$ & $\{A,C,G\}$ & step \# \ref{unionUp} \\
+ & & & \\
+A --- & & $\{A,C,G\}$ &$\{A\}$ & step \# \ref{restrictUp} \\
+& & & \\
+A --- & &$\{A\}$ & $\{A\}$&  step \# \ref{initUp} \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+\begin{table}[htdp]
+\caption{A tree and Fitch's down-pass and up-pass algorithms.  
+Step numbers refer to the number of the steps in the ``Fitch Up Pass'' box.  This figure demonstrates a case in which step \ref{addSharedUp}  is used, but does not add any new states. }
+\begin{center}
+\begin{tabular}{p{8mm}|p{7mm}c|c|l}
+\multicolumn{2}{c}{G} & Down-pass & Up-pass & Up-pass step \# \\
+& & & \\
+G --- & &$\{G\}$ & $\{G\}$ & step \# \ref{addSharedUp}, but $u_p \cap (d_L \cup d_R) = \emptyset$ \\
+ & & & \\
+A --- & & $\{A,G\}$ &$\{A\}$ & step \# \ref{restrictUp} \\
+& & & \\
+A --- & &$\{A\}$ & $\{A\}$&  step \# \ref{initUp} \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+
+
+
+\begin{table}[htdp]
+\caption{A tree and Fitch's down-pass and up-pass algorithms.  
+Step numbers refer to the number of the steps in the ``Fitch Up Pass'' box.  This figure demonstrates a case in which step \ref{addSharedUp}  is used and the step adds a  new state to a node's state set. }
+\begin{center}
+\begin{tabular}{p{8mm}|p{7mm}c|c|l}
+\multicolumn{2}{c}{G} & Down-pass & Up-pass & Up-pass step \# \\
+& & & \\
+A --- & &$\{A,G\}$ & $\{A,G\}$ & step \# \ref{restrictUp} \\
+ & & & \\
+G --- & & $\{G\}$ &$\{A,G\}$ & step \# \ref{addSharedUp}, and $u_p \cap (d_L \cup d_R) = \{A\}$  \\
+& & & \\
+A --- & &$\{A,G\}$ & $\{A\}$&  step \# \ref{restrictUp} \\
+& & & \\
+A --- & &$\{A\}$ & $\{A\}$&  step \# \ref{initUp} \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}% 
+
+\begin{table}[htdp]
+\caption{A tree and Fitch's down-pass, up-pass, and most-parsimonious changes algorithms.  
+Step numbers refer to the number of the steps in the ``Fitch Up Pass'' box.  
+Following Fitch, the states added to the state set during the up-pass are denoted in with (). 
+The allowed changes on all terminal branches are omitted. 
+These reconstructions are simply the up-pass set $\rightarrow$ the state show for the leaf).}
+\begin{center}
+\begin{tabular}{p{8mm}|p{7mm}c|c|l}
+\multicolumn{2}{c}{G} & Down-pass & Up-pass & Most parsimonious branch reconstructions.\\
+& & & \\
+A --- & &$\{A,G\}$ & $\{A,G\}$ & \\
+						 & & & & $A \rightarrow A$ and $G \rightarrow G$\\
+G --- & &$\{G\}$ & $\{(A),G\}$ & \\
+					 & & & & $A \rightarrow \{A,G\}$ and  $\{C,G\}\rightarrow G$\\
+C --- & &$\{C,G\}$ & $\{(A),C,G\}$ & \\
+					 & & & & $\{A\} \rightarrow \{A,C,G\}$ and $C \rightarrow C$\\
+A --- & &$\{A,C,G\}$ & $\{A,C\}$ & \\
+					 & & & & $A \rightarrow A$ and $C \rightarrow C$ \\
+C --- & &$\{C\}$ & $\{(A),C\}$ & \\
+					 & & & & $A \rightarrow \{A,C\}$ and $C \rightarrow C$ \\
+A --- & & $\{A,C\}$ & $\{A,C\}$ \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+
+
+\newpage
+\section*{Detailed example of Fitch's algorithms}
+
+\begin{table}[htdp]
+\caption{A data matrix consisting of one character in a DNA sequence}
+\begin{center}
+\label{dnaChar}
+\begin{tabular}{|c|c|}
+\hline 
+Taxon & Character state \\ 
+\hline 
+A & $A$ \\
+B & $C$ \\
+C & $C$ \\
+D & $A$ \\
+E & $A$ \\
+F & $C$ \\
+G & $G$ \\
+H & $A$ \\
+I & $A$ \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm steps 1 and 2 for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{Fitch1}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){\sf score=0}
+\end{picture}
+\end{center}
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm step 3 (first ancestral node) for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{Fitch2}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){\sf score=0}
+	\put(-198,-53){$\color{red}\mathbf{d=\{A\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm step 3 (second ancestral node) for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{Fitch3}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){\bf score=1}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$\color{red}\mathbf{d=\{C,G\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm step 3 (third ancestral node) for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{Fitch4}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){\bf score=2}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-175,-135){$\color{red}\mathbf{d=\{A, C,G\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm step 3 (fourth ancestral node) for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{Fitch5}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=2}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-175,-135){${d=\{A, C,G\}}$}
+	\put(133,-53){$\color{red}d=\mathbf\{A\}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm step 3 (fifth ancestral node) for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{Fitch6}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){\bf score=3}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-175,-135){${d=\{A, C,G\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(212,-93){$\color{red}\mathbf{d=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm step 3 (fifth ancestral node) for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{Fitch7}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){score=3}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-175,-135){${d=\{A, C,G\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(212,-93){${d=\{A,C\}}$}
+	\put(184,-135){$\color{red}\mathbf{d=\{A\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm step 3 (sixth ancestral node) for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{Fitch8}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){\bf score=4}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-175,-135){${d=\{A, C,G\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(212,-93){${d=\{A,C\}}$}
+	\put(184,-135){${d=\{A\}}$}
+	\put(154,-180){$\color{red}\mathbf{d=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch algorithm step 3 (seventh ancestral node -- root) for that DNA sequence character shown in Table \ref{dnaChar}}
+\label{FitchLast}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=4}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-175,-135){${d=\{A, C,G\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(212,-93){${d=\{A,C\}}$}
+	\put(184,-135){${d=\{A\}}$}
+	\put(154,-180){${d=\{A,C\}}$}
+	\put(44,-346){$\color{red}\mathbf{d=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch up-pass at root}
+\label{Fitchup1}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=4}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-175,-135){${d=\{A, C,G\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(212,-93){${d=\{A,C\}}$}
+	\put(184,-135){${d=\{A\}}$}
+	\put(154,-180){${d=\{A,C\}}$}
+	\put(44,-346){$\color{black}{d=\{A,C\}}$}
+	\put(44,-358){$\color{red}\mathbf{u=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch up-pass second level nodes}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=4}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-175,-135){${d=\{A, C,G\}}$}
+	\put(-175,-147){${\color{red}u=\{A, C\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(212,-93){${d=\{A,C\}}$}
+	\put(184,-135){${d=\{A\}}$}
+	\put(154,-180){${d=\{A,C\}}$}
+	\put(154,-192){${\color{red}u=\{A,C\}}$}
+	\put(44,-358){$\color{black}{u=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch up-pass third level nodes}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=4}
+	\put(-198,-53){$d=\{A\}$}
+	\put(-105,-53){$d=\{C,G\}$}
+	\put(-198,-65){$\color{red}u=\{A\}$}
+	\put(-125,-65){$\color{red}u=\{A, C,G\}$}
+	\put(-175,-147){${\color{black}u=\{A, C\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(212,-93){${d=\{A,C\}}$}
+	\put(184,-135){${d=\{A\}}$}
+	\put(184,-147){${\color{red}u=\{A,C\}}$}
+	\put(154,-192){${\color{black}u=\{A,C\}}$}
+	\put(44,-358){$\color{black}\mathbf{u=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch up-pass fourth level nodes}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=4}
+	\put(-198,-65){$\color{black}u=\{A\}$}
+	\put(-125,-65){$\color{black}u=\{A, C,G\}$}
+	\put(-175,-147){${\color{black}u=\{A, C\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(212,-93){${d=\{A,C\}}$}
+	\put(212,-105){${\color{red}u=\{A,C\}}$}
+	\put(184,-147){${\color{black}u=\{A,C\}}$}
+	\put(154,-192){${\color{black}u=\{A,C\}}$}
+	\put(44,-358){$\color{black}{u=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch up-pass fifth level nodes}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=4}
+	\put(-198,-65){$\color{black}u=\{A\}$}
+	\put(-125,-65){$\color{black}u=\{A, C,G\}$}
+	\put(-175,-147){${\color{black}u=\{A, C\}}$}
+	\put(133,-53){$d=\{A\}$}
+	\put(140,-65){$\color{red}u=\{A\}$}
+	\put(212,-105){${u=\{A,C\}}$}
+	\put(184,-147){${\color{black}u=\{A,C\}}$}
+	\put(154,-192){${\color{black}u=\{A,C\}}$}
+	\put(44,-358){$\color{black}{u=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch after up-pass }\label{FitchupLast}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=4}
+	\put(-198,-65){$\color{black}u=\{A\}$}
+	\put(-125,-65){$\color{black}u=\{A, C,G\}$}
+	\put(-175,-147){${\color{black}u=\{A, C\}}$}
+	\put(140,-65){$\color{black}u=\{A\}$}
+	\put(212,-105){${u=\{A,C\}}$}
+	\put(184,-147){${\color{black}u=\{A,C\}}$}
+	\put(154,-192){${\color{black}u=\{A,C\}}$}
+	\put(44,-358){$\color{black}{u=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{Fitch final state set with states added in up-pass  shown in () }\label{FitchupLast}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-130,-200){ score=4}
+	\put(-198,-65){$\color{black}u=\{A\}$}
+	\put(-130,-60){$\color{black}u=\{(A), C,G\}$}
+	\put(-175,-147){${\color{black}u=\{A, C\}}$}
+	\put(140,-65){$\color{black}u=\{A\}$}
+	\put(212,-105){${u=\{A,C\}}$}
+	\put(184,-147){${\color{black}u=\{A,(C)\}}$}
+	\put(154,-192){${\color{black}u=\{A,C\}}$}
+	\put(44,-358){$\color{black}{u=\{A,C\}}$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\begin{figure}[htpd]
+\begin{center}
+\caption{transitions in mpr }\label{FitchupLast}
+\begin{picture}(-50,0)(20,20)
+	\thicklines
+	\put(-228,7){Taxa:}
+	\put(-188,7){A}
+	\put(-191,-5){$\{A\}$}
+	\put(-132,7){D}
+	\put(-136,-5){$\{A\}$}
+	\put(-76,7){G}
+	\put(-80,-5){$\{G\}$}
+	\put(-20,7){C}
+	\put(-24,-5){$\{C\}$}
+	\put(36,7){B}
+	\put(32,-5){$\{C\}$}
+	\put(92,7){E}
+	\put(88,-5){$\{A\}$}
+	\put(148,7){H}
+	\put(144,-5){$\{A\}$}
+	\put(204,7){I}
+	\put(200,-5){$\{A\}$}
+	\put(260,7){F}
+	\put(256,-5){$\{C\}$}
+	\put(-260,-5){Char. State:}
+	\put(-153,-50){\line(2,3){25}}
+	\put(-46,-50){\line(-2,3){25}}
+	\put(-100,-130){\line(2,3){80}}
+	\put(150,-177){\line(-2,3){110}}
+	\put(180,-132){\line(-2,3){79}}
+	\put(208,-90){\line(-2,3){48}}
+	\put(181,-50){\line(2,3){25}}
+	\put(40,-342){\line(-2,3){220}}
+	\put(40,-342){\line(2,3){220}}
+	\put(-205,-35){$\color{black}A\rightarrow A$}
+	\put(-135,-30){$\color{black}A\rightarrow A$}
+	\put(-128,-45){$\color{black}{\{A,C,G\}}\rightarrow G$}
+	\put(-38,-45){$\color{black}{\{A,C,G\}}\rightarrow C$}
+	\put(-65,-85){$\color{black}{A}\rightarrow \{A,G,C\}$}
+	\put(-70,-100){$\color{black}{C}\rightarrow C$}
+	\put(-195,-100){${\color{black}\{A, C\}\rightarrow A}$}
+	\put(-100,-200){$\color{black}{C}\rightarrow C$}
+	\put(-85,-220){$\color{black}{A}\rightarrow A$}
+	\put(120,-240){$\color{black}{C}\rightarrow C$}
+	\put(110,-255){$\color{black}{A}\rightarrow A$}
+	\put(170,-160){$\color{black}{C}\rightarrow C$}
+	\put(160,-175){$\color{black}{A}\rightarrow A$}
+	\put(210,-110){$\color{black}{C}\rightarrow C$}
+	\put(200,-125){$\color{black}{A}\rightarrow A$}
+	\put(55,-135){$\color{black}{\{A,C\}}\rightarrow C$}
+	\put(75,-65){$\color{black}\{A,C\}\rightarrow A$}
+	\put(145,-85){$\color{black}\{A,C\}\rightarrow A$}
+	\put(235,-65){$\color{black}\{A,C\}\rightarrow C$}
+	\put(130,-35){$\color{black}A\rightarrow A$}
+	\put(195,-35){$\color{black}A\rightarrow A$}
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\newpage
+\bibliography{phylo}
+
+
+\end{document}

@@ -40,6 +40,9 @@ class LnLTrace(QtGui.QDialog):
         self.axis_pen = QtGui.QPen(QtCore.Qt.black, 1, QtCore.Qt.DashLine)
         self.connect(self.trace_button,  QtCore.SIGNAL('clicked()'), self.trace)
         self.setLayout(gridLayout)
+        self.unscaled_x_width = 0
+        self.lower_xrange, self.upper_xrange = 0, 1
+        self.y_offset = 0
         self.resize(570, 400)
         
     def trace(self):
@@ -75,33 +78,48 @@ class LnLTrace(QtGui.QDialog):
         maxima = [(i[1], i[0]) for i in inverted_maxima]
         self.do_plot(score_lists, maxima, x_range=(mn, mx) )
 
-    def do_plot(self, score_lists, maxima, x_range):
+    def rescale(self, x, y):
+        plot_x = self.width_offset + (x - self.lower_xrange)*self.width_pix/self.unscaled_x_width
+        plot_y = self.height_pix + self.scale*(y + self.y_offset) 
+        return (plot_x, plot_y)
+
+    def calc_rescaling_vars(self, score_lists, maxima, x_range):
         worst_index = len(score_lists) - 1
         worst_best = maxima[worst_index]
         best_best = maxima[0]
+
+
+        self.unscaled_x_width = x_range[1] - x_range[0]
+        self.lower_xrange, self.upper_xrange = x_range[0], x_range[1]
+        while (worst_best[1] == float('-inf')) and worst_index > 1:
+            worst_index -= 1
+            worst_best = maxima[worst_index]
+        if worst_best[1] == float('-inf'):
+            best_best_index = best_best[2]
+            score_set_index = best_best[3]
+            half_best_best_x = int(best_best_index/2)
+            from_top = len(score_lists[score_set_index]) - best_best_index
+            half_bigger_best_x = best_best_index + int(from_top/2)
+            self.lower_sc = min(score_lists[half_best_best_x][1], score_lists[half_bigger_best_x][1])
+        else:
+            self.lower_sc = worst_best[1]
+
+        diff = best_best[1] - self.lower_sc
+        self.height_in_lnL = self.plot_y_range_mult*diff
+        self.y_offset = diff - self.lower_sc
+        self.scale = -self.drawable_height/(self.height_in_lnL)
+
+        if best_best[1] != float('-inf'):
+            return best_best
+        return None
+     
+                    
+    def do_plot(self, score_lists, maxima, x_range):
         self.rescaled = []
         self.axes_lines = []
         self.axes_text = []
-        unscaled_x_width = x_range[1] - x_range[0]
-        if best_best[1] != float('-inf'):
-            while (worst_best[1] == float('-inf')) and worst_index > 1:
-                worst_index -= 1
-                worst_best = maxima[worst_index]
-            if worst_best[1] == float('-inf'):
-                best_best_index = best_best[2]
-                score_set_index = best_best[3]
-                half_best_best_x = int(best_best_index/2)
-                from_top = len(score_lists[score_set_index]) - best_best_index
-                half_bigger_best_x = best_best_index + int(from_top/2)
-                score_lists = score_lists[score_set_index]
-                lower_sc = min(score_lists[half_best_best_x][1], score_lists[half_bigger_best_x][1])
-            else:
-                lower_sc = worst_best[1]
-
-            diff = best_best[1] - lower_sc
-            height_in_lnL = self.plot_y_range_mult*diff
-            y_offset = diff - lower_sc
-            scale = -self.drawable_height/(height_in_lnL)
+        best_best = self.calc_rescaling_vars(score_lists, maxima, x_range)
+        if best_best is not None:
 
             # now we rescale the points to pixels...
             for sc in score_lists:
@@ -109,11 +127,10 @@ class LnLTrace(QtGui.QDialog):
                 cached = None
                 prev_in_range = False
                 for unscaled_x, unscaled_y in sc:
-                    plot_x = self.width_offset + (unscaled_x - x_range[0])*self.width_pix/unscaled_x_width
-                    plot_y = self.height_pix + scale*(unscaled_y + y_offset) 
-                    if unscaled_x < x_range[0]:
+                    plot_x, plot_y = self.rescale(unscaled_x, unscaled_y)
+                    if unscaled_x < self.lower_xrange:
                         cached = (plot_x, plot_y)
-                    elif unscaled_x > x_range[1]:
+                    elif unscaled_x > self.upper_xrange:
                         if prev_in_range:
                             rsc.append((plot_x, plot_y))
                         prev_in_range = False
@@ -123,36 +140,45 @@ class LnLTrace(QtGui.QDialog):
                             cached = None
                         rsc.append((plot_x, plot_y))
                         prev_in_range = True
-                print "RSC = ", rsc
+                print "RSC[:10] = ", rsc[:10]
+                print "RSC[10:] = ", rsc[10:]
+                print "scale =", self.scale
+                print "y_offset =", self.y_offset
+                print "best_best[1]", best_best[1]
+                print "lower_sc ", self.lower_sc
                 self.rescaled.append(rsc)
+
+
+            self.mle_x, self.mle_y = self.rescale(best_best[0], best_best[1])
+
+            self.upper_axis_y = self.height_pix + scale*(best_best[1] + y_offset)
+            self.lower_axis_y = self.height_pix 
+            self.left_axis_x = self.width_offset
+            self.right_axis_x = self.width_offset + self.width_pix
+
+
             
-            upper_axis_y = self.height_pix + scale*(best_best[1] + y_offset)
-            lower_axis_y = self.height_pix 
-            left_axis_x = self.width_offset
-            right_axis_x = self.width_offset + self.width_pix
-            mle_x = self.width_offset + (best_best[0] - x_range[0])*self.width_pix/unscaled_x_width
-            mle_y = self.height_pix + scale*(best_best[1] + y_offset)
-            self.axes_lines = [((left_axis_x, lower_axis_y),(right_axis_x, lower_axis_y)),
-                ((left_axis_x, 2*lower_axis_y),(left_axis_x, upper_axis_y)),
-                ((left_axis_x, mle_y),(mle_x, mle_y)),
-                ((mle_x, lower_axis_y + font_y_offset),(mle_x, mle_y)),
+            self.axes_lines = [
+                    ((self.left_axis_x, self.lower_axis_y),(self.right_axis_x, self.lower_axis_y)),
+                    ((self.left_axis_x, 2*self.lower_axis_y),(self.left_axis_x, self.upper_axis_y)),
+                    ((self.left_axis_x, self.mle_y),(self.mle_x, self.mle_y)),
+                    ((self.mle_x, self.lower_axis_y + font_y_offset),(self.mle_x, self.mle_y)),
                 ]
             self.axes_text = [
-                (((left_axis_x + right_axis_x)/2 - 3*font_x_offset, lower_axis_y + 3*font_y_offset), self.param_list[0].name),
-                ((left_axis_x - 3*font_x_offset, lower_axis_y - font_y_offset), "lnL"),
-                ((2, mle_y + font_y_offset), "%6.2f" % (best_best[1])),
-                ((mle_x - 2*font_x_offset, lower_axis_y + 5*font_y_offset), "%6.4f" % (best_best[0])),
+                (((self.left_axis_x + self.right_axis_x)/2 - 3*font_x_offset, self.lower_axis_y + 3*font_y_offset), self.param_list[0].name),
+                ((self.left_axis_x - 3*font_x_offset, self.lower_axis_y - font_y_offset), "lnL"),
+                ((2, self.mle_y + font_y_offset), "%6.2f" % (self.best_best[1])),
+                ((self.mle_x - 2*font_x_offset, self.lower_axis_y + 5*font_y_offset), "%6.4f" % (best_best[0])),
                 ]
 
             # add lines for the other trees if they are above near the lower axis
             for i, sub_opt in enumerate(maxima[1:]):
-                if sub_opt[1] > best_best[1] - 1.5*height_in_lnL:
-                    sub_mle_x = self.width_offset + (sub_opt[0] - x_range[0])*self.width_pix/unscaled_x_width
-                    sub_mle_y = self.height_pix + scale*(sub_opt[1] + y_offset)
-                    self.axes_lines.append(((left_axis_x, sub_mle_y),(sub_mle_x, sub_mle_y)))
-                    self.axes_lines.append(((sub_mle_x, lower_axis_y + (3*i + 4)*font_y_offset),(sub_mle_x, sub_mle_y)))
+                if sub_opt[1] > best_best[1] - 1.5*self.height_in_lnL:
+                    sub_mle_x = self.rescale(sub_opt[0], sub_opt[1])
+                    self.axes_lines.append(((self.left_axis_x, sub_mle_y),(sub_mle_x, sub_mle_y)))
+                    self.axes_lines.append(((sub_mle_x, self.lower_axis_y + (3*i + 4)*font_y_offset),(sub_mle_x, sub_mle_y)))
                     self.axes_text.append(((2, sub_mle_y + font_y_offset), "%6.2f" % (sub_opt[1])))
-                    self.axes_text.append(((sub_mle_x - 2*font_x_offset, lower_axis_y + (3*i + 8)*font_y_offset), "%6.4f" % (sub_opt[0])))
+                    self.axes_text.append(((sub_mle_x - 2*font_x_offset, self.lower_axis_y + (3*i + 8)*font_y_offset), "%6.4f" % (sub_opt[0])))
         self.repaint()
 
     def paintEvent(self, event):
@@ -175,10 +201,11 @@ class LnLTrace(QtGui.QDialog):
                     pass
                 else:
                     try:
+                        #print ifx, ify, isx, isy
                         paint.drawLine(ifx, ify, isx, isy)
                     except:
-                        #pass
-                        raise
+                        pass
+                        #raise
                 fx, fy = sx, sy
 
         paint.setPen(self.axis_pen)
