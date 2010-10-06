@@ -1,0 +1,41 @@
+#NEXUS
+
+begin data;
+	dimensions ntax = 7 nchar=6;
+	matrix
+A	000000
+B	000000
+C	110000
+D	110000
+E	101011
+F	101111
+G	1011??
+;
+end;
+set nowarntsave;
+
+begin trees;
+	tree star = [&U] (A,B,C,D,E,F,G);
+	tree AB   = [&U] ((A,B),C,D,E,F,G);
+	tree AC   = [&U] ((A,C),B,D,E,F,G);
+	tree AD   = [&U] ((A,D),C,B,E,F,G);
+	tree AE   = [&U] ((A,E),C,D,B,F,G);
+	tree AF   = [&U] ((A,F),C,D,E,B,G);
+	tree AG   = [&U] ((A,G),C,D,E,F,B);
+	tree BC   = [&U] ((B,C),A,D,E,F,G);
+	tree BD   = [&U] ((B,D),C,A,E,F,G);
+	tree BE   = [&U] ((B,E),C,D,A,F,G);
+	tree BF   = [&U] ((B,F),C,D,E,A,G);
+	tree BG   = [&U] ((B,G),C,D,E,F,A);
+	tree CD   = [&U] ((C,D),A,B,E,F,G);
+	tree CE   = [&U] ((C,E),A,D,B,F,G);
+	tree CF   = [&U] ((C,F),A,D,E,B,G);
+	tree CG   = [&U] ((C,G),A,D,E,F,B);
+	tree DE   = [&U] ((D,E),C,A,B,F,G);
+	tree DF   = [&U] ((D,F),C,A,E,B,G);
+	tree DG   = [&U] ((D,G),C,A,E,F,B);
+	tree EF   = [&U] ((E,F),C,D,A,B,G);
+	tree EG   = [&U] ((E,G),C,D,A,F,B);
+	tree FG   = [&U] ((F,G),C,D,E,A,B);
+
+END;

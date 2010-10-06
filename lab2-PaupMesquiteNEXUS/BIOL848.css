@@ -1,0 +1,147 @@
+.pagetitle {
+	font-family: "Times New Roman", Times, serif;
+	font-size: xx-large;
+	color: #000099;
+	vertical-align: top;
+}
+.rowhead {
+	font-family: "Times New Roman", Times, serif;
+	font-size: large;
+	color: #000099;
+}
+h1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: x-large;
+}
+.editable {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.makeconspicuous {
+	font-weight: bold;
+	font-style: italic;
+}
+.newterm {
+	font-weight: bold;
+}
+.command {
+	font-family: "Courier New", Courier, mono;
+	color: #993300;
+	background-color: #FFFF00;
+}
+.filename {
+	font-family: "Courier New", Courier, mono;
+	font-weight: bold;
+	color: #0000FF;
+}
+.NEXUS {
+	font-family: "Courier New", Courier, mono;
+	font-weight: bold;
+	color: #FF0000;
+}
+.listing {
+	text-align: center;
+}
+.instructions {
+	color: maroon;
+	background-color: silver;
+}
+.reference {
+	margin-top: 1em;
+	padding-right: 5%;
+	padding-left: 5%;
+}
+.topic {
+	font-size: larger;
+	font-weight: bold;
+	color: navy;
+}
+.qcommand {
+	font-family: "Courier New", Courier, mono;
+	font-style: normal;
+	font-weight: bold;
+	color: teal;
+}
+.question {
+	font-style: italic;
+	font-weight: bold;
+	color: teal;
+}
+.menu {
+	font-style: italic;
+	font-weight: normal;
+}
+.taxonname {
+	font-family: "Courier New", Courier, mono;
+	font-weight: normal;
+}
+h2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: x-large;
+}
+h3 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+}
+.rightlinks {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: small;
+	color: #000099;
+}
+.smallextras {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: small;
+}
+dt {
+	font-weight: bold;
+	margin-top: 2ex;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+}
+dd {
+	margin-top: 1ex;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 1ex;
+}
+.hostname {
+	font-family: "Courier New", Courier, mono;
+	font-weight: bold;
+	color: #CC3399;
+}
+.usertyped {
+	font-family: "Courier New", Courier, mono;
+	font-weight: bold;
+	font-size: medium;
+}
+.prompt {
+	font-family: "Courier New", Courier, mono;
+	font-weight: normal;
+	font-size: medium;
+}
+.progname {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	color: #0033FF;
+	font-weight: normal;
+}
+.variable {
+	font-style: italic;
+}
+.cancellation {
+	font-weight: bold;
+	color: #FF0000;
+}
+.answers {
+}
+li {
+	padding-top: 1ex;
+}
+.output {
+	font-family: "Courier New", Courier, mono;
+	font-weight: normal;
+	font-size: medium;
+}
+.linuxcmd {
+	font-family: "Courier New", Courier, mono;
+	font-weight: bold;
+}

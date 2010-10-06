@@ -1,0 +1,10 @@
+#NEXUS
+begin data;
+    dimensions ntax = 4 nchar = 10;
+    format datatype = standard;
+    matrix
+A 0000000000
+B 0100000000
+C 0011000111
+D 0000111111;
+end;

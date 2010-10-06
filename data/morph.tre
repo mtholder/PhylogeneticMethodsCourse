@@ -1,0 +1,13 @@
+#NEXUS
+
+[ID: 1500986805]
+begin trees;
+   [Note: This tree contains information on the topology, 
+          branch lengths (if present), and the probability
+          of the partition indicated by the branch.]
+   tree con_50_majrule = (tenue:0.091232,(fimbriata:0.030704,robusta:0.066311)1.00:0.328754,(articulata:0.126915,parksii:0.055373,macrophylla:0.059186,polygama:0.094311,(gracilis:0.041409,(ciliata:0.018142,basiramia:0.017949)0.96:0.103673)0.97:0.259230,(americana:0.036299,myriophylla:0.038513)0.92:0.107537)0.92:0.257907);
+
+   [Note: This tree contains information only on the topology
+          and branch lengths (mean of the posterior probability density).]
+   tree con_50_majrule = (tenue:0.091232,(fimbriata:0.030704,robusta:0.066311):0.328754,(articulata:0.126915,parksii:0.055373,macrophylla:0.059186,polygama:0.094311,(gracilis:0.041409,(ciliata:0.018142,basiramia:0.017949):0.103673):0.259230,(americana:0.036299,myriophylla:0.038513):0.107537):0.257907);
+end;

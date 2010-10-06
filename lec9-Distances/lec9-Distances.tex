@@ -1,0 +1,1976 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\usepackage{pdfpages}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+
+
+
+\myNewSlide
+\section*{Consistency Index (CI)}
+\begin{itemize}
+	\item minimum number of changes divided by the number required on the tree.
+	\item CI=1 if there is no homoplasy
+	\item negatively correlated with the number of species sampled
+\end{itemize}
+
+\myNewSlide
+\section*{Retention Index (RI)}
+ \[\mbox{RI} = \frac{\mbox{MaxSteps}-\mbox{ObsSteps}}{\mbox{MaxSteps}-\mbox{MinSteps}}\] 
+\begin{itemize}
+	\item defined to be 0 for parsimony uninformative characters
+	\item RI=1 if the character fits perfectly
+	\item RI=0 if the tree fits the character as poorly as possible
+\end{itemize}
+
+\myNewSlide
+\section*{Qualitative description of parsimony}
+\begin{itemize}
+	\item Enables estimation of ancestral sequences.
+	\item Even though parsimony always seeks to minimizes the number of changes, it can perform well even when changes are not rare. 
+	\item Does not ``prefer'' to put changes on one branch over another
+	\item Hard to characterize statistically
+	\begin{compactitem}
+		\item the set of conditions in which parsimony is guaranteed to work well is very restrictive (low probability of change and not too much branch length heterogeneity);
+	   \item Parsimony often performs well in simulation studies (even when outside the zones in which it is guaranteed to work); 
+	   	\item Estimates of the tree can be extremely biased.
+	\end{compactitem}	   
+\end{itemize}
+
+\myNewSlide
+\section*{Long branch attraction}
+\begin{picture}(0,0)(0,0)  
+\put(20,-60){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/fels_tree.pdf}}}
+\put(100, -0){\normalsize Felsenstein, J. 1978. Cases in which}
+\put(100, -10){\normalsize  parsimony or compatibility methods will be}
+\put(100, -20){\normalsize positively misleading. {\em Systematic Zoology}}
+\put(100, -30){\normalsize {\bf 27}: 401-410.}
+\put(20, -50){\small 1.0}
+\put(68, -50){\small 1.0}
+\put(44, -120){\small 0.01}
+\put(55, -115){\small 0.01}
+\put(30, -115){\small 0.01}
+\end{picture}
+
+\myNewSlide
+\section*{Long branch attraction}
+\begin{picture}(0,0)(0,0)  
+\put(20,-60){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/fels_tree.pdf}}}
+\put(38,-103){\makebox(0,0)[l]{\includegraphics[scale=1]{../images/lightning.pdf}}}
+\put(100, -0){\normalsize Felsenstein, J. 1978. Cases in which}
+\put(100, -10){\normalsize  parsimony or compatibility methods will be}
+\put(100, -20){\normalsize positively misleading. {\em Systematic Zoology}}
+\put(100, -30){\normalsize {\bf 27}: 401-410.}
+\put(100, -60){\normalsize The probability of a parsimony informative}
+\put(100, -70){\normalsize site due to inheritance is very low,}
+ \put(100, -80){\normalsize (roughly 0.0003).}
+\put(16, -0){\large A}
+\put(75, -0){\large G}
+\put(35, -123){\large A}
+\put(56, -123){\large G}
+\put(20, -50){\small 1.0}
+\put(68, -50){\small 1.0}
+\put(44, -120){\small 0.01}
+\put(55, -115){\small 0.01}
+\put(30, -115){\small 0.01}
+\end{picture}
+
+\myNewSlide
+\section*{Long branch attraction}
+\begin{picture}(0,0)(0,0)  
+\put(20,-60){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/fels_tree.pdf}}}
+\put(50,-50){\rotatebox{90}{\includegraphics{../images/lightning.pdf}}}
+\put(10,-50){\rotatebox{90}{\includegraphics{../images/lightning.pdf}}}
+\put(100, -0){\normalsize Felsenstein, J. 1978. Cases in which}
+\put(100, -10){\normalsize  parsimony or compatibility methods will be}
+\put(100, -20){\normalsize positively misleading. {\em Systematic Zoology}}
+\put(100, -30){\normalsize {\bf 27}: 401-410.}
+\put(100, -60){\normalsize The probability of a parsimony informative}
+\put(100, -70){\normalsize site due to inheritance is very low,}
+\put(100, -80){\normalsize (roughly 0.0003).}
+\put(100, -100){\normalsize The probability of a misleading parsimony}
+\put(100, -110){\normalsize informative site due to parallelism is much}
+\put(100, -120){\normalsize higher (roughly 0.008).}
+\put(16, -0){\large A}
+\put(75, -0){\large A}
+\put(35, -123){\large G}
+\put(56, -123){\large G}
+\put(20, -50){\small 1.0}
+\put(68, -50){\small 1.0}
+\put(44, -120){\small 0.01}
+\put(55, -115){\small 0.01}
+\put(30, -115){\small 0.01}
+\end{picture}
+
+\myNewSlide
+\section*{Long branch attraction}
+Parsimony is almost guaranteed to get this tree wrong.\\
+\begin{picture}(0,0)(0,0)  
+\put(20,-60){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/fels_tree.pdf}}}
+\put(120,-60){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/inferred_fels.pdf}}}
+\put(16, -0){\large 1}
+\put(75, -0){\large 3}
+\put(35, -123){\large 2}
+\put(56, -123){\large 4}
+\put(42, -133){\large True}
+\put(115, -20){\large 1}
+\put(200, -20){\large 3}
+\put(150, -103){\large 2}
+\put(165, -103){\large 4}
+\put(152, -123){\large Inferred}
+\end{picture}
+
+\myNewSlide
+\section*{Inconsistency}
+\begin{itemize}	
+	\item Statistical Consistency (roughly speaking) is converging to the true answer as the amount of data goes to $\infty$.
+	\item Parsimony based tree inference is {\em not} consistent for some tree shapes.  In fact it can be ``positively misleading'':
+	 \begin{itemize}	
+		\item ``Felsenstein zone'' tree
+		\item Many clocklike trees with short internal branch lengths and long terminal branches (Penny {\em et al.}, 1989, Huelsenbeck and Lander, 2003).
+	\end{itemize}
+	\item Methods for assessing confidence (e.g. bootstrapping) will indicate that you should be very confident in the wrong answer.
+\end{itemize}
+
+
+\myNewSlide
+If the data is generated such that:
+
+\begin{eqnarray*}
+\Pr
+\left(
+\begin{array}{c}
+ A \\
+ A \\
+ G \\   
+ G 
+\end{array}
+\right)\approx 0.0003 &\mbox{and} & \Pr
+\left(
+\begin{array}{c}
+ A \\
+ G \\
+ G \\   
+ A 
+\end{array}
+\right) \approx 0.008
+\end{eqnarray*}
+then how can we hope to infer the tree ((1,2),3,4) ?
+
+
+
+\myNewSlide
+
+Looking at the data in ``bird's eye'' view (using Mesquite):\\
+\begin{picture}(0,0)(100,0)  
+\put(0,-50){\makebox(0,0)[l]{\includegraphics[scale=2]{../images/birdseyefelsenstein.pdf}}}
+\end{picture}
+
+\myNewSlide
+
+Looking at the data in ``bird's eye'' view (using Mesquite):\\
+\begin{picture}(0,0)(100,0)  
+\put(0,-50){\makebox(0,0)[l]{\includegraphics[scale=2]{../images/birdseyefelsenstein.pdf}}}
+\end{picture}
+
+\vskip 8cm 
+We see that sequences 1 and 4 are clearly very different.\\
+Perhaps we can estimate the tree if we use the branch length information from the sequences...
+
+
+
+\myNewSlide
+
+\section*{Distance-based approaches to inferring trees}
+\begin{itemize}
+	\item Convert the raw data (sequences) to a pairwise distances
+	\item Try to find a tree that explains these distances.
+	\item {\em Not} simply clustering the most similar sequences.
+\end{itemize}
+
+
+
+\myNewSlide
+
+\begin{tabular}{lcccccccccc}
+ &1&2&3&4&5&6&7&8&9&10\\
+ Species 1\hskip 2mm& C & G  & A & C & C & A & G & G & T & A\\
+ Species 2\hskip 2mm& C & G  & A & C & C & A & G & G & T & A\\
+ Species 3\hskip 2mm& C & G  & G & T & C & C & G & G & T & A\\
+ Species 4\hskip 2mm& C & G  & G & C & C & A & T & G & T & A \\
+\end{tabular}\par
+Can be converted to a distance matrix:\par
+\begin{tabular}{c|cccc|}
+& Species 1& Species 2 & Species 3 &Species 4\\
+\hline Species 1\hskip 2mm& 0 & 0 & 0.3 & 0.2 \\
+Species 2\hskip 2mm& 0 & 0 &  0.3 & 0.2 \\
+Species 3\hskip 2mm& 0.3 & 0.3 & 0 &0.3 \\
+Species 4\hskip 2mm& 0.2 & 0.2 & 0.3 &0\\ \hline
+\end{tabular}
+
+\myNewSlide
+Note that the distance matrix is symmetric.\par
+\begin{tabular}{c|cccc|}
+& Species 1& Species 2 & Species 3 &Species 4\\
+\hline Species 1\hskip 2mm& 0 & 0 & 0.3 & 0.2 \\
+Species 2\hskip 2mm& 0 & 0 &  0.3 & 0.2 \\
+Species 3\hskip 2mm& 0.3 & 0.3 & 0 &0.3 \\
+Species 4\hskip 2mm& 0.2 & 0.2 & 0.3 &0\\ \hline
+\end{tabular}
+
+\myNewSlide
+\ldots so we can just use the lower triangle.\par
+\begin{tabular}{c|ccc|}
+& Species 1& Species 2 & Species 3 \\
+\hline Species 2\hskip 2mm& 0 &   &    \\
+Species 3\hskip 2mm& 0.3 & 0.3 &   \\
+Species 4\hskip 2mm& 0.2 & 0.2 & 0.3 \\
+\hline
+\end{tabular}
+\par
+Can we find a tree that would predict these observed character divergences?
+\myNewSlide
+\begin{tabular}{c|ccc|}
+& Species 1& Species 2 & Species 3 \\
+\hline Species 2\hskip 2mm& 0 &   &    \\
+Species 3\hskip 2mm& 0.3 & 0.3 &   \\
+Species 4\hskip 2mm& 0.2 & 0.2 & 0.3 \\ \hline
+\end{tabular}\par
+Can we find a tree that would predict these observed character divergences?
+\begin{picture}(0,0)(0,0)  
+\put(0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/simple_unrooted.pdf}}}
+\put(-15,-30){Sp. 1}
+\put(-15,-80){Sp. 2}
+\put(65,-30){Sp. 3}
+\put(65,-80){Sp. 4}
+\normalsize
+\put(0,-48){\bf 0.0}
+\put(15,-66){\bf 0.0}
+\put(22,-45){\bf 0.1}
+\put(55,-45){\bf 0.2}
+\put(58,-65){\bf 0.1}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)  
+\put(50,-30){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/path_lengths.pdf}}}
+\put(80,-10){$a$}
+\put(80,-50){$b$}
+\put(140,-10){$c$}
+\put(140,-50){$d$}
+\put(110,-25){$i$}
+\put(150, -120){\begin{tabular}{c|ccc|}
+& 1& 2 & 3 \\
+\hline 2\hskip 2mm& $d_{12}$ &   &    \\
+3\hskip 2mm& $d_{13}$ & $d_{23}$ &   \\
+4\hskip 2mm& $d_{14}$ & $d_{24}$ &$d_{34}$ \\ \hline
+\end{tabular}\par
+ }
+\put(185, -90){data}
+\put(37, -90){parameters}
+\put(10, -100){$p_{12} =  a+b$}
+\put(10, -110){$p_{13}  = a+i+c$}
+\put(10, -120){$p_{14}  = a+i+d$}
+\put(10, -130){$p_{23} =  b+i+c$}
+\put(10, -140){$p_{23}  = b+i+d$}
+\put(10, -150){$p_{34}  = c+d$}
+\end{picture}
+
+\myNewSlide
+\large
+If our pairwise distance measurements were error-free estimates of the {\em evolutionary
+distance} between the sequences, then we could always infer the tree from the distances.
+
+The evolutionary distance is the number of mutations that have occurred along the path
+that connects two tips. 
+
+We hope the distances that we measure can produce good estimates of the evolutionary
+distance, but we know that they cannot be perfect.
+
+\myNewSlide
+\section*{Intuition of sequence divergence vs evolutionary distance}
+\large
+\begin{picture}(0,0)(10,0)  
+\put(20,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/distance_correction.pdf}}}
+\put(-10,-70){ $p$-dist}
+\put(115, -133){Evolutionary distance}
+\put(230, -138){$\infty$}
+\put(188, -10){This can't be right!}
+\end{picture}
+
+\myNewSlide
+\section*{Sequence divergence vs evolutionary distance}
+\begin{picture}(0,0)(0,0)  
+\put(20,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/jc_distance_correction.pdf}}}
+\put(-10,-70){ $p$-dist}
+\put(115, -133){Evolutionary distance}
+\put(230, -138){$\infty$}
+\put(172, -30){the $p$-dist}
+\put(172, -40){``levels off''}
+\end{picture}
+
+
+\myNewSlide
+\section*{``Multiple hits'' problem (also known as saturation)}
+\begin{itemize}
+	\item Levelling off of sequence divergence vs time plot is caused by multiple substitutions affecting the same site in the DNA.
+	\item At large distances the ``raw'' sequence divergence (also known as the $p$-distance or Hamming distance) is a poor estimate of the true evolutionary distance.
+	 \item Large $p$-distances respond more to model-based correction -- and there is a larger error associated with the correction.
+\end{itemize}
+
+\myNewSlide
+\begin{picture}(0,0)(50,0)  
+\put(20,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/sim20BaseSeq.pdf}}}
+\end{picture}
+
+
+
+
+\myNewSlide
+\section*{Distance corrections}
+\begin{compactitem}
+	\item applied to distances before tree estimation,
+	\item converts raw distances to an estimate of the evolutionary distance
+\end{compactitem}
+\[d = -\frac{3}{4}\;\ln\left(\frac{4c}{3}-1\right) \]
+
+\begin{picture}(0,0)(0,0)  
+\put(150, -60){\begin{tabular}{c|ccc|}
+& 1& 2 & 3 \\
+\hline 2\hskip 2mm& $d_{12}$ &   &    \\
+3\hskip 2mm& $d_{13}$ & $d_{23}$ &   \\
+4\hskip 2mm& $d_{14}$ & $d_{24}$ &$d_{34}$ \\ \hline
+\end{tabular}\par
+ }
+\put(150, -20){corrected distances}
+
+\put(0, -60){\begin{tabular}{c|ccc|}
+& 1& 2 & 3 \\
+\hline 2\hskip 2mm& $c_{12}$ &   &    \\
+3\hskip 2mm& $c_{13}$ & $c_{23}$ &   \\
+4\hskip 2mm& $c_{14}$ & $c_{24}$ &$c_{34}$ \\ \hline
+\end{tabular}\par
+ }
+\put(0, -20){``raw'' $p$-distances}
+\end{picture}
+
+
+
+\myNewSlide
+\[d = -\frac{3}{4}\;\ln\left(1-\frac{4c}{3}\right) \]
+
+\begin{picture}(0,0)(0,0)  
+\put(150, -60){\begin{tabular}{c|ccc|}
+& 1& 2 & 3 \\
+\hline 2\hskip 2mm& $0$ &   &    \\
+3\hskip 2mm& $0.383$ & $0.383$ &   \\
+4\hskip 2mm& $0.233$ & $0.233$ &$0.383$ \\ \hline
+\end{tabular}\par
+ }
+\put(150, -20){corrected distances}
+
+\put(0, -60){\begin{tabular}{c|ccc|}
+& 1& 2 & 3 \\
+\hline 2\hskip 2mm& $0.0$ &   &    \\
+3\hskip 2mm& $0.3$ & $0.3$ &   \\
+4\hskip 2mm& $0.2$ & $0.2$ &$0.3$ \\ \hline
+\end{tabular}\par
+ }
+\put(0, -20){``raw'' $p$-distances}
+\end{picture}
+
+
+
+\myNewSlide
+\section*{Least Squares Branch Lengths}
+\Large
+\[\mbox{Sum of Squares} = \sum_{i}\sum_{j}\frac{(p_{ij}-d_{ij})^{2}}{\sigma_{ij}^{k}} \]
+\begin{itemize}
+	\item minimize discrepancy between path lengths and observed distances
+	\item ${\sigma_{ij}^{k}} $ is used to ``downweight'' distance estimates with high variance
+\end{itemize}
+
+
+\myNewSlide
+\section*{Least Squares Branch Lengths}
+\Large
+\[\mbox{Sum of Squares} = \sum_{i}\sum_{j}\frac{(p_{ij}-d_{ij})^{2}}{\sigma_{ij}^{k}} \]
+\begin{itemize}
+	\item in unweighted least-squares (Cavalli-Sforza \& Edwards, 1967): $k=0$ 
+	\item in the method Fitch-Margoliash (1967):  $k=2$ and $\sigma_{ij} = d_{ij}$ 
+\end{itemize}
+
+\myNewSlide
+\section*{Poor fit using arbitrary branch lengths}
+\large
+\begin{tabular}{|c|c|c|c|}
+\hline Species& $d_{ij}$ & $p_{ij}$ & $(p-d)^{2}$\\
+\hline Hu-Ch & 0.09267 & 0.2 & 0.01152 \\
+\hline Hu-Go & 0.10928  & 0.3 & 0.03637 \\
+\hline Hu-Or & 0.17848  & 0.4 & 0.04907 \\
+\hline Hu-Gi & 0.20420  & 0.4 & 0.03834 \\
+\hline Ch-Go & 0.11440  & 0.3 & 0.03445 \\
+\hline Ch-Or & 0.19413  & 0.4 & 0.04238 \\
+\hline Ch-Gi & 0.21591  & 0.4 & 0.03389 \\
+\hline Go-Or & 0.18836  & 0.3 & 0.01246 \\
+\hline Go-Gi & 0.21592  & 0.3 & 0.00707 \\
+\hline Or-Gi & 0.21466  & 0.2 & 0.00021  \\
+\hline &   &  S.S.  & {\bf 0.26577 } \\
+\hline
+\end{tabular}
+
+\begin{picture}(0,0)(0,0)  
+\put(151,90){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/primate_tree_shape.pdf}}}
+\put(141,80){Hu}
+\put(170,50){Ch}
+\put(185,125){Go}
+\put(232,80){Or}
+\put(203,50){Gi}
+\put(157,85){\normalsize 0.1} %hu
+\put(165,65){\normalsize 0.1} %ch
+\put(175,93){\normalsize 0.1} %hu-ch
+\put(197,93){\normalsize 0.1} %or-gi
+\put(193,109){\normalsize 0.1} %go
+\put(215,85){\normalsize 0.1} %or
+\put(209,65){\normalsize 0.1} %gi
+\end{picture}
+
+\myNewSlide
+\section*{Optimizing branch lengths yields the least-squares score}
+\normalsize
+\begin{tabular}{|c|c|c|c|}
+\hline Species& $d_{ij}$ & $p_{ij}$ & $(p-d)^{2}$\\
+\hline Hu-Ch & 0.09267 & 0.09267  & 0.000000000\\
+\hline Hu-Go & 0.10928  & 0.10643  & 0.000008123\\
+\hline Hu-Or & 0.17848  & 0.18026  & 0.000003168\\
+\hline Hu-Gi & 0.20420  & 0.20528  & 0.000001166\\
+\hline Ch-Go & 0.11440  & 0.11726  & 0.000008180\\
+\hline Ch-Or & 0.19413  & 0.19109  & 0.000009242\\
+\hline Ch-Gi & 0.21591  & 0.21611  & 0.000000040\\
+\hline Go-Or & 0.18836  & 0.18963  & 0.000001613\\
+\hline Go-Gi & 0.21592  & 0.21465  & 0.000001613\\
+\hline Or-Gi & 0.21466  & 0.21466  & 0.000000000 \\
+\hline &   &  S.S.  & {\bf 0.000033144 } \\
+\hline
+\end{tabular}
+
+\begin{picture}(0,0)(0,0)  
+\put(161,70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/primate_tree_shape.pdf}}}
+\put(151,60){Hu}
+\put(180,30){Ch}
+\put(195,105){Go}
+\put(242,60){Or}
+\put(213,30){Gi}
+\put(164,63){\small 0.04092} %hu
+\put(165,45){\small 0.05175} %ch
+\put(177,73){\small 0.00761} %hu-ch
+\put(207,73){\small 0.03691} %or-gi
+\put(203,89){\small 0.05790} %go
+\put(222,63){\small 0.09482} %or
+\put(219,45){\small 0.11984} %gi
+\end{picture}
+
+\myNewSlide
+\section*{Least squares as an optimality criterion}
+\begin{picture}(0,0)(0,0)  
+\put(121,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/primate_tree_shape.pdf}}}
+\put(111,-80){Hu}
+\put(140,-110){\color{red} Ch}
+\put(155,-35){\color{red} Go}
+\put(203,-80){Or}
+\put(173,-110){Gi}
+\put(124,-77){\small 0.04092} %hu
+\put(125,-95){\small 0.05175} %ch
+\put(137,-67){\small 0.00761} %hu-ch
+\put(167,-67){\small 0.03691} %or-gi
+\put(163,-51){\small 0.05790} %go
+\put(182,-77){\small 0.09482} %or
+\put(179,-95){\small 0.11984} %gi
+\put(11,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/primate_tree_shape.pdf}}}
+\put(1,-80){Hu}
+\put(30,-110){\color{red} Go}
+\put(45,-35){\color{red} Ch}
+\put(93,-80){Or}
+\put(63,-110){Gi}
+\put(14,-77){\small 0.04742} %hu
+\put(15,-95){\small 0.05175} %go
+\put(25,-67){\small -0.00701} %hu-go
+\put(57,-67){\small 0.04178} %or-gi
+\put(53,-51){\small 0.05591} %ch
+\put(72,-77){\small 0.09482} %or
+\put(69,-95){\small 0.11984} %gi
+\put(25, -15){\large SS = 0.00034}
+\put(135, -15){\large SS = 0.0003314}
+\put(145, -25){\large (best tree)}
+\end{picture}
+
+\myNewSlide
+\section*{Minimum evolution optimality criterion}
+\begin{picture}(0,0)(0,0)  
+\put(121,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/primate_tree_shape.pdf}}}
+\put(111,-80){Hu}
+\put(140,-110){\color{red} Ch}
+\put(155,-35){\color{red} Go}
+\put(203,-80){Or}
+\put(173,-110){Gi}
+\put(124,-77){\small 0.04092} %hu
+\put(125,-95){\small 0.05175} %ch
+\put(137,-67){\small 0.00761} %hu-ch
+\put(167,-67){\small 0.03691} %or-gi
+\put(163,-51){\small 0.05790} %go
+\put(182,-77){\small 0.09482} %or
+\put(179,-95){\small 0.11984} %gi
+\put(11,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/primate_tree_shape.pdf}}}
+\put(1,-80){Hu}
+\put(30,-110){\color{red} Go}
+\put(45,-35){\color{red} Ch}
+\put(93,-80){Or}
+\put(63,-110){Gi}
+\put(14,-77){\small 0.04742} %hu
+\put(15,-95){\small 0.05175} %go
+\put(25,-67){\small -0.00701} %hu-go
+\put(57,-67){\small 0.04178} %or-gi
+\put(53,-51){\small 0.05591} %ch
+\put(72,-77){\small 0.09482} %or
+\put(69,-95){\small 0.11984} %gi
+\put(20, -5){\large Sum of branch lengths}
+\put(35, -15){\large =0.41152}
+\put(130, -5){\large Sum of branch lengths}
+\put(145, -15){\large =0.40975}
+\put(145, -25){\large (best tree)}
+\put(-20, -125){\large We still use least squares branch lengths when we use Minimum Evolution }
+\end{picture}
+
+\myNewSlide
+\section*{Huson and Steel -- distances that perfectly mislead}
+\large
+\citet{HusonS2004} point out problems when our pairwise distances have errors (do not reflect true evolutionary distances).
+Consider:
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|ccccccc|p{1cm}|c|cccc|}
+\hline
+& & & & & & & & & &\multicolumn{4}{c|}{Taxa} \\
+Taxon & \multicolumn{7}{c|}{Characters} & & Taxa & A& B & C &D \\
+\hline
+A & A & A & C & A & A & C & C & & A & - & 6 & 6 & 5 \\
+B & A & C & A & C & C & A & A & & B & 6 & - & 5 & 6\\
+C & C & A & G & G & G & A & A & & C & 6 & 5  & - & 6\\
+D & C & G & A & A & A & G & G & & D & 5 & 6 & 6 & - \\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+Homoplasy-free on tree $AB|CD$, but additive on tree $AD|BC$  (and not additive on any other tree).
+
+\myNewSlide
+\section*{Huson and Steel -- distances that perfectly mislead}
+Clearly, the previous matrix was contrived and not typical of realistic data. \\
+Would we ever expect to see additive distances on the {\bf wrong} tree as the result of a reasonable evolutionary process?
+
+Yes.  
+
+\citet{HusonS2004} show that under the equal-input model(more on this later), the {\bf uncorrected} distances can be additive on the wrong tree leading to long-branch attraction.
+The result holds even if the number of characters $\rightarrow \infty$
+
+\myNewSlide
+\section*{Failure to correct distance sufficiently leads to poor performance}
+ ``Under-correcting''  will underestimate long evolutionary distances more than short distances\\
+\begin{picture}(0,0)(0,0)  
+\put(70,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/felsenstein_undercorrected.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Failure to correct distance sufficiently leads to poor performance}
+ The result is the classic ``long-branch attraction'' phenomenon.\\
+\begin{picture}(0,0)(0,0)  
+\put(80,-70){\makebox(0,0)[l]{\includegraphics[scale=1.]{../images/fels_inferred.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Distance methods -- summary}
+We can:
+\begin{compactitem}
+	\item summarize a dataset as a matrix of distances or dissimilarities.
+	\item correct these distances for unseen character state changes.
+	\item estimate a tree by finding the tree with path lengths that are ``closest'' to the corrected distances. 
+\end{compactitem}
+
+
+
+\myNewSlide
+{
+\setlength{\unitlength}{.06cm}
+\begin{picture}(100,100)(-100,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+}
+If the tree above is correct then:
+\begin{eqnarray*}
+	p_{AB} & = & a + b \\
+	p_{AC} & = & a + i + c \\
+	p_{AD} & = & a + i + d \\
+	p_{BC} & = & b + i + c \\
+	p_{BD} & = & b + i + d \\
+	p_{CD} & = & c + d \\
+\end{eqnarray*}
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	\put(-95,15){\color{darkgreen}\line(1,-1){45}}
+	\put(20,-30){\color{darkgreen}\line(1,1){45}}
+	\put(-50,-30){\color{darkgreen}\line(1,0){70}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & {\color{darkgreen}$d_{AC}$} & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{darkgreen}$d_{AC}$}
+
+\end{center}
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	\put(-95,15){\color{darkgreen}\line(1,-1){45}}
+	\put(20,-30){\color{darkgreen}\line(1,1){45}}
+	\put(-50,-30){\color{darkgreen}\line(1,0){70}}
+
+	\put(-95,-105){\color{darkgreen}\line(1,1){45}}
+	\put(20,-60){\color{darkgreen}\line(1,-1){45}}
+	\put(-50,-60){\color{darkgreen}\line(1,0){70}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & {\color{darkgreen}$d_{AC}$} & $d_{BC}$ & \\
+ D & $d_{AD}$ & {\color{darkgreen}$d_{BD}$} & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{darkgreen}$d_{AC} + d_{BD}$}
+
+\end{center}
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	\put(-95,15){\color{darkgreen}\line(1,-1){45}}
+	\put(20,-30){\color{darkgreen}\line(1,1){45}}
+	\put(-50,-30){\color{darkgreen}\line(1,0){70}}
+
+	\put(-95,-105){\color{darkgreen}\line(1,1){45}}
+	\put(20,-60){\color{darkgreen}\line(1,-1){45}}
+	\put(-50,-60){\color{darkgreen}\line(1,0){70}}
+
+	\put(-110,-90){\color{red}\line(1,1){45}}
+	\put(-110,0){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & {\color{red}$d_{AB}$} & & \\
+ C & {\color{darkgreen}$d_{AC}$} & $d_{BC}$ & \\
+ D & $d_{AD}$ & {\color{darkgreen}$d_{BD}$} & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{darkgreen}$d_{AC} + d_{BD}$}
+\par
+{\color{red}$d_{AB}$}
+\end{center}
+
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	%\put(-95,15){\color{darkgreen}\line(1,-1){45}}
+	\put(20,-30){\color{darkgreen}\line(1,1){45}}
+	\put(-50,-30){\color{darkgreen}\line(1,0){70}}
+
+	%\put(-95,-105){\color{darkgreen}\line(1,1){45}}
+	\put(20,-60){\color{darkgreen}\line(1,-1){45}}
+	\put(-50,-60){\color{darkgreen}\line(1,0){70}}
+
+	%\put(-110,-90){\color{red}\line(1,1){45}}
+	%\put(-110,0){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & {\color{red}$d_{AB}$} & & \\
+ C & {\color{darkgreen}$d_{AC}$} & $d_{BC}$ & \\
+ D & $d_{AD}$ & {\color{darkgreen}$d_{BD}$} & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{darkgreen}$d_{AC} + d_{BD}$} {\color{red}$- d_{AB}$}
+\par
+\end{center}
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	%\put(-95,15){\color{darkgreen}\line(1,-1){45}}
+	\put(20,-30){\color{darkgreen}\line(1,1){45}}
+	\put(-50,-30){\color{darkgreen}\line(1,0){70}}
+
+	%\put(-95,-105){\color{darkgreen}\line(1,1){45}}
+	\put(20,-60){\color{darkgreen}\line(1,-1){45}}
+	\put(-50,-60){\color{darkgreen}\line(1,0){70}}
+
+	\put(35,-45){\color{red}\line(1,1){45}}
+	\put(35,-45){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & {\color{red}$d_{AB}$} & & \\
+ C & {\color{darkgreen}$d_{AC}$} & $d_{BC}$ & \\
+ D & $d_{AD}$ & {\color{darkgreen}$d_{BD}$} & {\color{red}$d_{CD}$} \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{darkgreen}$d_{AC} + d_{BD}$} {\color{red}$- d_{AB}$}
+\par
+{\color{red}$d_{CD}$}
+\end{center}
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	%\put(-95,15){\color{darkgreen}\line(1,-1){45}}
+	%\put(20,-30){\color{darkgreen}\line(1,1){45}}
+	\put(-50,-30){\color{darkgreen}\line(1,0){70}}
+
+	%\put(-95,-105){\color{darkgreen}\line(1,1){45}}
+	%\put(20,-60){\color{darkgreen}\line(1,-1){45}}
+	\put(-50,-60){\color{darkgreen}\line(1,0){70}}
+
+	%\put(35,-45){\color{red}\line(1,1){45}}
+	%\put(35,-45){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & {\color{red}$d_{AB}$} & & \\
+ C & {\color{darkgreen}$d_{AC}$} & $d_{BC}$ & \\
+ D & $d_{AD}$ & {\color{darkgreen}$d_{BD}$} & {\color{red}$d_{CD}$} \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{darkgreen}$d_{AC} + d_{BD}$} {\color{red}$- d_{AB}-d_{CD}$}
+\par
+\end{center}
+
+
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\color{darkgreen}\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & {\color{red}$d_{AB}$} & & \\
+ C & {\color{darkgreen}$d_{AC}$} & $d_{BC}$ & \\
+ D & $d_{AD}$ & {\color{darkgreen}$d_{BD}$} & {\color{red}$d_{CD}$} \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+\Large
+{$i^{\dag} = \frac{{\color{darkgreen}d_{AC} + d_{BD}} {\color{red}- d_{AB}-d_{CD}}}{2}$}
+\par
+\end{center}
+\normalsize
+
+
+\myNewSlide
+\Large
+Note that our estimate \\
+\[i^{\dag} = \frac{{\color{darkgreen}d_{AC} + d_{BD}} {\color{red}- d_{AB}-d_{CD}}}{2}\] 
+ does not use all of our data.  $d_{BC}$ and $d_{AD}$ are ignored!
+
+We could have used $d_{BC} + d_{AD}$ instead of $d_{AC} + d_{BD}$ (you can see this by going through
+the previous slides after rotating the internal branch).
+
+\[{i^{\ast} = \frac{d_{BC} + d_{AD} {\color{red}- d_{AB}-d_{CD}}}{2}}\] 
+
+\myNewSlide
+A better estimate than either $i$ or $i^{\ast}$ would be the average of both of them:
+\[i^{\prime} = \frac{d_{BC} + d_{AD}  + {\color{darkgreen}d_{AC} + d_{BD}}}{4} {\color{red} - \frac{d_{AB}-d_{CD}}{2}}\] 
+
+
+
+\myNewSlide
+\begin{figure}
+\normalsize
+\begin{center}
+\setlength{\unitlength}{.04cm}
+\begin{picture}(200,250)(70,-250)
+	\thicklines
+	{\color{red}
+	\put(-105,3){A}
+	\put(-110,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$\nu_a$}
+	\put(-65,-72){$\nu_b$}
+	\put(40,-17){$\nu_c$}
+	\put(28,-74){$\nu_d$}
+	\put(-15,-40){$\nu_i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+}
+	\put(105,3){A}
+	\put(105,-99){C}
+	\put(280,3){B}
+	\put(280,-99){D}
+	\put(135,-17){$\nu_a$}
+	\put(130,-72){$\nu_c$}
+	\put(250,-17){$\nu_b$}
+	\put(243,-74){$\nu_d$}
+	\put(195,-40){$\nu_i$}
+	\put(120,0){\line(1,-1){45}}
+	\put(120,-90){\line(1,1){45}}
+	\put(165,-45){\line(1,0){70}}
+	\put(235,-45){\line(1,1){45}}
+	\put(235,-45){\line(1,-1){45}}
+
+	{\color{green}
+	\put(325,3){A}
+	\put(320,-99){D}
+	\put(500,3){C}
+	\put(500,-99){B}
+	\put(365,-17){$\nu_a$}
+	\put(365,-72){$\nu_d$}
+	\put(470,-17){$\nu_c$}
+	\put(460,-74){$\nu_b$}
+	\put(415,-40){$\nu_i$}
+	\put(335,0){\line(1,-1){45}}
+	\put(335,-90){\line(1,1){45}}
+	\put(380,-45){\line(1,0){70}}
+	\put(450,-45){\line(1,1){45}}
+	\put(450,-45){\line(1,-1){45}}
+	}
+	\put(-180,-195){\begin{tabular}{p{3.75cm}|p{5.95cm}p{0.2cm}p{6cm}p{0.2cm}p{8cm}|}
+\hline
+{\color{black}$d_{AB} + d_{CD}$} & {\color{red}$\nu_a+\nu_b+\nu_c+\nu_d$} & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} & & {\color{green}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} \\
+\hline
+{\color{black}$d_{AC} + d_{BD}$}& {\color{red}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d$} & & {\color{green}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} \\
+\hline
+{\color{black}$d_{AD} + d_{BC}$} & {\color{red}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} & & {\color{green}$\nu_a+\nu_b+\nu_c+\nu_d$} \\
+\hline
+\end{tabular}
+}
+\end{picture}
+\end{center}
+\end{figure}
+
+The four point condition of \citet{Buneman1971}.
+
+This assumes additivity of distances.
+
+\myNewSlide
+\normalsize
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.04cm}
+\begin{picture}(200,250)(70,-250)
+	\thicklines
+	\put(105,3){A}
+	\put(105,-99){C}
+	\put(280,3){B}
+	\put(280,-99){D}
+	\put(135,-17){$\nu_a$}
+	\put(130,-72){$\nu_c$}
+	\put(250,-17){$\nu_b$}
+	\put(243,-74){$\nu_d$}
+	\put(195,-40){$\nu_i$}
+	\put(120,0){\line(1,-1){45}}
+	\put(120,-90){\line(1,1){45}}
+	\put(165,-45){\line(1,0){70}}
+	\put(235,-45){\line(1,1){45}}
+	\put(235,-45){\line(1,-1){45}}
+
+	\put(-180,-175){\begin{tabular}{p{4cm}|p{5cm}p{0.3cm}p{12cm}p{0.8cm}p{8cm}|}
+\hline
+{\color{black}$d_{AB} + d_{CD}$} &  & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i + \epsilon_{AB} + \epsilon_{CD}$} & & \\
+\hline
+{\color{black}$d_{AC} + d_{BD}$}& & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+ \epsilon_{AC}+ \epsilon_{BD}$} & & \\
+\hline
+{\color{black}$d_{AD} + d_{BC}$} & & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i+ \epsilon_{AD}+ \epsilon_{BC}$} & & \\
+\hline
+\end{tabular}
+}
+\end{picture}
+\end{center}
+\end{figure}
+\large
+If $|\epsilon_{ij}| < \frac{\nu_i}{2}$ then $d_{AC} + d_{BD}$ will still be the smallest sum -- So Buneman's method will get the tree correct.
+
+Worst case: $\epsilon_{AC} = \epsilon_{BD} = \frac{\nu_i}{2}$ and $\epsilon_{AB} = \epsilon_{CD} = -\frac{\nu_i}{2}$ then 
+
+\[d_{AC} + d_{BD} = \nu_a+\nu_b+\nu_c+\nu_d+\nu_i = d_{AB} + d_{CD}\]
+
+\myNewSlide
+
+
+
+
+\large
+Both Buneman's four-point condition and  Hennigian logic, return the tree given perfectly clean data. But what does ``perfectly clean data'' mean?
+\begin{compactenum}
+	\item Hennigian analysis $\rightarrow$ no homoplasy. The infinite alleles model.
+	\item Buneman's four-point test $\rightarrow$ no multiple hits to the same site. The infinite sites model.
+\end{compactenum}
+
+
+\myNewSlide
+\section*{The guiding principle of distance-based methods}
+If our data are true measures of evolutionary distances (and the distance along each branch is always $>0$)
+then:
+\begin{compactenum}
+	\item The distances will be additive on the true tree.
+	\item The distances will {\bf not} be additive on any other tree.
+\end{compactenum}
+This is the basis of Buneman's method and the motivation for minimizing the sum-of-squared error (least squares) too choose among trees.
+
+
+
+\myNewSlide
+\section*{Balanced minimum evolution}
+\large
+The logic behind Buneman's four-point condition has been extend to trees of more than 4 taxa by \citet{Pauplin2000} and \citet{SempleS2004}.
+
+\cite{Pauplin2000} showed that you can calculate a tree length from the pairwise distances without calculating branch lengths.
+The key is weighting the distances:
+\[l = \sum_i^N\sum_{j=i+1}^N w_{ij} d_{ij}\] 
+where:
+\[w_{ij} = \frac{1}{2^{n(i,j)}}\]
+and $n(i,j)$ is the number of nodes on the path from $i$ to $j$.
+
+\section*{Balanced minimum evolution}
+
+``Balanced Minimum Evolution'' \citet{DesperG2002,DesperG2004} -- fitting the branch lengths using the estimators of \citet{Pauplin2000} and preferring the tree with the smallest tree length 
+
+BME = a form of weighted least squares in which distances are down-weighted by an exponential function of the topological distances between the leaves.
+
+\citet{DesperG2005}: neighbor-joining is star decomposition (more on this later) under BME. See \citet{GascuelS2006}
+
+\myNewSlide
+\section*{FastME}
+Software by \citet{DesperG2004} which implements searching under the balanced minimum evolution criterion. 
+
+It is extremely fast and is more accurate than neighbor-joining (based on simulation studies).
+
+\myNewSlide
+\section*{Distance methods: pros}
+\begin{itemize}
+	\item Fast  -- the new FastTree method \citet{PriceDA2009} can calculate a tree in less time than it takes to calculate a full distance matrix!
+	\item Can use models to correct for unobserved differences
+	\item Works well for closely related sequences
+	\item Works well for clock-like sequences
+\end{itemize}
+
+\myNewSlide
+\section*{Distance methods: cons}
+\begin{itemize}
+	\item Do not use all of the information in sequences
+	\item Do not reconstruct character histories, so they not enforce all logical constraints
+\end{itemize}
+
+\begin{picture}(0,0)(0,0)  
+\put(100,-50){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/simple_unrooted.pdf}}}
+\put(90,-30){A}
+\put(90,-80){G}
+\put(165,-30){A}
+\put(165,-80){G}
+\end{picture}
+
+
+
+
+\myNewSlide
+
+\myNewSlide
+\section*{Neighbor-joining}
+\citet{SaitouN1987}.  $r$ is the number of leaves remaining.
+Start with $r=N$.
+\begin{compactitem}
+	\item[1.] choose the pair of leaves $x$ and $y$ that minimize $Q(x,y)$:
+	\[Q(i,j) = (r-2)d_{ij} -\sum_{k=1}^r d_{ik}-\sum_{k=1}^r d_{jk}\]
+	\item[2.] Join $x$ and $y$ with at a new node $z$.  Take $x$ and $y$ out of the leaf set and distance matrix, and add the new node $z$ as a leaf.
+\end{compactitem}
+
+\myNewSlide
+\section*{Neighbor-joining (continued)}
+\begin{compactitem}
+	\item[3.] Set the branch length from $x$ to $z$ using:
+	\[d_{xz} = \frac{d_{xy}}{2} + \left(\frac{1}{2(r-2)}\right)\left(\sum_{k=1}^r d_{xk}-\sum_{k=1}^r d_{yk}\right)\]
+	(the length of the branch from $y$ to $z$ is set with a similar formula).
+	\item[4.] Update the distance matrix, by adding (for any other taxon $k$) the distance:
+	\[d_{zk} = \frac{d_{xk} + d_{yk} - d_{xz} - d_{yz}}{2}\]
+	\item[5.] return to step 1 until you are down to a trivial tree.
+\end{compactitem}
+
+
+
+
+\myNewSlide
+\section*{Neighbor-joining (example)}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+ & A & B & C & D & E & F  \\ 
+\hline
+A &      - &         &         &       & & \\ 
+B & 0.258 &        - &         &       & & \\ 
+C  & 0.274 &  0.204   &      - &       & & \\ 
+D  & 0.302  & 0.248 & 0.278  &       -  & &\\
+E  &  0.288  &  0.224 &  0.252 &  0.268 &        -  & \\
+F  &  0.250  &  0.160 &  0.226 &  0.210 &  0.194 &        - \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\section*{Neighbor-joining (example)}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|r|c|c|c|c|c|c|c|}
+\hline
+$\sum_{k} d_{ik}$ &  & A & B & C & D & E & F  \\ 
+\hline
+1.372 & A & 0.0 & 0.258 & 0.274 & 0.302 & 0.288 & 0.25 \\
+1.094 & B & 0.258 & 0.0 & 0.204 & 0.248 & 0.224 & 0.16 \\
+1.234 & C & 0.274 & 0.204 & 0.0 & 0.278 & 0.252 & 0.226 \\
+1.306 & D & 0.302 & 0.248 & 0.278 & 0.0 & 0.268 & 0.21 \\
+1.226 & E & 0.288 & 0.224 & 0.252 & 0.268 & 0.0 & 0.194 \\
+1.040 & F & 0.25 & 0.16 & 0.226 & 0.21 & 0.194 & 0.0 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}%
+
+
+\myNewSlide
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|r|c|}
+\hline
+$Q(A,B)$ & -1.434 \\
+$Q(A,C)$ & -1.510 \\
+$Q(A,D)$ & -1.470 \\
+$Q(A,E)$ & -1.446 \\
+$Q(A,F)$ & -1.412 \\
+{\color{red} $Q(B,C)$ } &{\color{red} -1.512 }\\
+$Q(B,D)$ & -1.408 \\
+$Q(B,E)$ & -1.424 \\
+$Q(B,F)$ & -1.494 \\
+$Q(C,D)$ & -1.428 \\
+$Q(C,E)$ & -1.452 \\
+$Q(C,F)$ & -1.370 \\
+$Q(D,E)$ & -1.460 \\
+$Q(D,F)$ & -1.506 \\
+$Q(E,F)$ & -1.490 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}%
+
+
+
+
+\myNewSlide
+\section*{Neighbor-joining (example)}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ & A  & D & E & F & (B,C)  \\ 
+\hline
+A & 0.0 & 0.302 & 0.288 & 0.25 & 0.164 \\
+D & 0.302 & 0.0 & 0.268 & 0.21 & 0.161 \\
+E & 0.288 & 0.268 & 0.0 & 0.194 & 0.136 \\
+F & 0.25 & 0.21 & 0.194 & 0.0 & 0.091 \\
+(B,C) & 0.164 & 0.161 & 0.136 & 0.091 & 0.0\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}%
+
+
+
+\myNewSlide
+\section*{Neighbor-joining (example)}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+$\sum_{k} d_{ik}$ &  & A & D & E & F & (B,C)  \\ 
+\hline
+1.004000 & A & 0.0 & 0.302 & 0.288 & 0.25 & 0.164 \\
+0.941000 & D & 0.302 & 0.0 & 0.268 & 0.21 & 0.161 \\
+0.886000 & E & 0.288 & 0.268 & 0.0 & 0.194 & 0.136 \\
+0.745000 & F & 0.25 & 0.21 & 0.194 & 0.0 & 0.091 \\
+0.552000 & (B,C) & 0.164 & 0.161 & 0.136 & 0.091 & 0.0 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}%
+
+\myNewSlide
+\section*{Neighbor-joining (example)}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|r|c|}
+\hline
+$Q(A,D)$ & -1.039000 \\
+$Q(A,E)$ & -1.026000 \\
+$Q(A,F)$ & -0.999000 \\
+{\color{red} $Q(A,(B,C))$} & {\color{red} -1.064000} \\
+$Q(D,E)$ & -1.023000 \\
+$Q(D,F)$ & -1.056000 \\
+$Q(D,(B,C))$ & -1.010000 \\
+$Q(E,F)$ & -1.049000 \\
+$Q(E,(B,C))$ & -1.030000 \\
+$Q(F,(B,C))$ & -1.024000 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}%
+
+
+
+\myNewSlide
+\section*{Neighbor-joining (example)}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+   & D & E & F & (A,(B,C))  \\ 
+\hline
+D & 0.0 & 0.268 & 0.21 & 0.1495 \\
+E & 0.268 & 0.0 & 0.194 & 0.13 \\
+F & 0.21 & 0.194 & 0.0 & 0.0885 \\
+(A,(B,C)) & 0.1495 & 0.13 & 0.0885 & 0.0 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}%
+
+
+\myNewSlide
+\section*{Neighbor-joining (example)}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$\sum_{k} d_{ik}$ &  & D & E & F & (A,(B,C))  \\
+\hline
+0.627500 & D & 0.0 & 0.268 & 0.21 & 0.1495 \\
+0.592000 & E & 0.268 & 0.0 & 0.194 & 0.13 \\
+0.492500 & F & 0.21 & 0.194 & 0.0 & 0.0885 \\
+0.368000 & (A,(B,C)) & 0.1495 & 0.13 & 0.0885 & 0.0 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}%
+
+
+\myNewSlide
+\section*{Neighbor-joining (example)}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|r|c|}
+\hline
+$Q(D,E)$ & -0.683500 \\
+{\color{red}$Q(D,F)$} & {\color{red}-0.700000} \\
+$Q(D,(A,(B,C)))$ & -0.696500 \\
+$Q(E,F)$ & -0.696500 \\
+$Q(E,(A,(B,C)))$ & -0.700000 \\
+$Q(F,(A,(B,C)))$ & -0.683500 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}%
+\begin{center}
+{\color{red}$((D,F),E,(A,(B,C)))$}
+\end{center}
+
+
+\myNewSlide
+\section*{Neighbor-joining is special}
+\citet{Bryant2005} discusses neighbor joining in the context of clustering methods that:
+\begin{compactitem}
+	\item Work on the distance (or dissimilarity) matrix as input.
+	\item Repeatedly
+	\begin{compactitem}
+		\item select a pair of taxa to agglomerate (step 1 above)
+		\item make the pair into a new group (step 2 above)
+		\item estimate branch lengths (step 3 above)
+		\item reduce the distance matrix (step 4 above)
+	\end{compactitem}
+\end{compactitem}
+
+\myNewSlide
+\section*{Neighbor-joining is special (cont)}
+\citet{Bryant2005} shows that if you want your selection criterion to be:
+\begin{compactitem}
+	\item based solely on distances
+	\item invariant to the ordering of the leaves (no {\em a priori} special taxa).
+	\item work on linear combinations of distances (simple coefficients for weights, no fancy weighting schemes).
+	\item statistically consistent
+\end{compactitem}
+then neighbor-joining's $Q$-criterion as a selection rule is the {\em only} choice.
+	
+\myNewSlide
+\section*{Neighbor-joining is not perfect}
+\begin{compactitem}
+	\item BioNJ \citep{Gascuel1997} does a better job by using the variance and covariances in the reduction step.
+	\item Weighbor \citep{BrunoSH2000} includes the variance information in the selection step.
+	\item FastME \citep{DesperG2002,DesperG2004} does a better job of finding the BME tree (and seems to get the true tree right more often).
+\end{compactitem}
+
+
+\myNewSlide
+\bibliography{phylo}
+\end{document}     
+
+
+
+
+\myNewSlide
+
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+
+If the tree above is correct then:
+\begin{eqnarray*}
+	p_{AB} & = & a + b \\
+	p_{AC} & = & a + i + c \\
+	p_{AD} & = & a + i + d \\
+	p_{BC} & = & b + i + c \\
+	p_{BD} & = & b + i + d \\
+	p_{CD} & = & c + d \\
+\end{eqnarray*}
+
+\myNewSlide
+If our distance data reflects true ``evolutionary distance'' (amount of character change within a lineage),
+then distances will be additive:
+\begin{eqnarray*}
+	d_{AB} = p_{AB} & = & a + b \\
+	d_{AC} = p_{AC} & = & a + i + c \\
+	d_{AD} = p_{AD} & = & a + i + d \\
+	d_{BC} = p_{BC} & = & b + i + c \\
+	d_{BD} = p_{BD} & = & b + i + d \\
+	d_{CD} = p_{CD} & = & c + d \\
+\end{eqnarray*}
+and we simply have to find values for $a, b, c, d,$ and $i$  that match the data.
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	\put(-95,15){\color{green}\line(1,-1){45}}
+	\put(20,-30){\color{green}\line(1,1){45}}
+	\put(-50,-30){\color{green}\line(1,0){70}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{green}$d_{AC}$}
+
+\end{center}
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	\put(-95,15){\color{green}\line(1,-1){45}}
+	\put(20,-30){\color{green}\line(1,1){45}}
+	\put(-50,-30){\color{green}\line(1,0){70}}
+
+	\put(-95,-105){\color{green}\line(1,1){45}}
+	\put(20,-60){\color{green}\line(1,-1){45}}
+	\put(-50,-60){\color{green}\line(1,0){70}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{green}$d_{AC} + d_{BD}$}
+
+\end{center}
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	\put(-95,15){\color{green}\line(1,-1){45}}
+	\put(20,-30){\color{green}\line(1,1){45}}
+	\put(-50,-30){\color{green}\line(1,0){70}}
+
+	\put(-95,-105){\color{green}\line(1,1){45}}
+	\put(20,-60){\color{green}\line(1,-1){45}}
+	\put(-50,-60){\color{green}\line(1,0){70}}
+
+	\put(-110,-90){\color{red}\line(1,1){45}}
+	\put(-110,0){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{green}$d_{AC} + d_{BD}$}
+\par
+{\color{red}$d_{AB}$}
+\end{center}
+
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	%\put(-95,15){\color{green}\line(1,-1){45}}
+	\put(20,-30){\color{green}\line(1,1){45}}
+	\put(-50,-30){\color{green}\line(1,0){70}}
+
+	%\put(-95,-105){\color{green}\line(1,1){45}}
+	\put(20,-60){\color{green}\line(1,-1){45}}
+	\put(-50,-60){\color{green}\line(1,0){70}}
+
+	%\put(-110,-90){\color{red}\line(1,1){45}}
+	%\put(-110,0){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{green}$d_{AC} + d_{BD} - d_{AB}$}
+\par
+\end{center}
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	%\put(-95,15){\color{green}\line(1,-1){45}}
+	\put(20,-30){\color{green}\line(1,1){45}}
+	\put(-50,-30){\color{green}\line(1,0){70}}
+
+	%\put(-95,-105){\color{green}\line(1,1){45}}
+	\put(20,-60){\color{green}\line(1,-1){45}}
+	\put(-50,-60){\color{green}\line(1,0){70}}
+
+	\put(35,-45){\color{red}\line(1,1){45}}
+	\put(35,-45){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{green}$d_{AC} + d_{BD} - d_{AB}$}
+\par
+{\color{red}$d_{CD}$}
+\end{center}
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	%\put(-95,15){\color{green}\line(1,-1){45}}
+	%\put(20,-30){\color{green}\line(1,1){45}}
+	\put(-50,-30){\color{green}\line(1,0){70}}
+
+	%\put(-95,-105){\color{green}\line(1,1){45}}
+	%\put(20,-60){\color{green}\line(1,-1){45}}
+	\put(-50,-60){\color{green}\line(1,0){70}}
+
+	%\put(35,-45){\color{red}\line(1,1){45}}
+	%\put(35,-45){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+
+{\color{green}$d_{AC} + d_{BD} - d_{AB}-d_{CD}$}
+\par
+\end{center}
+
+
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.06cm}
+\begin{picture}(200,100)(0,-100)
+	\thicklines
+	\put(-105,3){A}
+	\put(-105,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$a$}
+	\put(-70,-72){$b$}
+	\put(40,-17){$c$}
+	\put(33,-74){$d$}
+	\put(-15,-40){$i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\color{green}\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+
+	%\put(-95,15){\color{green}\line(1,-1){45}}
+	%\put(20,-30){\color{green}\line(1,1){45}}
+	%\put(-50,-30){\color{green}\line(1,0){70}}
+
+	%\put(-95,-105){\color{green}\line(1,1){45}}
+	%\put(20,-60){\color{green}\line(1,-1){45}}
+	%\put(-50,-60){\color{green}\line(1,0){70}}
+
+	%\put(35,-45){\color{red}\line(1,1){45}}
+	%\put(35,-45){\color{red}\line(1,-1){45}}
+
+\put(160,-45){\begin{tabular}{c|ccc}
+ & A & B & C\\
+ \hline
+ B & $d_{AB}$ & & \\
+ C & $d_{AC}$ & $d_{BC}$ & \\
+ D & $d_{AD}$ & $d_{BD}$ & $d_{CD}$ \\
+\end{tabular}
+}
+\end{picture}\\
+\end{center}
+\end{figure}
+\vskip 2cm
+\begin{center}
+\Large
+{\color{green}$i = \frac{d_{AC} + d_{BD} - d_{AB}-d_{CD}}{2}$}
+\par
+\end{center}
+\normalsize
+
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.04cm}
+\begin{picture}(200,250)(70,-250)
+	\thicklines
+	{\color{red}
+	\put(-105,3){A}
+	\put(-110,-99){B}
+	\put(70,3){C}
+	\put(70,-99){D}
+	\put(-75,-17){$\nu_a$}
+	\put(-65,-72){$\nu_b$}
+	\put(40,-17){$\nu_c$}
+	\put(28,-74){$\nu_d$}
+	\put(-15,-40){$\nu_i$}
+	\put(-95,0){\line(1,-1){45}}
+	\put(-95,-90){\line(1,1){45}}
+	\put(-50,-45){\line(1,0){70}}
+	\put(20,-45){\line(1,1){45}}
+	\put(20,-45){\line(1,-1){45}}
+}
+	\put(105,3){A}
+	\put(105,-99){C}
+	\put(280,3){B}
+	\put(280,-99){D}
+	\put(135,-17){$\nu_a$}
+	\put(130,-72){$\nu_c$}
+	\put(250,-17){$\nu_b$}
+	\put(243,-74){$\nu_d$}
+	\put(195,-40){$\nu_i$}
+	\put(120,0){\line(1,-1){45}}
+	\put(120,-90){\line(1,1){45}}
+	\put(165,-45){\line(1,0){70}}
+	\put(235,-45){\line(1,1){45}}
+	\put(235,-45){\line(1,-1){45}}
+
+	{\color{green}
+	\put(325,3){A}
+	\put(320,-99){D}
+	\put(500,3){C}
+	\put(500,-99){B}
+	\put(365,-17){$\nu_a$}
+	\put(365,-72){$\nu_d$}
+	\put(470,-17){$\nu_c$}
+	\put(460,-74){$\nu_b$}
+	\put(415,-40){$\nu_i$}
+	\put(335,0){\line(1,-1){45}}
+	\put(335,-90){\line(1,1){45}}
+	\put(380,-45){\line(1,0){70}}
+	\put(450,-45){\line(1,1){45}}
+	\put(450,-45){\line(1,-1){45}}
+	}
+	\put(-180,-195){\begin{tabular}{p{3.75cm}|p{5.95cm}p{0.2cm}p{6cm}p{0.2cm}p{8cm}|}
+\hline
+{\color{black}$d_{AB} + d_{CD}$} & {\color{red}$\nu_a+\nu_b+\nu_c+\nu_d$} & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} & & {\color{green}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} \\
+\hline
+{\color{black}$d_{AC} + d_{BD}$}& {\color{red}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d$} & & {\color{green}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} \\
+\hline
+{\color{black}$d_{AD} + d_{BC}$} & {\color{red}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i$} & & {\color{green}$\nu_a+\nu_b+\nu_c+\nu_d$} \\
+\hline
+\end{tabular}
+}
+\end{picture}
+\end{center}
+\end{figure}
+
+The four point condition of \citet{Buneman1971}.
+
+This assumes additivity of distances.
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{.04cm}
+\begin{picture}(200,250)(70,-250)
+	\thicklines
+	\put(105,3){A}
+	\put(105,-99){C}
+	\put(280,3){B}
+	\put(280,-99){D}
+	\put(135,-17){$\nu_a$}
+	\put(130,-72){$\nu_c$}
+	\put(250,-17){$\nu_b$}
+	\put(243,-74){$\nu_d$}
+	\put(195,-40){$\nu_i$}
+	\put(120,0){\line(1,-1){45}}
+	\put(120,-90){\line(1,1){45}}
+	\put(165,-45){\line(1,0){70}}
+	\put(235,-45){\line(1,1){45}}
+	\put(235,-45){\line(1,-1){45}}
+
+	\put(-180,-175){\begin{tabular}{p{4cm}|p{5cm}p{0.3cm}p{12cm}p{0.8cm}p{8cm}|}
+\hline
+{\color{black}$d_{AB} + d_{CD}$} &  & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i + \epsilon_{AB} + \epsilon_{CD}$} & & \\
+\hline
+{\color{black}$d_{AC} + d_{BD}$}& & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+ \epsilon_{AC}+ \epsilon_{BD}$} & & \\
+\hline
+{\color{black}$d_{AD} + d_{BC}$} & & & {\color{black}$\nu_a+\nu_b+\nu_c+\nu_d+2\nu_i+ \epsilon_{AD}+ \epsilon_{BC}$} & & \\
+\hline
+\end{tabular}
+}
+\end{picture}
+\end{center}
+\end{figure}
+\large
+If $|\epsilon_{ij}| < \frac{\nu_i}{2}$ then $d_{AC} + d_{BD}$ will still be the smallest sum -- So Buneman's method will get the tree correct.
+
+Worst case: $\epsilon_{AC} = \epsilon_{BD} = \frac{\nu_i}{2}$ and $\epsilon_{AB} = \epsilon_{CD} = -\frac{\nu_i}{2}$ then 
+
+\[d_{AC} + d_{BD} = \nu_a+\nu_b+\nu_c+\nu_d+\nu_i = d_{AB} + d_{CD}\]
+\myNewSlide
+\begin{picture}(0,0)(0,0)
+	\put(-30,-70){\makebox(0,0)[l]{\includegraphics{../images/sim20BaseSeq.pdf}}}
+\end{picture}
+
+\myNewSlide
+\includepdf[pages={10-15}]{../nonfreeimages/pol/pol-distances.pdf} 
+
+
+

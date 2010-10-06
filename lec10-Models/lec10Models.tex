@@ -1,0 +1,428 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\usepackage{pdfpages}
+
+\newcommand{\disruption}{\theta}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+\begin{center}
+{\Large Some of these slides have been borrowed from Dr.\ Paul Lewis, Dr.\ Joe Felsenstein. Thanks!}
+\vskip 15mm
+\large Paul has many great tools for teaching phylogenetics at his web site: \\
+\url{http://hydrodictyon.eeb.uconn.edu/people/plewis}
+\end{center}
+
+
+
+
+\myNewSlide
+\includepdf[pages={2-3}]{../nonfreeimages/pol/pol-09-model.pdf} 
+
+
+\myNewSlide
+\section*{The Poisson distribution}
+Probability distribution on the number of events when:
+\begin{compactenum}
+	\item events are assumed to be independent,
+	\item the {\em rate} of events some constant, $\mu$, and
+	\item the process continues for some duration of time, $t$.
+\end{compactenum}
+The expectation of the number of events is $\nu = \mu t$.
+
+Note that $\nu$ can be any non-negative number, but the Poisson is a discrete distribution -- it gives the probabilities of the number of events (and this number will always be a non-negative integer).
+
+\myNewSlide
+\section*{The Poisson distribution}
+\Large
+\[\Pr(k\mbox{ events}|\mbox{Expected \# is } \nu) = \frac{\nu^k e^{-\nu}}{k !}
+\]
+
+\[\Pr(0\mbox{ events}) = \frac{\nu^0 e^{-\nu}}{0 !} = e^{-\nu} = e^{-\mu t}
+\]
+
+\[\Pr(\geq 1\mbox{ events}) = 1 - e^{-\nu} = 1 - e^{-\mu t}
+\]
+
+\myNewSlide
+\includepdf[pages={13}]{../nonfreeimages/pol/pol-09-model.pdf} 
+
+\myNewSlide
+\section*{Probability of T$\rightarrow$G over time $t$}
+If $\mu$ is the rate of disruptions, and a branch is $t$ units of time long then:
+Let's use $\disruption$ for the rate of any particular ``disruption.''
+
+\[ \mu_{TA} = \mu_{TC} = \mu_{TG} = \mu_{TT} = \disruption \]
+\[\mu = 4 \disruption\]
+
+Furthermore, given that there is a disruption the chance of any particular change is
+$\frac{1}{4}$
+
+\myNewSlide
+\section*{Probability of $T\rightarrow G$ over time $t$}
+\begin{eqnarray*}
+	\Pr(0\mbox{ disruptions} | t) &  = & e^{-\mu t} \\
+	\Pr(\mbox{at least 1 disruption}| t) &  = & 1 - e^{-\mu t} \\
+	\Pr(\mbox{last disruption leads to }G) &  = & 0.25 \\
+	\Pr(T\rightarrow G | t) & = & 0.25\left(1 - e^{-\mu t}\right) \\
+		 & = & 0.25\left(1 - e^{-4\disruption t}\right)
+\end{eqnarray*}
+
+\myNewSlide
+\includepdf[pages={15}]{../nonfreeimages/pol/pol-09-model.pdf} 
+
+\myNewSlide
+\section*{JC transition probabilities}
+\large
+\begin{eqnarray*}
+	\Pr(T\rightarrow A | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+	\Pr(T\rightarrow C | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+	\Pr(T\rightarrow G | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+	\Pr(T\rightarrow T | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+\end{eqnarray*}
+but this only adds up to:
+\[\left(1 - e^{-4\disruption t}\right)\]
+instead of 1!
+
+\myNewSlide
+We left out the probability of no disruptions:$ e^{-4\disruption t}$
+
+So:
+\begin{eqnarray*}
+	\Pr(T\rightarrow A | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+	\Pr(T\rightarrow C | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+	\Pr(T\rightarrow G | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+	\Pr(T\rightarrow T | t) & = & e^{-4\disruption t} + 0.25\left(1 - e^{-4\disruption t}\right) \\
+		& = & 0.25 + 0.75e^{-4\disruption t} \\
+\end{eqnarray*}
+
+\myNewSlide
+\section*{JC transition probabilities}
+\begin{eqnarray*}
+	\Pr(i\rightarrow j | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+	\Pr(i\rightarrow i | t) & = & 0.25 + 0.75e^{-4\disruption t} \\
+\end{eqnarray*}
+When $t = 0$, then $e^{-4\disruption t} = 1$, and:
+\begin{eqnarray*}
+	\Pr(i\rightarrow j | t) & = & 0 \\
+	\Pr(i\rightarrow i | t) & = & 1 \\
+\end{eqnarray*}
+
+\myNewSlide
+\section*{JC transition probabilities}
+\begin{eqnarray*}
+	\Pr(i\rightarrow j | t) & = & 0.25\left(1 - e^{-4\disruption t}\right) \\
+	\Pr(i\rightarrow i | t) & = & 0.25 + 0.75e^{-4\disruption t} \\
+\end{eqnarray*}
+When $t = \infty$, then $e^{-4\disruption t} = 0$, and:
+\begin{eqnarray*}
+	\Pr(i\rightarrow j | t) & = & 0.25 \\
+	\Pr(i\rightarrow i | t) & = & 0.25 \\
+\end{eqnarray*}
+
+\myNewSlide
+\includepdf[pages={24-27}]{../nonfreeimages/pol/pol-09-model.pdf} 
+
+\myNewSlide
+\section*{JC instantaneous rate matrix - the Q matrix for JC}
+The 1 parameter is $\alpha$ (sometimes parameterized in terms of $\mu$).
+This is the rate of replacements (``disruptions'' that change the state):
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-3\alpha$ & $\alpha$ & $\alpha$ & $\alpha$    \\
+\multirow{2}{*}{State } &C & $\alpha$ & $-3\alpha$ & $\alpha$ & $\alpha$    \\
+ &G & $\alpha$ & $\alpha$ & $-3\alpha$ & $\alpha$    \\
+ &T & $\alpha$ & $\alpha$ & $\alpha$ & $-3\alpha$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\myNewSlide
+\section*{Change probabilities}
+We can calculate a transition probability matrix as a function of time by:
+\[\mathbf{P}(t) = e^{\mathbf{Q}t}\]
+The important thing to note is the rates ($\mathbf{Q}$ matrix) is multiplied by the time.
+
+We can't separate rates and times since we always see the effect of their product.
+
+Is a medium level of character divergence:
+\begin{compactenum}
+	\item medium rate of change and medium amount of time,
+	\item high rate, but short time period,
+	\item low rate, but a long time period?
+\end{compactenum}
+\myNewSlide
+\section*{JC instantaneous rate matrix again}
+What if you do not know the length of time for a branch in the tree?
+We estimate branch lengths in terms of character divergence -- the product of rate and time.
+What is important is that we know the relative rates of different types of substitutions, so JC can be expressed:
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-3$ & $1$ & $1$ & $1$    \\
+\multirow{2}{*}{State } &C & $1$ & $-3$ & $1$ & $1$    \\
+ &G & $1$ & $1$ & $-3$ & $1$ \\
+ &T & $1$ & $1$ & $1$ & $-3$ \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\section*{JC instantaneous rate matrix yet again}
+We estimate branch lengths in terms of expected number of changes {\em per site}.
+To do this we standardize the total rate of divergence in the Q matrix and estimate $\nu = \mu t = 3\alpha t$
+for each branch.
+
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-1$ & $\frac{1}{3}$ & $\frac{1}{3}$ & $\frac{1}{3}$    \\
+\multirow{2}{*}{State } &C & $\frac{1}{3}$ & $-1$ & $\frac{1}{3}$ & $\frac{1}{3}$    \\
+ &G & $\frac{1}{3}$ & $\frac{1}{3}$ & $-1$ & $\frac{1}{3}$    \\
+ &T & $\frac{1}{3}$ & $\frac{1}{3}$ & $\frac{1}{3}$ & $-1$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\section*{\citet{Kimura1980} model or ``the K80 model''}
+Transitions and transversions occur at different rates:
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-2\beta - \alpha$ & $\beta $ & $\alpha$ & $\beta $    \\
+\multirow{2}{*}{State } &C & $\beta $ & $-2\beta - \alpha$ & $\beta $ & $\alpha$    \\
+ &G & $\alpha$ & $\beta $ & $-2\beta - \alpha$ & $\beta $    \\
+ &T & $\beta $ & $\alpha$ & $\beta $ & $-2\beta - \alpha$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\section*{\citet{Kimura1980} model or ``the K80 model''. Reparameterized.}
+Once again, we care only about the relative rates, so we can choose one rate to be frame of reference. This turns the 2 parameter model into a 1 parameter form:
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-(2+\kappa)\beta$ & $\beta $ & $\kappa\beta$ & $\beta $    \\
+\multirow{2}{*}{State } &C & $\beta $ & $-(2+\kappa)\beta$ & $\beta $ & $\kappa\beta$    \\
+ &G & $\kappa\beta$ & $\beta $ & $-(2+\kappa)\beta$ & $\beta $    \\
+ &T & $\beta $ & $\kappa\beta$ & $\beta $ & $-(2+\kappa)\beta$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\section*{\citet{Kimura1980} model or ``the K80 model''. Reparameterized again.}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-2-\kappa$ & $1 $ & $\kappa$ & $1 $    \\
+\multirow{2}{*}{State } &C & $1 $ & $-2-\kappa$ & $1 $ & $\kappa$    \\
+ &G & $\kappa$ & $1 $ & $-2 - \kappa$ & $1 $    \\
+ &T & $1 $ & $\kappa$ & $1 $ & $-2 - \kappa$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+Kappa is the transititon/transversion rate ratio:
+\[\kappa = \frac{\alpha}{\beta}\]
+(if $\kappa = 1$ then we are back to JC).
+
+\myNewSlide
+What is the instantaneous probability of an  particular transversion?
+\begin{eqnarray*}
+	\Pr(A\rightarrow C) & = & \Pr(A)\Pr(\mbox{change to } C) \\
+& =  & \frac{1}{4}\left(\beta dt\right)
+\end{eqnarray*}
+
+\myNewSlide
+What is the instantaneous probability of an  particular transition?
+\begin{eqnarray*}
+	\Pr(A\rightarrow G) & = & \Pr(A)\Pr(\mbox{change to } G) \\
+& =  & \frac{1}{4}\left(\kappa\beta dt\right)
+\end{eqnarray*}
+
+\myNewSlide
+There are four types of transitions:
+	\[A\rightarrow G ,G\rightarrow A ,C\rightarrow T, T\rightarrow C \]
+and eight types of transversions:
+	\[A\rightarrow C ,A\rightarrow T ,G\rightarrow C ,G\rightarrow T ,C\rightarrow A, C\rightarrow G,T\rightarrow A, T\rightarrow G \]
+	\[\mbox{Ti/Tv ratio} = \frac{\Pr(\mbox{any transition})}{\Pr(\mbox{any transversion})} = \frac{4\left(\frac{1}{4}\left(\kappa\beta dt\right)\right)}{8\left(\frac{1}{4}\left(\beta dt\right)\right)} = \frac{\kappa}{2}\]
+
+For K2P instantaneous transition/transversion ratio is one-half the instantaneous transition/transversion {\bf rate ratio}
+
+\myNewSlide
+\section*{Felsenstein  1981 model or ``F81 model''}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-$ & $\pi_C $ & $\pi_G$ & $\pi_T $    \\
+\multirow{2}{*}{State } &C & $\pi_A$ & $- $ & $\pi_G$ & $\pi_T $    \\
+ & G & $\pi_A$ & $\pi_C $ & $-$ & $\pi_T $    \\
+ &  T & $\pi_A$ & $\pi_C $ & $\pi_G$ & $- $    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\myNewSlide
+\section*{HKY  1985 model}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-$ & $\pi_C $ & $\kappa\pi_G$ & $\pi_T $    \\
+\multirow{2}{*}{State } &C & $\pi_A$ & $- $ & $\pi_G$ & $\kappa\pi_T $    \\
+ & G & $\kappa\pi_A$ & $\pi_C $ & $-$ & $\pi_T $    \\
+ &  T & $\pi_A$ & $\kappa\pi_C $ & $\pi_G$ & $- $    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\includepdf[pages={38}]{../nonfreeimages/pol/pol-09-model.pdf} 
+
+\myNewSlide
+\section*{General Time Reversible -- GTR model}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-$ & $a\pi_C $ & $b\pi_G$ & $c\pi_T $    \\
+\multirow{2}{*}{State } &C & $a\pi_A$ & $- $ & $d\pi_G$ & $e\pi_T $    \\
+ & G & $b\pi_A$ & $d\pi_C $ & $-$ & $f\pi_T $    \\
+ &  T & $c\pi_A$ & $e\pi_C $ & $f\pi_G$ & $- $    \\
+\end{tabular}
+\end{center}
+\end{table}
+In PAUP, $f=1$ indicating that $G\rightarrow T$ is the reference rate
+
+
+\myNewSlide
+
+
+\bibliography{phylo}
+
+\end{document}     
+
+
+
+
+\myNewSlide
+\section*{Balanced Minimum Evolution}
+\cite{Pauplin2000} showed that you can calculate a tree length from the pairwise distances without calculating branch lengths.
+The key is weighting the distances:
+\[l = \sum_i^N\sum_{j=i+1}^N w_{ij} d_{ij}\] 
+where:
+\[w_{ij} = \frac{1}{2^{n(i,j)}}\]
+and $n(i,j)$ is the number of nodes on the path from $i$ to $j$.
+\myNewSlide
+\section*{Balanced Minimum Evolution}
+ \citet{DesperG2002, DesperG2004} called minimizing this estimate of the tree length Balanced Minimum Evolution
+ and showed that it is equivalent to a form of weighted least squares in which distances are down-weighted by an exponential function of the topological distances between the leaves.
+
+Desper and Gascuel (2005) showed that NJ is star decomposition under BME. See \citet{GascuelS2006}.
+
+\myNewSlide
+\section*{NJ review}
+Neighbor-joining is a quick $O(N^3)$ algorithm for estimating the balanced minimum evolution tree.
+
+Performance (based on simulation studies) is often close to the performance of searches under minimum evolution.
+
+Branch length estimates in neighbor joining do not take into account the higher variance associated with large dissimilarity measurements.
+Thus the method tends to be sensitive to having long distances in the input data.
+
+\myNewSlide
+\section*{Distance-based phylogenetics review}
+Least squares and minimum evolution try to find trees and branch lengths such that the path length (or ``patristic distance'') between all taxa is as close as possible to the dissimilarity that is based on your data.
+
+Frequently the observed $p$-distances must be corrected for multiple hits using models of character evolution.
+
+Even when using corrected distances, distance-based approaches suffer from not adequately enforcing all of the natural constraints on the processes that generate the data.
+
+
+\myNewSlide
+\section*{Weaknesses in distance-based approaches}
+The fact that different errors in the pairwise distances is \citep[the generalized least-square approach outlined by][]{Bulmer1991} is computationally expensive.
+
+Pairwise distance estimates, even when corrected, do not benefit from insights about which positions are evolving fast and which are slow (or other higher level patterns of sequence evolution).
+
+Reconstructed tree is not forced to be compatible with reasonable constraints on sequence evolution.
+
+\myNewSlide
+\section*{Farris' example}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Taxon & Character State\\
+\hline
+1 & A \\
+2 & C \\
+3 & G \\ 
+4 & T \\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+\myNewSlide
+\section*{Another example}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|ccc|}
+\hline
+Taxon & & & \\
+\hline
+A & {\tt 1000000} & {\tt\color{red} 11111} & {\tt\color{darkgreen} 00000} \\
+B & {\tt 0100000} & {\tt\color{red} 11111} & {\tt\color{darkgreen} 11111} \\
+C & {\tt 0010000} & {\tt\color{red} 01111} & {\tt\color{darkgreen} 00000} \\
+D & {\tt 0001000} & {\tt\color{red} 00011} & {\tt\color{darkgreen} 00000} \\
+E & {\tt 0000100} & {\tt\color{red} 00001} & {\tt\color{darkgreen} 10000} \\
+F & {\tt 0000010} & {\tt\color{red} 00000} & {\tt\color{darkgreen} 01100} \\
+G & {\tt 0000001} & {\tt\color{red} 00000} & {\tt\color{darkgreen} 00011} \\
+\hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+If we consider just the characters in black and red, then we'd have a homoplasy-free data matrix.
+The characters in green display character-conflict (they are incompatible with some of the characters in green and all of the read characters).
+Homework: What tree does ordinary (unweighted) least squares on the uncorrected total distance favor?
+What tree does parsimony favor? Perform a MP reconstruction of characters on the OLS tree. Which branches look suspicious according to parsimony? (you can use PAUP.  I'll post a NEXUS file).

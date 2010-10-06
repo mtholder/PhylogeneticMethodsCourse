@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>EEB 848: Phylogenetic Methods</title> 
+	<link href="../lab2-PaupMesquiteNEXUS/EEB349.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<table width="972" height="160" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="49" colspan="2" valign="top">
+			<p>
+				<span class="pagetitle">BIOL 848: Phylogenetic Methods</span><span class="pagetitle"></span> 
+			</p>
+		</td>
+	</tr>
+	<tr>
+	</tr>
+</table>
+<div class="editable">
+	<p>
+		This lab was written by Paul O. Lewis and being used in BIOL 848 (with slight modifications) by Mark Holder with Paul's permission (the original lab is <a href="http://hydrodictyon.eeb.uconn.edu/eebedia/index.php/Phylogenetics:_Parsimony_Lab">here</a>). 
+	</p>
+	<h1>Lab 3: Tree searching using PAUP (and parsimony).</h1> This lab consists of two parts: 
+	<ul>
+		<li>
+			<a href="#checkhomework">Part A: Using PAUP* to check your answers for homework #4</a> 
+		</li>
+		<li>
+			<a href="#parssearching">Part B: Searching under the parsimony criterion</a> 
+		</li>
+	</ul>
+	<a name="#checkhomework"></a><h2> <span class="mw-headline"> Part A: Using PAUP* to check your answers for homework #4 </span></h2> 
+	<ol>
+		<li>
+			Create a NEXUS data file containing the data for the one DNA site you examined for homework assignment #4. To do this, open TextEdit (or any other text editor) File &gt; New from the main menu to create an empty file. Referring to the description of a nexus <a href="../lab2-PaupMesquiteNEXUS/lab2-paupNEXUSMesquite.html#datablock" class="external text" rel="nofollow">data block from the previous lab</a>, build a NEXUS file containing 4 taxa and 1 character corresponding to the data in homework assignment #4. Be sure to save the file, giving it a name like <span class="filename">homework4.nex</span>. 
+			<br />
+			<br />
+		</li>
+		<li>
+			Execute your new data file to make sure there were no mistakes: 
+			<ol>
+				<li>
+					change your working directory to the directory with your file 
+				</li>
+				<li>
+					launch PAUP* 
+				</li>
+				<li>
+<pre><span class="command">execute homework4.nex ;</span></pre> 
+				</li>
+			</ol>
+			Even though you are not yet finished setting up the file, it is always a good idea to periodically check to make sure PAUP* can interpret the contents. If you wait too long before doing this check, then you end up making multiple mistakes and it gets increasingly hard to figure out how to fix all of them! If your file executes successfully, you should see a line such as the following: <pre>Processing of file &quot;homework4.nex&quot; completed.</pre> 
+			<br />
+			<br />
+		</li>
+		<li>
+			Go back to your text editor, and add a stepmatrix definition to specify that transitions should cost 1 step while transvesions should cost 2 steps. Add an <a href="../lab2-PaupMesquiteNEXUS/lab2-paupNEXUSMesquite.html#assumptionsblock" class="external text" rel="nofollow">assumptions block</a> to your data file (note: do not add another "#NEXUS" to your file, this should appear only as the first thing in a NEXUS file). Your assumptions block should look like this: <pre>begin assumptions;&#10; usertype my_ctype stepmatrix=4&#10;     A C G T&#10; [A] . 2 1 2&#10; [C] 2 . 2 1&#10; [G] 1 2 . 2&#10; [T] 2 1 2 .&#10;&nbsp;;&#10;end;</pre>Feel free to replace "my_ctype" with a name of your choosing (but avoid using spaces or punctuation; note that I used an underscore character instead of a space). Save your file (using &lt;Ctrl-s&gt; is easiest), then re-execute using &lt;Ctrl-r&gt; to ensure that you haven't made any mistakes. 
+			<br />
+			<br />
+		</li>
+		<li>
+			Execute the file in PAUP again. Now we will apply the newly-defined stepmatrix to character 1. First use the PAUP* cstatus command to examine the current status of your single character:<pre class="command">cstatus full</pre> The full keyword produces a list showing information about each character individually. What is the current type of character? Which variant of parsimony would you be using were you to perform an analysis at this point (Wagner, Fitch, Transversion, or Ordered)? Use the PAUP* ctype command to apply your new usertype to character 1 as follows:<pre class="command">ctype my_ctype: 1;</pre> PAUP* will not respond with any confirmation, but check to make sure that your stepmatrix has been applied to character 1 using the cstatus command again. Note that this time PAUP* says <pre>All characters are of user-defined type &quot;my ctype&quot;</pre> You may be wondering where the underscore character went: when producing output, PAUP* converts underscore characters to spaces in taxon, tree, character, and usertype names. 
+			<br />
+			<br />
+		</li>
+		<li>
+			Create a PAUP block in your data file so that the usertype can be applied automatically each time you execute the file. The next time you open and execute this file, the usertype will be defined but it will not be applied to any characters. Adding a paup block to the file allows you to perform some operations (such as applying a usertype to one or more characters) each time you execute the file. Create a paup block after your assumptions and data blocks in the file <span class="filename">homework4.nex</span>. Add two commands to your paup block: 1) the <tt>ctype</tt> command above that applies your usertype to character 1; and 2) the <tt>cstatus full</tt> command. Be sure to end each command with a semicolon! After saving your work, quit PAUP* and relaunch it, executing <span class="filename">homework4.nex</span> after PAUP* starts up. Notice that it is now clear that your usertype has been applied already. 
+			<br />
+			<br />
+		</li>
+		<li>
+			Search through all possible trees for the one having the best parsimony score. Use the <tt>alltrees</tt> command for this. With so few possible trees to consider, PAUP* will finish this almost immediately 
+			<br />
+			PAUP* will present a histogram in which each bar represents trees of a given length (i.e. number of steps). The tree length is the number at the base of the bar (to the left). The number in parentheses at the top of a bar (to the right) is the number of trees having that length. Do these results agree with your hand calculations? 
+			<br />
+			<br />
+		</li>
+		<li>
+			Use PAUP* to verify ancestral character state assignments. You found that there was some ambiguity about ancestral character states for tree 1 (the tree that places taxon 1 with taxon 2. In particular, you found that both C and T were equally viable possibilities for one of the interior nodes, whereas only A was viable at the other interior node. To get PAUP* to verify this, use the following command:<pre class="command">describetrees 1 / mprsets</pre>This tells PAUP* to describe tree 1, and the option mprsets tells PAUP* to show what character state assignments are possible at each interior node (the Most Parsimonious Reconstruction sets). Is the result what you expected based on the hand calculations you performed for the homework assignment? 
+		</li>
+	</ol>
+	<a name="#parssearching"></a><h2> <span class="mw-headline"> Part B: Searching under the parsimony criterion </span></h2> 
+	<ol>
+		<li>
+			<b>Create the data file.</b> Download the file from <a href="../data/angio35b.nex" class="external text" rel="nofollow">here</a> and save it on the machine that you are working on. 
+		</li>
+		<li>
+			<b>Create a command file.</b> Create a blank file, then type in the following text, saving this as <span class="filename">run.nex</span>: <pre>#nexus&#10;&#10;begin paup;&#10;  log file=output.txt start replace;&#10;  execute angio35b.nex;&#10;end;</pre> in the same directory that holds the 
+			<sapan class="filename">
+				angio35b.nex 
+			</sapan>
+			file that you downloaded 
+		</li>
+		<li>
+			<b>Execute run.nex, which will in turn execute angio35b.nex.</b> There at least a couple of advantages to creating little NEXUS files like run.nex. For now, the only advantage is that executing run.nex automatically starts a log file so that you will have a record of what you did. Later, when you get in the habit of putting commands in paup blocks, you will appreciate the separation of the data from the commands that initiate analyses (I have many times opened a data file, forgetting about the embedded paup block that then starts a long search, overwrites my previous log file, and otherwise creates havoc). 
+			<br />
+			<br />
+			Note that because we used the replace keyword in the log command, the file 
+			<sapan class="filename">
+				output.txt 
+			</sapan>
+			will be overwritten without warning if it exists. This is called <i>living dangerously</i>, so you may want to refrain from using the replace keyword so that PAUP* asks before overwriting files. 
+		</li>
+		<li>
+			<b>Delete all taxa except the first five.</b> Using this command<pre>delete 6-.</pre>will cause PAUP* to ignore all taxa except Ephedrasinica, Gnetum_gnemJS, WelwitschiaJS, Ginkgo_biloba, and Pinus_ellCH. 
+		</li>
+		<li>
+			<b>Perform an exhaustive search using parsimony.</b> Use the <span class="command">alltrees</span> command for this. This should go fast because you now have only 5 taxa. 
+			<ul>
+				<li>
+					<i>How many separate tree topologies did PAUP* examine?</i> 
+				</li>
+				<li>
+					<i>What is the parsimony treelength of the best tree? The worst tree?</i> 
+				</li>
+				<li>
+					<i>How many steps separate the best tree from the next best?</i> 
+				</li>
+			</ul>
+		</li>
+		<li>
+			<b>Perform an heuristic search using NNI branch swapping.</b> Before you start, use the <span class="command">describe</span> command to show you the tree obtained from the exhaustive enumeration. 
+			<ul>
+				<li>
+					<i>Draw this tree on a piece of paper and then draw the 4 possible NNI rearrangements</i> 
+				</li>
+			</ul>
+		</li>
+		<li>
+			<b>Find all NNI rearrangements of the best tree.</b> Note that because we performed an exhaustive enumeration, we now know which tree is the globally most parsimonious tree. We are thus guaranteed to never find a better tree were we to start an heuristic search with this tree. Let's do an experiment: perform an NNI heuristic search, starting with the best tree, and have PAUP* save all the trees it encounters in this search. In the end, PAUP* will have in memory 5 trees: the starting tree and the 4 trees corresponding to all possible NNI rearrangements of that starting tree: <span class="command">hsearch start=1 swap=nni nbest=15;</span>
+			<ul>
+				<li>
+					<tt>start=1</tt> starts the search from the tree currently in memory (i.e., the best tree resulting from your exhaustive search using the parsimony criterion) 
+				</li>
+				<li>
+					<tt>swap=nni</tt> causes the Nearest-Neighbor Interchange (NNI) method to be used for branch swapping 
+				</li>
+				<li>
+					<tt>nbest=15</tt> saves the 15 best trees found during the search. Thus, were PAUP* to examine every possible tree, we would end up saving all of them in memory. The reason this command is needed is that PAUP* ordinarily does not save trees that are worse than the best one it has seen thus far. Here, we are interested in seeing the trees that are examined during the course of the search, even if they are not as good as the starting tree. 
+				</li>
+			</ul>
+		</li>
+		<li>
+			<b>Show all 5 trees in memory.</b> Use the <span class="command">describe all</span> command to plot the 5 trees currently in memory. The reason we are using the <tt>describe</tt> command rather than the <tt>showtrees</tt> command is because we want PAUP* to show us the numbers it has assigned to the internal nodes, something that <tt>showtrees</tt> doesn't do. 
+			<ul>
+				<li>
+					<i>Which tree was the original tree?</i> 
+				</li>
+				<li>
+					<i>Which trees correspond to NNI rearrangments of which internal edges on the original tree?</i> 
+				</li>
+			</ul>
+		</li>
+		<li>
+			<b>Find the most parsimonious tree for all 35 taxa.</b> Restore all taxa using the restore all command (this will wipe out the 5 trees you currently have stored in memory, but that is ok), then conduct a heuristic search having the following characteristics: 
+			<ul>
+				<li>
+					The starting trees are each generated by the stepwise addition method, using random addition of sequences 
+				</li>
+				<li>
+					Swap using NNI branch swapping 
+				</li>
+				<li>
+					Reset the <tt>nbest</tt> option to <tt>all</tt> because we want to be saving just the best trees, not suboptimal trees (yes, this option is a little confusing). 
+				</li>
+				<li>
+					Set the random number seed to 5555 (this determines the sequence of pseudorandom numbers used for the random additions; ordinarily you would not need to set the random number seed, but we will do this here to ensure that we all get the same results) 
+				</li>
+				<li>
+					Do 500 replicate searches; each replicate represents an independent search starting from a different random-addition tree
+					<br />
+					Here is the full command implementing this search: <span class="command">hsearch start=stepwise addseq=random swap=nni nbest=all rseed=5555 nreps=500;</span> 
+				</li>
+				<li>
+					<i>How many tree islands were found?</i> 
+				</li>
+				<li>
+					<i>How long did the search take?</i> 
+				</li>
+				<li>
+					<i>How many rearrangements were tried?</i> 
+				</li>
+			</ul>
+		</li>
+		<li>
+			<b>Conduct a second search with SPR swapping.</b> Be sure to reset the random number seed to 5555. You should be able to figure out how to do this using the output from <tt>hsearch&nbsp;?</tt>. Note that to save typing you can call up previously entered commands using the little buttons on the right of the command line edit control. 
+			<ul>
+				<li>
+					<i>How many tree islands were found?</i> 
+				</li>
+				<li>
+					<i>What are the scores of the trees in each island?</i> 
+				</li>
+				<li>
+					<i>How long did the search take this time?</i> 
+				</li>
+				<li>
+					<i>How many rearrangements were tried?</i> 
+				</li>
+			</ul>
+		</li>
+		<li>
+			<b>Now conduct a third search with TBR swapping.</b> 
+			<ul>
+				<li>
+					<i>How many tree islands were found?</i> 
+				</li>
+				<li>
+					<i>What are the scores of the trees in each island?</i> 
+				</li>
+				<li>
+					<i>How long did the search take this time?</i> 
+				</li>
+				<li>
+					<i>How many rearrangements were tried?</i> 
+				</li>
+				<li>
+					<i>How many trees are currently in memory (use the treeinfo command)?</i> 
+				</li>
+				<li>
+					<i>Has PAUP* saved trees from all islands discovered during this search?</i> (Hint: compare "Number of trees retained" to the sum of the "Size" column in the Tree-island profile.) Explain why PAUP* saved the number of trees it did.
+					<br />
+					<br />
+					Wondering about that warning "Multiple hits on islands of unsaved trees may in fact represent different islands"? When PAUP* encounters a new island, it will find all trees composing that particular island in the process of branch swapping. Thus, if (in a new search) it encounters any trees already stored in memory, it knows that it has hit an island that it found previously. Note that it would be pointless to continue on this tack, because it will only find all the trees on that island again. For trees retained in memory, PAUP* can keep track of which island they belong to (remember that it is possible for trees with the same parsimony score to be in different tree islands!). But for trees that are not retained in memory, PAUP* only knows that it has encountered an island of trees having score X; it has no way of finding out how many islands are actually represented amongst the trees having score X. 
+				</li>
+				<li>
+					<i>Of the three types of branch swapping (NNI, SPR, TBR), which is the most thorough? Least thorough?</i> 
+				</li>
+				<li>
+					<i>How many TBR rearrangements can PAUP* examine on the computer you are using in one second (on average)?</i> 
+				</li>
+				<li>
+					<i>Based on this, how long would it take to examine all possible trees if only 20 sequences were included?</i> 
+				</li>
+			</ul>
+		</li>
+	</ol>
+	Feel free to look at the NEXUS datasets that cause multiple NNI islands (<a href="./nni_islands.nex">here</a>) and the cause star decomposition to fail even in the absence of homoplasy (<a href="./perfect_decomp_mistake.nex">here</a>).
+</div>
+</body>
+</html>

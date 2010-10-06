@@ -1,0 +1,31 @@
+#NEXUS
+begin data;
+	dimensions ntax = 5 nchar = 8;
+	format datatype = dna;
+matrix
+A	ACGCAGGT
+B	ATGGTGAT
+C	GCTCACGG
+D	ACTGTCGT
+E	GTTCTGAG
+;
+end;
+
+
+Begin trees; 
+tree AB_CD = [&U] ((A,B),(C,D),E);
+tree AB_CE = [&U] ((A,B),(C,E),D);
+tree AB_DE= [&U] ((A,B),(D,E),C);
+tree AC_BD = [&U] ((A,C),(B,D),E);
+tree AC_BE = [&U] ((A,C),(B,E),D);
+tree AC_DE= [&U] ((A,C),(D,E),B);
+tree AD_CB = [&U] ((A,D),(C,B),E);
+tree AD_CE = [&U] ((A,D),(C,E),B);
+tree AD_BE= [&U] ((A,D),(B,E),C);
+tree AE_CD = [&U] ((A,E),(C,D),B);
+tree AE_CB = [&U] ((A,E),(C,B),D);
+tree AE_DB= [&U] ((A,E),(D,B),C);
+tree AE_CD = [&U] ((B,C),(D,E),A);
+tree AE_CB = [&U] ((B,D),(C,E),A);
+tree AE_DB= [&U] ((B,E),(C,D),A);
+End;
