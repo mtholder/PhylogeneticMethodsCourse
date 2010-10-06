@@ -1,0 +1,453 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Phylogenetics: Maximum Likelihood in PAUP Lab</title> 
+	<link href="../lab2-PaupMesquiteNEXUS/EEB349.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<table width="972" height="160" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="49" colspan="2" valign="top">
+			<p>
+				<span class="pagetitle">BIOL 848: Phylogenetic Methods</span><span class="pagetitle"></span> 
+			</p>
+		</td>
+	</tr>
+</table>
+<p>
+	This lab was written by Paul O. Lewis and being used in BIOL 848 (with slight modifications) by Mark Holder with Paul's permission. 
+</p>
+<tr>
+<td>
+	The goal of this lab exercise is to show you how to conduct maximum likelihood analyses in PAUP* using several models, and to decide among competing models using likelihood ratio tests 
+</td>
+</tr>
+<table id="toc" class="toc" summary="Contents">
+	<tr>
+		<td>
+			<div id="toctitle">
+				<h2>Contents</h2>
+			</div>
+			<ul>
+				<li class="toclevel-1">
+					<a href="#Part_A:_Using_PAUP.2A_to_check_your_answers_for_homework_.234"><span class="tocnumber">1</span> <span class="toctext">Part A: Using PAUP* to calculate a site's likelihood (this could help you check your homework)</span></a> 
+					<ul>
+						<li class="toclevel-2">
+							<a href="#Create_a_data_file"><span class="tocnumber">1.1</span> <span class="toctext">Create a data file</span></a>
+						</li>
+						<li class="toclevel-2">
+							<a href="#Understanding_the_data_file"><span class="tocnumber">1.2</span> <span class="toctext">Understanding the data file</span></a> 
+							<ul>
+								<li class="toclevel-3">
+									<a href="#First_paup_block"><span class="tocnumber">1.2.1</span> <span class="toctext">First paup block</span></a>
+								</li>
+								<li class="toclevel-3">
+									<a href="#Data_block"><span class="tocnumber">1.2.2</span> <span class="toctext">Data block</span></a>
+								</li>
+								<li class="toclevel-3">
+									<a href="#Trees_block"><span class="tocnumber">1.2.3</span> <span class="toctext">Trees block</span></a>
+								</li>
+								<li class="toclevel-3">
+									<a href="#Final_paup_block"><span class="tocnumber">1.2.4</span> <span class="toctext">Final paup block</span></a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li class="toclevel-1">
+					<a href="#Part_B:"><span class="tocnumber">2</span> <span class="toctext">Part B:</span></a> 
+					<ul>
+						<li class="toclevel-2">
+							<a href="#Return_PAUP.2A_to_its_factory_default_settings"><span class="tocnumber">2.1</span> <span class="toctext">Return PAUP* to its factory default settings</span></a>
+						</li>
+						<li class="toclevel-2">
+							<a href="#.28Re.29create_the_data_file_algae.nex"><span class="tocnumber">2.2</span> <span class="toctext">(Re)create the data file algae.nex</span></a>
+						</li>
+						<li class="toclevel-2">
+							<a href="#Obtain_the_maximum_likelihood_tree_under_the_F81_model"><span class="tocnumber">2.3</span> <span class="toctext">Obtain the maximum likelihood tree under the F81 model</span></a>
+						</li>
+						<li class="toclevel-2">
+							<a href="#Estimate_base_frequencies"><span class="tocnumber">2.4</span> <span class="toctext">Estimate base frequencies</span></a>
+						</li>
+						<li class="toclevel-2">
+							<a href="#Estimate_transition.2Ftransversion_bias"><span class="tocnumber">2.5</span> <span class="toctext">Estimate transition/transversion bias</span></a>
+						</li>
+						<li class="toclevel-2">
+							<a href="#Estimate_the_proportion_of_invariable_sites"><span class="tocnumber">2.6</span> <span class="toctext">Estimate the proportion of invariable sites</span></a>
+						</li>
+						<li class="toclevel-2">
+							<a href="#Estimate_the_heterogeneity_in_rates_among_sites"><span class="tocnumber">2.7</span> <span class="toctext">Estimate the heterogeneity in rates among sites</span></a>
+						</li>
+						<li class="toclevel-2">
+							<a href="#Estimate_both_pinvar_and_the_gamma_shape_parameter"><span class="tocnumber">2.8</span> <span class="toctext">Estimate both pinvar and the gamma shape parameter</span></a>
+						</li>
+					</ul>
+				</li>
+				<li class="toclevel-1">
+					<a href="#Likelihood_ratio_tests"><span class="tocnumber">3</span> <span class="toctext">Likelihood ratio tests</span></a>
+				</li>
+				<li class="toclevel-1">
+					<a href="#A_challenge"><span class="tocnumber">4</span> <span class="toctext">A challenge</span></a>
+				</li>
+				<li class="toclevel-1">
+					<a href="#Logiter"><span class="tocnumber">5</span> <span class="toctext">Logiter option</span></a>
+				</li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<script type="text/javascript"> if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script> 
+<div/>
+<a name="Part_A:_Using_PAUP.2A_to_check_your_answers_for_homework_.234"></a><h2> Part A: Using PAUP* to check your answers for homework #6 </h2> 
+<div/>
+<a name="Create_a_data_file"></a><h3> Create a data file </h3> 
+<p>
+	Create a new file in PAUP* and enter the following text (note this is not exactly the same dataset as homework, so you'll need to modify this when you want to double check your homework).
+</p>
+<pre>#nexus
+
+begin paup;
+  set storebrlens;
+end; 
+
+begin data;
+  dimensions ntax=4 nchar=2;
+  format datatype=dna;
+  matrix
+    taxon1 AA
+    taxon2 AC
+    taxon3 CG
+    taxon4 TT
+   &nbsp;;
+end;
+
+begin trees;
+  utree anyTreeNameHere = (taxon1:0.1, taxon2:0.1, (taxon3:0.1, taxon4:0.1):0.3);
+end;
+
+begin paup;
+  lset nst=1 basefreq=equal;
+  lscores 1 / userbrlen sitelike;
+end;
+</pre> 
+<div />
+<a name="Understanding_the_data_file"></a><h3> Understanding the data file </h3> 
+<p>
+	The NEXUS file you just created has four blocks. 
+</p>
+<div />
+<a name="First_paup_block"></a><h4> First paup block </h4> 
+<p>
+	The first block is a paup block that sets the <tt>storebrlens</tt> flag. This tells PAUP* to save branch lengths found in any trees. By default, PAUP* throws away branch lengths that it finds and estimates the branch lengths. In this case, we are trying to get PAUP* to compute likelihoods for a tree in which all five branch lengths are set to the specific value 0.1, so it is important to get PAUP* to not discard branch lengths. 
+</p>
+<div />
+<a name="Data_block"></a><h4> Data block </h4> 
+<p>
+	The second block is the data block. Data for two sites are provided, the first site is a data pattern that you would like to score. The second site is necessary because PAUP* will refuse to calculate the likelihood of a tree with data from only one site (and PAUP also wants a data matrix that has all four nucleotides). We will simply ignore results for the second (dummy) site. 
+</p>
+<div />
+<a name="Trees_block"></a><h4> Trees block </h4> 
+<p>
+	The third block is a trees block that defines the tree and branch lengths. 
+</p>
+<ul>
+	<li>
+		'<i>Can you find where in the newick tree description the length of the central branch is defined?</i> 
+	</li>
+</ul>
+<p>
+	The keyword <tt>utree</tt> can be used in PAUP* (but not necessarily other programs) to explicitly define an <i>unrooted</i> tree. The <tt>anyTreeNameHere</tt> part is just an arbitrary name for this tree: you could use any name there. 
+</p>
+<div />
+<a name="Final_paup_block"></a><h4> Final paup block </h4> 
+<p>
+	The fourth (paup) block comprises an <tt>lset</tt> command that specifies the likelihood settings. The <tt>nst</tt> option specifies the number of substitution parameters, which is 1 for the JC model, and <tt>basefreq=equal</tt> specifies that base frequencies are assumed to be equal. Together, <tt>nst=1</tt> and <tt>basefreq=equal</tt> specify the JC model because the only other model with one substitution parameter is the F81 model (which has unequal base frequencies). 
+</p>
+<p>
+	The command <tt>lscores 1</tt> tells PAUP* to compute likelihood scores for the first tree in memory (which is the one we entered in this file). The keyword <tt>userbrlen</tt> tells PAUP* to use the branch lengths in the tree description (i.e. don't estimate branch lengths), and the <tt>sitelike</tt> keyword tells PAUP* to output the individual site likelihoods (the default behavior is to just output the overall likelihood). 
+</p>
+<p>
+	Ok, go ahead and execute the file in PAUP*. Make sure that you understand the output. Can you think of a way to get PAUP* to give you the likelihood for a particular site and ancestral character state reconstruction? 
+</p>
+<div />
+<a name="Part_B:"></a><h2> Part B: </h2> 
+<div />
+<a name="Return_PAUP.2A_to_its_factory_default_settings"></a><h3> Return PAUP* to its factory default settings </h3> 
+<p>
+	In part A, we told PAUP* to use user-defined branch lengths and output site likelihoods whenever the <tt>lscores</tt> command was issued. PAUP* remembers these settings, and sometimes this causes unexpected results. You can cause PAUP* to forget these changes to default settings in one of two ways: 
+</p>
+<ul>
+	<li>
+		restart PAUP* 
+	</li>
+	<li>
+		use the <tt>factory</tt> command 
+	</li>
+</ul>
+<p>
+	Issue the <tt>factory</tt> command now to cause PAUP* to revert to its factory default settings without having to quit and restart the program. 
+</p>
+<div />
+<a name=".28Re.29create_the_data_file_algae.nex"></a><h3> (Re)create the data file algae.nex </h3> 
+<p>
+	Download (again) the data file <a href="../data/algae.nex">algae.nex</a>. You may remember that we found last week that only one model (LogDet) gave us the accepted phylogeny for these data using various distance-based approaches (i.e. that the chlorophyll-a/b-containing plastids group together, excluding the cyanobacterium <i>Anacystis</i> and the chromophyte chlorophyll-a/c-containing <i>Olithodiscus</i>).
+	This week we will see if we can tease apart which aspects of sequence evolution that are important for getting the tree correct. 
+</p>
+<div />
+<a name="Obtain_the_maximum_likelihood_tree_under_the_F81_model"></a><h3> Obtain the maximum likelihood tree under the F81 model </h3> 
+<p>
+	The first goal is to learn how to obtain maximum likelihood estimates of the parameters in several different substitution models. Use PAUP* to answer the following questions. Start by obtaining the maximum likelihood tree under the F81 model. Create a <tt>run.nex</tt> file and save in it the following: 
+</p>
+<pre>#nexus
+
+begin paup;
+  execute algae.nex;
+  set criterion=likelihood;
+  lset nst=1 basefreq=empirical;
+  hsearch;
+end;
+</pre> 
+<p>
+	The <tt>nst=1</tt> tells PAUP* that we want a model having just one substitution rate parameter (the JC69 and F81 models both fall in this category). The <tt>basefreq=empirical</tt> tells PAUP* that we want to use simple estimates of the base frequencies. The empirical frequency of the base G, for example, is the value you would get if you simply counted up all the Gs in your entire data matrix and divided by the total number of nucleotides. The empirical frequencies are not usually the same as the maximum likelihood estimates (MLEs) of the base frequencies, but they are quick to calculate and often very close to the corresponding MLEs. 
+</p>
+<p>
+	Execute run.nex in PAUP* and issue the following command to show the tree: 
+</p>
+<pre> showtrees;
+</pre> 
+<p>
+	One problem is that the tree drawn in such a way that it appears to be rooted within the flowering plants (tobacco and rice). Specifying the cyanobacterium <i>Anacystis</i> as the outgroup makes more sense: 
+</p>
+<pre>outgroup Anacystis_nidulans;
+showtrees;
+</pre> 
+<p>
+	Note that the branches are not drawn proportional to the expected number of substitutions. To fix this, use the <tt>describetrees</tt> command rather than the simpler <tt>showtrees</tt> command: 
+</p>
+<pre>descr 1 / plot=phylogram;
+</pre> 
+<p>
+	As with all PAUP* commands, it is usually not necessary to type the entire command name, only enough letters that PAUP* can determined unambiguously which command you want. Here, you typed <tt>descr</tt> instead of <tt>describetrees</tt>, and it worked just fine. 
+</p>
+<p>
+	Note that you will work with this tree for quite awhile. Resist the temptation to do heuristic searches with each model, as it will be important to compare the performance of all of the models on the <i>same tree topology</i>! To be safe, save this tree to a file named <tt>f81.tre</tt> using the <tt>savetrees</tt> command: 
+</p>
+<pre>savetrees file=f81.tre brlens;
+</pre> 
+<p>
+	If you ever need to read this tree back in, use the <tt>gettrees</tt> command: 
+</p>
+<pre>gettrees file=f81.tre;
+</pre> 
+<p>
+	Now get PAUP* to show you the maximum likelihood estimates for the parameters of the F81 model used in this analysis (the 1 here refers to tree 1 in memory): 
+</p>
+<pre>lscores 1;
+</pre> 
+<ul>
+	<li>
+		<i>What are the empirical base frequencies for this data set?</i> <span title="A is 0.27029, C is 0.21751 , G is 0.31106, and T is 0.20115" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>What is the lnL of this tree under this "empirical base frequencies" version of the F81 model?</i> <span title="-3351.78855" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>What proportion of sites are constant? (The <tt>cstatus</tt> command will give you this information)</i> <span title="0.716304" style="border-bottom:1px dotted">answer</span> 
+	</li>
+</ul>
+<div />
+<a name="Estimate_base_frequencies"></a><h3> Estimate base frequencies </h3> 
+<p>
+	Now estimate the base frequencies on this tree with maximum likelihood as follows. Note how the <tt>lscores</tt> command is used to force PAUP* to recompute the likelihood (under the revised model) and spit out the parameter estimates. 
+</p>
+<pre>lset basefreq=estimate;
+lscores 1;
+</pre> 
+<ul>
+	<li>
+		<i>What are the maximum likelihood estimates (MLEs) of the base frequencies?</i> <span title="A is 0.274510, C is 0.208927, G is 0.289165 and T is 0.227398" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>What is the lnL of this tree under the "estimated base frequencies" version of the F81 model?</i> <span title="-3348.34075" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>How many parameters are being estimated using the F81 model?</i> <span title="16 total (3 base frequencies plus 13 branch lengths)" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>Is it better than the lnL under the "empirical base frequencies" version of the F81 model?</i> <span title="yes, -3348.34075 &gt; -3351.78855" style="border-bottom:1px dotted">answer</span> 
+	</li>
+</ul>
+<div />
+<a name="Estimate_transition.2Ftransversion_bias"></a><h3> Estimate transition/transversion bias </h3> 
+<p>
+	Switch to the HKY85 model now and estimate the transition/transversion ratio along with the base frequencies. The way you specify the HKY model in PAUP* is to tell it you want a model with 2 substitution rate parameters (<tt>nst=2</tt>), and that you want to estimate the base frequencies (<tt>basefreq=estimate</tt>) and the transition/transversion ratio (<tt>tratio=estimated</tt>). Note that these specifications also apply to the F84 model, so if you want PAUP* to use the F84 model, you would need to add <tt>variant=f84</tt> to the <tt>lset</tt> command. 
+</p>
+<pre>lset nst=2 basefreq=estimate tratio=estimate;
+lscores 1;
+</pre> 
+<ul>
+	<li>
+		<i>What is the MLE of the transition/transversion ratio under the HKY85 model?</i> <span title="1.888808" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>What is the MLE of the transition/transversion </i>rate<i> ratio under the HKY85 model?</i> <span title="3.715051" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>What is the lnL of this tree under the HKY85 model?</i> <span title="-3268.85606" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>How many parameters are being estimated using the HKY85 model?</i> <span title="17 total (3 base frequencies, 1 rate ratio and 13 branch lengths)" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>Does the HKY model fit the data better than the F81 model?</i> <span title="yes, -3268.85606 &gt; -3348.34075" style="border-bottom:1px dotted">answer</span> 
+	</li>
+</ul>
+<div />
+<a name="Estimate_the_proportion_of_invariable_sites"></a><h3> Estimate the proportion of invariable sites </h3> 
+<p>
+	Now ask PAUP* to estimate pinvar, the proportion of invariant sites, using the command <tt>lset pinvar=estimate</tt>. The HKY85 model with among-site rate heterogeneity modeled using the two-category invariant sites approach is called the HKY85+I model. 
+</p>
+<ul>
+	<li>
+		<i>What is the MLE of pinvar under the HKY85+I model?</i> <span title="0.633121" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>Is the MLE of pinvar larger or smaller than the proportion of constant sites?</i> <span title="smaller, 0.633121 &lt; 0.716304" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>Why are these two proportions different? That is, how can a site be constant but not invariant?</i> 
+	</li>
+	<li>
+		<i>What is the lnL of this tree under the HKY85+I model?</i> <span title="-3174.72872" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>How many parameters are being estimated using the HKY85+I model?</i> <span title="18 total (3 base frequencies, 1 rate ratio, 1 proportion of invariable sites and 13 branch lengths)" style="border-bottom:1px dotted">answer</span> 
+	</li>
+</ul>
+<div />
+<a name="Estimate_the_heterogeneity_in_rates_among_sites"></a><h3> Estimate the heterogeneity in rates among sites </h3> 
+<p>
+	Now set <tt>pinvar=0</tt> and tell PAUP* to use the discrete gamma distribution with 5 rate categories. Here are the commands for doing this all in one step: 
+</p>
+<pre>lset pinvar=0 rates=gamma ncat=5 shape=estimate;
+lscores 1;
+</pre> 
+<p>
+	The HKY85 model with among-site rate heterogeneity modeled using the discrete gamma approach is called the HKY85+G model. 
+</p>
+<ul>
+	<li>
+		<i>What is the MLE of the gamma shape parameter under the HKY85+G model?</i> <span title="0.260778" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>What is the lnL of this tree under the HKY85+G model?</i> <span title="-3171.55074" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>How many parameters are being estimated using the HKY85+G model?</i> <span title="18 total (3 base frequencies, 1 rate ratio, 1 gamma shape and 13 branch lengths)" style="border-bottom:1px dotted">answer</span> 
+	</li>
+</ul>
+<div />
+<a name="Estimate_both_pinvar_and_the_gamma_shape_parameter"></a><h3> Estimate both pinvar and the gamma shape parameter </h3> 
+<p>
+	Now issue the command <tt>lset pinvar=estimate</tt> to create the HKY85+I+G model and ask PAUP* to estimate both pinvar and the gamma shape parameter simultaneously. 
+</p>
+<ul>
+	<li>
+		<i>What is the MLE of the gamma shape parameter under the HKY85+I+G model?</i> <span title="0.411387" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>What is the MLE of the pinvar parameter under the HKY85+I+G model?</i> <span title="0.222433" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>Is the MLE of the shape parameter higher or lower under the HKY85+I+G model compared to the HKY85+G model?</i> <span title="higher, 0.411387 &gt; 0.260778" style="border-bottom:1px dotted">answer</span> Explain why this is so. 
+	</li>
+	<li>
+		<i>What is the lnL of this tree under the HKY85+I+G model?</i> <span title="-3171.49320" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>How many parameters are being estimated using the HKY85+I+G model?</i> <span title="19 total (3 base frequencies, 1 rate ratio, 1 proportion of invariable sites, 1 gamma shape and 13 branch lengths)" style="border-bottom:1px dotted">answer</span> 
+	</li>
+</ul>
+<div />
+<a name="Likelihood_ratio_tests"></a><h2> Likelihood ratio tests</h2> 
+<p>
+	In this section, you will perform some simple likelihood ratio tests to decide which of the models used in the previous section does the best job of explaining the data while keeping the number of parameters used to a minimum. Remember, the likelihood ratio test is performed by doubling the difference in log-likelihood scores and comparing this test statistic with the critical value from a chi-squared distribution having degrees of freedom equal to the difference in the number of estimated parameters in the two models. Use <a href="http://faculty.vassar.edu/lowry/tabs.html#csq" class="external text" title="http://faculty.vassar.edu/lowry/tabs.html#csq" rel="nofollow">this online chi-square calculator</a> to determine the significance of the test. 
+</p>
+<p>
+	The model with which we will begin is the F81 model with estimated base freqencies. Compare this F81 model to the HKY85 model, which differs from the F81 model only in the fact that it allows transitions and transversions to occur at different rates. 
+</p>
+<p>
+	You should have all the numbers you need to perform these likelihood ratio tests. If, however, you have not written some of them down, and thus need to redo some of these analyses, you might need to know how to "turn off" rate heterogeneity using the following command: 
+</p>
+<pre>lset rates=equal pinvar=0;
+</pre> 
+<ul>
+	<li>
+		<i>What is the likelihood ratio test statistic for F81 vs. HKY85?</i> <span title="answer" style="border-bottom:1px dotted">{{{2}}}</span> 
+	</li>
+	<li>
+		<i>How many degrees of freedom for this test?</i> <span title="1" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>What is the significance (P-value) for this test?</i> <span title="0.0" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>Does allowing for a transition/transversion bias make a significant difference?</i> <span title="yes" style="border-bottom:1px dotted">answer</span> 
+	</li>
+</ul>
+<p>
+	Consider the remaining models for which we have collected log likelihoods: HKY85+I, HKY85+G and HKY85+I+G. 
+</p>
+<ul>
+	<li>
+		<i>Does the HKY85+I model explain the data signficantly better than an equal rates HKY85 model?</i> <span title="yes" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>Does the HKY85+G model explain the data signficantly better than an equal rates HKY85 model?</i> <span title="yes" style="border-bottom:1px dotted">answer</span> 
+	</li>
+	<li>
+		<i>Does the HKY85+I+G model explain the data signficantly better than either HKY85+I or HKY85+G alone?</i> <span title="I+G signif. better than I alone but not better than G alone" style="border-bottom:1px dotted">answer</span> 
+	</li>
+</ul>
+<p>
+	Using the simplest model that you can defend (of the four we have examined), perform an heuristic search under the maximum likelihood criterion. To make the analysis go faster, we will ask PAUP* to <b>not</b> re-estimate all the model parameters for every tree it examines during the search. To do this, first use the <tt>lset</tt> command to set up the model you are planning to use. Use the <tt>lscores</tt> command to force PAUP* to re-estimate all of the parameters of your selected model on some tree (the tree just needs to be something reasonable, such as a NJ tree or the F81 tree you have been using). Now, for every parameter that you estimated, change the word <tt>estimate</tt> to <tt>previous</tt> in the <tt>lset</tt> command, and after executing this new <tt>lset</tt> command, start a search using just <tt>hsearch</tt>. PAUP* will fix the parameters at the previous values (i.e. the estimates you just forced it to calculate) and use these same values for every tree examined during the search. 
+</p>
+<ul>
+	<li>
+		<i>Does the model you have selected place all the chlorophyll a/b organisms together?</i> 
+	</li>
+</ul>
+<p>
+	This lab is a bit long, so we will not take time to do it now, but I hope you realize that you could figure out exactly what parameter(s) are needed in the model to get this tree right. JC69 doesn't do it, nor does F81 (as you may have noticed), but it actually doesn't take much beyond JC69 to do the trick. 
+</p>
+<div />
+<a name="A_challenge"></a><h2> A challenge </h2> 
+<p>
+	The data file <a href="../data/simdata.nex">simdata.nex</a> was generated under one of the following models: JC69, F81, K80, or HKY85. 
+</p>
+<p>
+	All of the sites either evolved at the same rate, or rate heterogeneity was added in the form of gamma distributed relative rates with or without some invariant sites. Can you identify which of the four basic models was used, and in addition tell me how much rate heterogeneity was added? 
+</p>
+<p>
+	Hint: start by getting a NJ tree and estimating all parameters of the most complex model (HKY85+I+G) on that tree. You should be able to tell by examining the parameter estimates which model was used. If it is not clear, you can perform some likelihood ratio tests to see how much significance should be attached to the value of the parameters in question. 
+</p>
+<a name="Logiter"></a><h2> Logiter - want to see a lot of numbers whiz by on your computer screen? </h2>
+<p>
+	To get the feeling for how many times you have to calculate the likelihood during the process of <i>maximizing</i> the likelihood I encourage you to use the command <tt>lset logiter</tt> in PAUP before performing an <tt>LScore</tt> command.
+	First get a tree in memory, and specify the GTR+I+G model so that there are plenty of parameters to estimate.  
+	</p>
+<p>When it is conducting the LScore, each line that starts with the word "parameters" corresponds to a new set of parameters in the model of character evolution.  
+Each line that starts with "pass" is a pass over the tree that optimizes the length of each branch.  
+The optimal value for a single branch length is found, and then PAUP moves to a
+neighboring branch.
+Because the lengths of one branch affect the maximum likelihood estimates of other branches (particularly branches that are close to it), PAUP has to pass over the entire tree multiple times before it converges to a set of branch lengths that do not change.
+If you score a large tree, then there can be a huge number of passes over the branch lengths mixed in with changes to the substitution parameters.
+</p>
+<p>
+Approximating the ML score really does  require a <i>lot</i> of computation.
+</p>
+	
+</body>
+</html>

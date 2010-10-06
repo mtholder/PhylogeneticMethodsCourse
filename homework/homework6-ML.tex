@@ -1,0 +1,33 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\begin{document}
+\pagecolor{white}
+
+
+\section*{Homework 6 (due Mon, Oct 11)}
+\normalsize
+Print out and fill in the next page.
+\begin{compactenum}
+	\item likelihood calculations
+\begin{compactenum}
+	\item As data, use a character in which  {\tt A} is the state for taxa 1 and 2 , taxon 3 has state {\tt G}, and taxon 4 has a {\tt C}
+	\item Fill in the circle with character state (either the observed data for tips or the inferred states)
+	\item There are 16 trees on each page, use them to show all 16 possible ancestral character state combinations.
+	\item Calculate the probability of each reconstruction under the Kimura model.
+	\item Use $\kappa=2$
+	\item For branch lengths, use {\tt(1:0.05,3:0.4,(2:0.05,4:0.4):0.05)}
+\end{compactenum}
+	\item Which branch length has the higher ratio of the transition probability to transversion probability?
+\end{compactenum}
+\myNewSlide
+I recommend, using a spreadsheet to:
+\begin{compactenum}
+	\item  calculate all three change probabilities (no change, transition, transversion) for the 0.05 branch length.
+	\item  calculate all three change probabilities (no change, transition, transversion) for the 0.4 branch length
+	\item  calculate multiply the appropriate numbers.
+\end{compactenum}
+If you label the cells of the spreadsheet logically, I'll be able to figure out your system.
+\includepdf[pages={2}]{../images/parshomework4taxontrees.pdf}
+\end{document}

@@ -1,0 +1,499 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\usepackage{pdfpages}
+\usepackage{bm}
+
+\newcommand{\disruption}{\theta}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+\begin{center}
+{\Large Some of these slides have been borrowed from Dr.\ Paul Lewis, Dr.\ Joe Felsenstein. Thanks!}
+\vskip 15mm
+\large Paul has many great tools for teaching phylogenetics at his web site: \\
+\url{http://hydrodictyon.eeb.uconn.edu/people/plewis}
+\end{center}
+
+
+\myNewSlide
+\section*{JC instantaneous rate matrix yet again}
+\Large
+We estimate branch lengths in terms of expected number of changes {\em per site}.
+To do this we standardize the total rate of divergence in the Q matrix and estimate $\nu = \mu t = 3\alpha t$
+for each branch.
+
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-1$ & $\frac{1}{3}$ & $\frac{1}{3}$ & $\frac{1}{3}$    \\
+\multirow{2}{*}{State } &C & $\frac{1}{3}$ & $-1$ & $\frac{1}{3}$ & $\frac{1}{3}$    \\
+ &G & $\frac{1}{3}$ & $\frac{1}{3}$ & $-1$ & $\frac{1}{3}$    \\
+ &T & $\frac{1}{3}$ & $\frac{1}{3}$ & $\frac{1}{3}$ & $-1$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\section*{JC ``state-comparison'' probabilities}
+$i$ and $j$ refer to states (A, C, G, T). $i\neq j$:
+$$\Pr(i\rightarrow i|\nu) = \frac{1}{4} + \frac{3}{4}e^{\frac{-4\nu}{3}}$$\\
+$$\Pr(i\rightarrow j|\nu) = \frac{1}{4} - \frac{1}{4}e^{\frac{-4\nu}{3}}$$
+
+\myNewSlide
+\section*{CFN transition probabilities}
+$$\Pr(0\rightarrow 0|\nu) = \Pr(1\rightarrow 1|\nu) = \frac{1}{2} + \frac{1}{2}e^{-2\nu}$$\\
+$$\Pr(0\rightarrow 1|\nu) = \Pr(1\rightarrow 0|\nu) = \frac{1}{2} - \frac{1}{2}e^{-2\nu}$$
+
+\myNewSlide
+\section*{``M$k$'' transition probabilities}
+$k$-state version of the one-rate model.
+\Large
+$$\Pr(i\rightarrow i|\nu) = \frac{1}{k} + \frac{(k-1)e^{-\left(\frac{k}{k-1}\right)\nu}}{k}$$\\
+$$\Pr(i\rightarrow j|\nu) = \frac{1}{k} - \frac{e^{-\left(\frac{k}{k-1}\right)\nu}}{k} $$
+
+
+
+
+\myNewSlide
+\section*{\citet{Kimura1980} model or ``the K80 model''}
+
+Transitions and transversions occur at different rates:
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-2\beta - \alpha$ & $\beta $ & $\alpha$ & $\beta $    \\
+\multirow{2}{*}{State } &C & $\beta $ & $-2\beta - \alpha$ & $\beta $ & $\alpha$    \\
+ &G & $\alpha$ & $\beta $ & $-2\beta - \alpha$ & $\beta $    \\
+ &T & $\beta $ & $\alpha$ & $\beta $ & $-2\beta - \alpha$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\section*{\citet{Kimura1980} model or ``the K80 model''. Reparameterized.}
+\large
+We only care about the {\em relative} rates, so we can choose one rate to be frame of reference. This turns the 2 parameter model into a 1 parameter form:
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-(2+\kappa)\beta$ & $\beta $ & $\kappa\beta$ & $\beta $    \\
+\multirow{2}{*}{State } &C & $\beta $ & $-(2+\kappa)\beta$ & $\beta $ & $\kappa\beta$    \\
+ &G & $\kappa\beta$ & $\beta $ & $-(2+\kappa)\beta$ & $\beta $    \\
+ &T & $\beta $ & $\kappa\beta$ & $\beta $ & $-(2+\kappa)\beta$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\section*{\citet{Kimura1980} model or ``the K80 model''. Reparameterized again.}
+\Large
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-2-\kappa$ & $1 $ & $\kappa$ & $1 $    \\
+\multirow{2}{*}{State } &C & $1 $ & $-2-\kappa$ & $1 $ & $\kappa$    \\
+ &G & $\kappa$ & $1 $ & $-2 - \kappa$ & $1 $    \\
+ &T & $1 $ & $\kappa$ & $1 $ & $-2 - \kappa$    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+Kappa is the transititon/transversion rate ratio:
+\[\kappa = \frac{\alpha}{\beta}\]
+(if $\kappa = 1$ then we are back to JC).
+
+\myNewSlide
+What is the instantaneous probability of an  particular transversion?
+\begin{eqnarray*}
+	\Pr(A\rightarrow C) & = & \Pr(A)\Pr(\mbox{change to } C) \\
+& =  & \frac{1}{4}\left(\beta dt\right)
+\end{eqnarray*}
+
+\myNewSlide
+What is the instantaneous probability of an  particular transition?
+\begin{eqnarray*}
+	\Pr(A\rightarrow G) & = & \Pr(A)\Pr(\mbox{change to } G) \\
+& =  & \frac{1}{4}\left(\kappa\beta dt\right)
+\end{eqnarray*}
+
+\myNewSlide
+\large
+There are four types of transitions:
+	\[A\rightarrow G ,G\rightarrow A ,C\rightarrow T, T\rightarrow C \]
+and eight types of transversions:
+	\[A\rightarrow C ,A\rightarrow T ,G\rightarrow C ,G\rightarrow T ,C\rightarrow A, C\rightarrow G,T\rightarrow A, T\rightarrow G \]
+	\[\mbox{Ti/Tv ratio} = \frac{\Pr(\mbox{any transition})}{\Pr(\mbox{any transversion})} = \frac{4\left(\frac{1}{4}\left(\kappa\beta dt\right)\right)}{8\left(\frac{1}{4}\left(\beta dt\right)\right)} = \frac{\kappa}{2}\]
+
+For K2P instantaneous transition/transversion ratio is one-half the instantaneous transition/transversion {\bf rate ratio}
+
+\myNewSlide
+\section*{Kimura model change probabilities}
+\Large
+$$\Pr(A\rightarrow A|\nu) = \frac{1}{4}\left(1 + e^{-\left(\frac{4}{2+\kappa}\right)\nu} + 2e^{-\left(\frac{2+2\kappa}{2+\kappa}\right)\nu}\right)$$\\
+$$\Pr(A\rightarrow G|\nu) = \frac{1}{4}\left(1 + e^{-\left(\frac{4}{2+\kappa}\right)\nu} - 2e^{-\left(\frac{2+2\kappa}{2+\kappa}\right)\nu}\right)$$\\
+$$\Pr(A\rightarrow C|\nu) = \frac{1}{4}\left(1 - e^{-\left(\frac{4}{2+\kappa}\right)\nu}\right)$$
+
+\myNewSlide
+\section*{Felsenstein  1981 model or ``F81 model''}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-$ & $\pi_C $ & $\pi_G$ & $\pi_T $    \\
+\multirow{2}{*}{State } &C & $\pi_A$ & $- $ & $\pi_G$ & $\pi_T $    \\
+ & G & $\pi_A$ & $\pi_C $ & $-$ & $\pi_T $    \\
+ &  T & $\pi_A$ & $\pi_C $ & $\pi_G$ & $- $    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\myNewSlide
+\section*{HKY  1985 model}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-$ & $\pi_C $ & $\kappa\pi_G$ & $\pi_T $    \\
+\multirow{2}{*}{State } &C & $\pi_A$ & $- $ & $\pi_G$ & $\kappa\pi_T $    \\
+ & G & $\kappa\pi_A$ & $\pi_C $ & $-$ & $\pi_T $    \\
+ &  T & $\pi_A$ & $\kappa\pi_C $ & $\pi_G$ & $- $    \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\myNewSlide
+\includepdf[pages={38}]{../nonfreeimages/pol/pol-09-model.pdf} 
+
+\myNewSlide
+\section*{General Time Reversible -- GTR model}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{cc|cccc}
+& & \multicolumn{4}{c}{To State} \\
+& & A & C & G & T \\
+\hline
+\multirow{2}{*}{From } & A &  $-$ & $a\pi_C $ & $b\pi_G$ & $c\pi_T $    \\
+\multirow{2}{*}{State } &C & $a\pi_A$ & $- $ & $d\pi_G$ & $e\pi_T $    \\
+ & G & $b\pi_A$ & $d\pi_C $ & $-$ & $f\pi_T $    \\
+ &  T & $c\pi_A$ & $e\pi_C $ & $f\pi_G$ & $- $    \\
+\end{tabular}
+\end{center}
+\end{table}
+In PAUP, $f=1$ indicating that $G\rightarrow T$ is the reference rate
+
+
+
+\myNewSlide
+\includepdf[pages={4}]{../nonfreeimages/pol/pol-ML.pdf} 
+
+\myNewSlide
+\section*{How can we calculate the likelihood score}
+\Large 
+Under the JC (or K2P) model:
+\begin{eqnarray*}
+	\ln L & =  &  12 \ln\pi_A + 7 \ln\pi_C + 7 \ln\pi_G + 6 \ln\pi_T \\
+		 & =  &  12 \ln0.25 + 7 \ln0.25 + 7 \ln0.25 + 6 \ln0.25 \\
+		 & = & -44.361
+\end{eqnarray*}
+
+\myNewSlide
+\section*{How can we calculate the likelihood score}
+\Large 
+Under the F81 (or HKY or GTR) model:
+\begin{eqnarray*}
+	\ln L & =  &  12 \ln\pi_A + 7 \ln\pi_C + 7 \ln\pi_G + 6 \ln\pi_T \\
+\end{eqnarray*}
+But what are the values for the parameters: $\pi_A, \pi_C, \pi_G, \pi_T$ ?
+
+In many cases we refer to these parameters as ``nuisance parameters.''
+They must be specified in order to calculate the likelihood, but we are not interested in them by themselves.
+
+
+\myNewSlide
+\section*{ML parameter estimates}
+\large
+We can find the maximum likelihood estimates of the parameters to give us the ML score: the maximum likelihood obtainable under this model:
+\begin{eqnarray*}
+	\ln L & =  &  12 \ln\pi_A + 7 \ln\pi_C + 7 \ln\pi_G + 6 \ln\pi_T \\
+	 & =  &  12 \ln\widehat{\pi_A} + 7 \ln\widehat{\pi_C} + 7 \ln\widehat{\pi_G} + 6 \ln\widehat{\pi_T} \\
+	 & =  &  12 \ln0.375 + 7 \ln0.21875 + 7 \ln0.21875+ 6 \ln0.1875 \\
+	 & =  & -43.091 
+\end{eqnarray*}
+But how did I get the numbers to fill for the parameters?
+How do we know that $\widehat{\pi_A} = 0.375$ and $\widehat{\pi_C} = 0.21875$
+
+\myNewSlide
+\section*{ML parameter estimates}
+We might guess that:
+\begin{eqnarray*}
+	\widehat{\pi_A} & = &  \frac{12}{32} = 0.375\\
+	\widehat{\pi_C} & = &  \frac{7}{32} = 0.21875\\
+	\widehat{\pi_G} & = &  \frac{7}{32} = 0.21875\\
+	\widehat{\pi_T} & = &  \frac{6}{32} = 0.1875
+\end{eqnarray*}
+but how do we prove it?
+
+\myNewSlide
+\section*{ML parameter estimates}
+For simple problems we solve for the point in parameter space for which derivatives with respect to all parameters are 0 (we also have to consider boundary points).
+
+We would have to do constrained optimization because \[\pi_A + \pi_C + \pi_G + \pi_T = 1\]
+and that is a pain.
+
+\myNewSlide
+\section*{ML parameter estimates}
+\normalsize
+We can reparameterize:
+\begin{eqnarray*}
+	r & = & {\pi_A+\pi_G} \\
+   a  & = & \frac{\pi_A}{\pi_A+\pi_G} \\
+   c & = & \frac{\pi_C}{\pi_C+\pi_T}
+\end{eqnarray*}
+and always recover the original parameters:
+\begin{eqnarray*}
+	\pi_A & = & ra \\
+	\pi_G & = & r(1-a) \\
+	\pi_C & = & (1-r)c \\
+	\pi_T & = & (1-r)(1-c) \\
+\end{eqnarray*}
+
+\myNewSlide
+\section*{ML parameter estimates}
+\begin{eqnarray*}
+	\ln L & = & 12 \ln\pi_A + 7 \ln\pi_C + 7 \ln\pi_G + 6 \ln\pi_T \\
+	& = & 12 \ln\left[ra\right] + 7 \ln\left[(1-r)c\right] + 7 \ln\left[r(1-a)\right] + 6 \ln\left[(1-r)(1-c)\right] 
+\end{eqnarray*}
+Recall that:
+\begin{eqnarray*}
+	\frac{\partial \ln f(x)}{\partial x} =\frac{\frac{\partial f(x)}{\partial x}}{f(x)}
+\end{eqnarray*}
+
+
+\myNewSlide
+\begin{eqnarray*}
+	\ln L & = & 12 \ln\left[ra\right] + 7 \ln\left[(1-r)c\right] + 7 \ln\left[r(1-a)\right] + 6 \ln\left[(1-r)(1-c)\right]  \\
+	\frac{\partial \ln L}{\partial a} & = &\frac{12 r}{ra} + \frac{7(-r)}{r(1-a)} \\
+	& = & \frac{12}{a} -\frac{7}{(1-a)}\\
+	 0 & = & \frac{12}{\hat{a}} -\frac{7}{(1-\hat{a})}  \\
+	 \hat{a} & = & \frac{12}{19}
+\end{eqnarray*}
+
+\myNewSlide
+\begin{eqnarray*}
+	\ln L & = & 12 \ln\left[ra\right] + 7 \ln\left[(1-r)c\right] + 7 \ln\left[r(1-a)\right] + 6 \ln\left[(1-r)(1-c)\right]  \\
+	\frac{\partial \ln L}{\partial c} & = &\frac{7 (1-r)}{(1-r)c} + \frac{6-(1-r)}{(1-r)(1-a)} \\
+	& = & \frac{7}{c} -\frac{6}{(1-c)}\\
+	 0 & = & \frac{7}{\hat{c}} -\frac{6}{(1-\hat{c})}  \\
+	 \hat{c} & = & \frac{7}{13}
+\end{eqnarray*}
+
+\myNewSlide
+\begin{eqnarray*}
+	\ln L & = & 12 \ln\left[ra\right] + 7 \ln\left[(1-r)c\right] + 7 \ln\left[r(1-a)\right] + 6 \ln\left[(1-r)(1-c)\right]  \\
+	\frac{\partial \ln L}{\partial r} & = &\frac{12 a}{ra} + \frac{7(-c)}{(1-r)c} + \frac{7(1-a)}{r(1-a)} + \frac{6(-(1-c))}{(1-r)(1-c)} \\
+	& = & \frac{12}{r} -\frac{7}{(1-r)} + \frac{7}{r} - \frac{6}{1-r}\\
+	& = & \frac{19}{r} -\frac{13}{(1-r)}\\
+	 0 & = & \frac{19}{\hat{r}} -\frac{13}{(1-\hat{r})}  \\
+	 \hat{r} & = & \frac{19}{32}
+\end{eqnarray*}
+
+
+\myNewSlide
+ML inference displays ``scale invariance'' so we can just transform the ML estimates into our original parameters:
+\begin{eqnarray*}
+	\widehat{\pi_A} = \hat{r}\hat{a}  & = & \left(\frac{19}{32}\right)\left(\frac{12}{19}\right) = \frac{12}{32} \\
+	\widehat{\pi_G}  = \hat{r}(1-\hat{a})& = & \left(\frac{19}{32}\right)\left(\frac{7}{19}\right) = \frac{7}{32} \\
+	\widehat{\pi_C}  =  (1-\hat{r})\hat{c} & = & \left(\frac{13}{32}\right)\left(\frac{6}{13}\right) = \frac{7}{32} \\
+	\widehat{\pi_T}  =  (1-\hat{r})(1-\hat{c})& = & \left(\frac{13}{32}\right)\left(\frac{6}{13}\right) = \frac{6}{32} \\
+\end{eqnarray*}
+
+\myNewSlide
+\section*{Likelihood ratio testing}
+\large
+$$\ln L_{JC} = -44.361 $$
+$$\ln L_{F81} = -43.091 $$
+But the F81 model has 3 more free parameters than JC.
+
+The likelihood ratio test is a hypothesis testing approach to model selection.
+
+
+\myNewSlide
+\section*{Likelihood ratio testing}
+$H_0$: the data were generated under the simpler model\\
+$H_A$: the data were generated under the more complex model. \par
+
+test statistic: $2\left(\ln L_{\mbox{complex}} - \ln L_{\mbox{simple}}\right)$
+
+The LRT only works if the simple model is nested inside the more complex model (if the free parameters for the simple model are a subset of the free parameters for the more complex model).
+
+\myNewSlide
+\section*{Likelihood ratio testing}
+Null distribution: $\chi^2$ distribution with \\
+$d.f.$ = difference in the number of free parameters.
+
+If the LR test statistic is $>$ than the critical value from the appropriate chi-square table, then we reject the simple model and prefer the more complex model.
+
+\myNewSlide
+\section*{Likelihood ratio testing - example}
+\large
+$$\ln L_{JC} = -44.361 $$
+$$\ln L_{F81} = -43.091 $$
+$$LRT = 2(-43.091 - (-44.361)) = 2.54$$
+$$df = 3 - 0 = 3$$
+$$\chi^2_3(\mbox{critical}, P = 0.05) = 7.815$$
+Not significant. Do not reject the JC model.
+
+(if we look up the $P$-value for this test statistic it is 0.4681).
+
+\myNewSlide
+\section*{Likelihoods on the simplest possible tree}
+\begin{center}
+{\Huge
+\tt GA$\rightarrow$GG}
+\end{center}
+\large
+\begin{eqnarray*}
+	L & = & L_1 L_2 \\
+	 & = & \Pr(G)\Pr(G\rightarrow G) \Pr(A)\Pr(A\rightarrow G)\\
+	 & = & \Pr(G)\Pr(G\rightarrow G|\nu) \Pr(A)\Pr(A\rightarrow G|\nu) \\
+	 & = & \left(\frac{1}{4}\right)\left(\frac{1}{4} + \frac{3}{4}\;e^{\frac{-4\nu}{3}}\right)\left(\frac{1}{4}\right)\left(\frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}}\right)
+\end{eqnarray*}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+	d & = & \frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}} \\
+	\left(\frac{1}{4} + \frac{3}{4}\;e^{\frac{-4\nu}{3}}\right) & = & 1 -3d \\
+	L & = & \left(\frac{1}{4}\right)\left(\frac{1}{4} + \frac{3}{4}\;e^{\frac{-4\nu}{3}}\right)\left(\frac{1}{4}\right)\left(\frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}}\right) \\
+	& = & \frac{(1-3d)d}{16} \\
+	\frac{\partial \ln L}{\partial d} & = &\frac{1-6d}{16}\\
+	0 & = &\frac{1-6\hat{d}}{16} \\
+	\hat{d}& = &\frac{1}{6}\\
+	\hat{\nu } & = & 0.82396 \\
+	L & = & 0.005208
+\end{eqnarray*}
+
+\myNewSlide
+\large
+You may recall that the JC distance correction from lecture 8 looked like this:
+\[\nu = \frac{-3}{4}\;\ln\left(1-\frac{4p}{3}\right) \]
+If you put in $p= 0.5$, because half the sites differ in our example then you the same branch length:
+\[\nu  = 0.82396 \]
+Our JC distance correction formula is actually an ML estimator of the branch length between a pair of taxa.
+
+\myNewSlide
+The first 30 nucleotides of the $\psi\eta$-globin gene
+{\tt
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{lc}
+gorilla & G{\color{red}A}A{\color{red}G}TCCTTGAGAAATAAACTGCACACTGG \\
+orangutan & G{\color{red}G}A{\color{red}C}TCCTTGAGAAATAAACTGCACACTGG\\
+\end{tabular}
+\end{center}
+\end{table}%
+}
+\vskip -2cm
+\[ L = \left[\left(\frac{1}{4}\right)\left(\frac{1}{4} + \frac{3}{4}\;e^{\frac{-4\nu}{3}}\right)\right]^{28}\left[\left(\frac{1}{4}\right)\left(\frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}}\right)\right]^2\]
+\begin{picture}(0,0)(0,40)
+	\put(0,0){\makebox(0,0)[l]{\includegraphics[scale=0.5]{../images/GorOrangProfile.pdf}}}
+	\put(70,-20){$\hat{\nu}=0.06982$}
+	\put(70,-30){$\ln L= -51.13396$}
+\end{picture}
+
+\myNewSlide
+\includepdf[pages={9-12}]{../nonfreeimages/pol/pol-ML.pdf} 
+
+\myNewSlide
+\begin{picture}(0,0)(-30,200)
+	\put(0,0){\makebox(0,0)[l]{\includegraphics{../images/pruning_tree.pdf}}}
+	\put(0,170){\begin{tabular}{|c|c|}
+\hline
+Taxon & Character \\
+\hline
+1 & A \\
+2 & C \\
+3 & C \\
+4 & C \\
+5 & G \\
+\hline
+\end{tabular}
+}
+\end{picture}
+
+\myNewSlide
+\[L = \sum_x \sum_y \sum_z \sum_w\Pr(x,y,z,w,A,C,C,C,G|{\bm\nu}) \]
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+L & = & \sum_x \sum_y \sum_z \sum_w\Pr(x)\Pr(y|x,\nu_6)\Pr(A|y,\nu_1)\Pr(C|y,\nu_2) \cdots \\
+	&& \Pr(z|x,\nu_8)\Pr(C|z,\nu_3)\Pr(w|z,\nu_7) \Pr(C|w,\nu_4)\Pr(G|w,\nu_5) 
+\end{eqnarray*}
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+L & = & \sum_x \sum_y \sum_z \Pr(x)\Pr(y|x,\nu_6)\Pr(A|y,\nu_1)\Pr(C|y,\nu_2) \cdots \\
+	&& \Pr(z|x,\nu_8)\Pr(C|z,\nu_3){\color{red}\Big(\sum_w\Pr(w|z,\nu_7) \Pr(C|w,\nu_4)\Pr(G|w,\nu_5) \Big)}
+\end{eqnarray*}
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+L & = & \sum_x \sum_y  \Pr(x)\Pr(y|x,\nu_6)\Pr(A|y,\nu_1)\Pr(C|y,\nu_2) \cdots \\
+	&& {\color{cyan}\Big(\sum_z\Pr(z|x,\nu_8)\Pr(C|z,\nu_3)}{\color{red}\Big(\sum_w\Pr(w|z,\nu_7) \Pr(C|w,\nu_4)\Pr(G|w,\nu_5) \Big)}{\color{cyan}\Big)}
+\end{eqnarray*}
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+L & = & \sum_x   \Pr(x){\color{darkgreen}\Big(\sum_y\Pr(y|x,\nu_6)\Pr(A|y,\nu_1)\Pr(C|y,\nu_2)\Big)} \cdots \\
+	&& {\color{cyan}\Big(\sum_z\Pr(z|x,\nu_8)\Pr(C|z,\nu_3)}{\color{red}\Big(\sum_w\Pr(w|z,\nu_7) \Pr(C|w,\nu_4)\Pr(G|w,\nu_5) \Big)}{\color{cyan}\Big)}
+\end{eqnarray*}
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\includepdf[pages={13-14}]{../nonfreeimages/pol/pol-ML.pdf} 
+
+\myNewSlide
+\bibliography{phylo}
+
+\end{document}     
