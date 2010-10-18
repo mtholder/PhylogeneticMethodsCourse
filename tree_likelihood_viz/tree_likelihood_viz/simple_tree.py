@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from tree_likelihood_viz.utility import debug
-from tree_likelihood_viz.model import Parameter, CharModel, DataConditioning, BranchLengthModel, CFN, CompatModel
+from tree_likelihood_viz.model import Parameter, CharModel, DataConditioning, BranchLengthModel, CFN, CFNPinv, CompatModel
 class BranchEnum:
     A, B, INTERNAL, C, D = 0, 1, 2, 3, 4
     names = ["A", "B", "Internal", "C", "D"]
@@ -78,10 +78,13 @@ class Tree(object):
         return (0, 1, 1, 2, 1, 2, 1, 1)
 
     def calc_pat_probs(self, alert_pat_prob_listener=True):
-        if isinstance(self.char_model, CFN):
+        if isinstance(self.char_model, CFNPinv):
+            return self.calc_pat_probs_cfn_pinv(alert_pat_prob_listener=alert_pat_prob_listener)
+        elif isinstance(self.char_model, CFN):
             return self.calc_pat_probs_cfn(alert_pat_prob_listener=alert_pat_prob_listener)
         elif isinstance(self.char_model, CompatModel):
             return self.calc_pat_probs_compat(alert_pat_prob_listener=alert_pat_prob_listener)
+
     def calc_pat_probs_compat(self, alert_pat_prob_listener=True):
         assert(self.char_model.conditioning == DataConditioning.VARIABLE)
         pars_scores = self.calc_pat_p_scores()
@@ -103,7 +106,18 @@ class Tree(object):
             for listener in self.pat_prob_calc_callbacks:
                 listener()
         return x
-
+    
+    def calc_pat_probs_cfn_pinv(self, alert_pat_prob_listener=True):
+        x = self.calc_pat_probs_cfn(False)
+        
+        if alert_pat_prob_listener:
+            for listener in self.pat_prob_calc_callbacks:
+                listener()
+        pinv = self.char_model.get_pinv()
+        omp = 1.0 - pinv
+        x = [omp * i for i in x]
+        x[0] += pinv
+        return x
 
     def calc_pat_probs_cfn(self, alert_pat_prob_listener=True):
         """Pattern likelihoods returned in order (assumes CFN with A=0),

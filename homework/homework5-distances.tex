@@ -1,0 +1,31 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\begin{document}
+\pagecolor{white}
+
+
+\section*{Homework 5 (due Fri, Oct 9)}
+\begin{compactenum}
+	\item Consider the distance matrix below.  It shows $p$-distances between four taxa.
+	\item Calculate corrected distances using the Jukes-Cantor distance correction.
+	\item Calculate unweighted (ordinary) least-squares tree score for the tree {\tt ((A:0.05,C:0.07):0.12,B:0.04,D:0.08).}   Show your work.
+\end{compactenum}
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+ & A & B & C & D  \\ 
+\hline 
+A & 0.00 & 0.19 & 0.10 & 0.25\\
+B & 0.19 & 0.00 & .25 & 0.11 \\
+C & 0.10 & 0.25 & 0.00 & 0.25 \\
+D & 0.25 & 0.11 & 0.25 & 0.00\\
+\hline 
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\end{document}

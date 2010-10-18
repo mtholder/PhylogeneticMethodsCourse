@@ -1,0 +1,477 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\usepackage{pdfpages}
+\usepackage{bm}
+\usepackage{ifsym}
+
+\newcommand{\disruption}{\theta}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+\begin{center}
+{\Large Some of these slides have been borrowed from Dr.\ Paul Lewis, Dr.\ Joe Felsenstein. Thanks!}
+\vskip 15mm
+\large Paul has many great tools for teaching phylogenetics at his web site: \\
+\url{http://hydrodictyon.eeb.uconn.edu/people/plewis}
+\end{center}
+
+\myNewSlide
+\includepdf[pages={2-3}]{../nonfreeimages/pol/polratehet.pdf} 
+
+\myNewSlide
+\section*{Question: Why is rate heterogeneity ubiquituous?}
+Answer: Differences in mutational rates and (mainly) {\bf selective constraint}
+\begin{compactitem}
+	\item Many sites are under purifying (stabilizing) selection:
+	\begin{compactitem}
+		\item Any mutation results in a different amino acid, AND
+		\item A amino acid replacement at the site results in dramatically worse functioning of the protein.
+		\item These sites will show {\em low} rates of evolution on a tree.
+	\end{compactitem}
+	\item Other sites are less constrained.
+	\begin{compactitem}
+		\item A mutation results in the same amino acid, OR
+		\item Many amino acids will work equally well at that position in the protein.
+		\item These sites will show {\em high} rates of evolution on a tree.
+	\end{compactitem}
+\end{compactitem}
+
+\myNewSlide
+\section*{Rate heterogeneity in protein-coding genes: terms}
+\large
+\begin{compactitem}
+	\item {\bf Synonymous} mutations result in the same amino acid.
+	\item {\bf Non-synonymous} mutations result in the different amino acid.
+	\item {\bf Conservative} changes are non-synonymous changes that result in a chemically similar amino acid.
+	\item {\bf Neutral} mutations result in a new genotype that has the same fitness as the genotypes currently fixed in the population.
+\end{compactitem}
+
+\myNewSlide
+\section*{Rate heterogeneity in protein-coding genes: generalities}
+\large
+\begin{compactitem}
+	\item Synonymous changes are often neutral (or close to neutral),
+	\item Third base positions and untranslated regions (introns and other non-coding regions) tend to have high rates because changes to these sites lead to synonymous changes.
+	\item Transitions tend to lead to more synonymous or conservative changes.
+	\item Amino acid residues that are embedded, involved in salt bonding, or part of the active site tend to be more constrained.
+	\item Loops of amino acid residues on the outside of proteins often tolerate a wide range of substitutions (or even indels).
+\end{compactitem}
+\myNewSlide
+\normalsize
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|cc|cc|cc|cc|}
+\hline
+ & \multicolumn{8}{c|}{2nd Base}\\
+ & U && C && A && G& \\
+\hline
+ \multirow{4}{*}{U} & UUU & \multirow{2}{*}{\bf F} & UCU & \multirow{4}{*}{\bf S} & UAU & \multirow{2}{*}{\bf Y} & UGU & \multirow{2}{*}{\bf C}\\
+	&  UUC & & UCC & & UAC & & UGC & \\
+	&  UUA & \multirow{2}{*}{\bf L} & UCA & & UAA & \multirow{2}{*}{\bf *} & UGA & {\bf *} \\
+	&  UUG & & UCG &  & UAG & & UGG & {\bf W} \\
+ \hline 
+ \multirow{4}{*}{C} & CUU & \multirow{4}{*}{\bf L} & CCU & \multirow{4}{*}{\bf P} & CAU & \multirow{2}{*}{\bf H} & CGU & \multirow{4}{*}{\bf R}\\
+	 & CUC & & CCC & & CAC & & CGC & \\
+	 & CUA & & CCA & & CAA & \multirow{2}{*}{\bf Q} & CGA &  \\
+	 & CUG & & CCG &  & CAG & & CGG &  \\
+ \hline 
+ \multirow{4}{*}{A} & AUU & \multirow{3}{*}{\bf I} & ACU & \multirow{4}{*}{\bf T} & AAU & \multirow{2}{*}{\bf N} & AGU & \multirow{2}{*}{\bf S}\\
+ & AUC & & ACC & & AAC & & AGC & \\
+ & AUA&  & ACA & & AAA & \multirow{2}{*}{\bf K} & AGA & \multirow{2}{*}{\bf R} \\
+ & AUG & {\bf M}& ACG &  & AAG & & AGG & \\
+ \hline 
+ \multirow{4}{*}{G} & GUU & \multirow{2}{*}{\bf V} & GCU & \multirow{4}{*}{\bf A} & GAU & \multirow{2}{*}{\bf D} & GGU & \multirow{4}{*}{\bf G}\\
+ & GUC & & GCC & & GAC & & GGC & \\
+ & GUA & \multirow{2}{*}{\bf L} & GCA & & GAA & \multirow{2}{*}{\bf E} & GGA & \\
+ & GUG & & GCG &  & GAG & & GGG & \\
+ \hline 
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+
+\myNewSlide
+\includepdf[pages={6-8}]{../nonfreeimages/pol/polratehet.pdf} 
+
+\myNewSlide
+\section*{Transition probabilities under the JC69 model}
+\Large
+with no rate heterogeneity:
+\begin{eqnarray*} 
+	\Pr(i\rightarrow i | \nu) & = & \frac{1}{4}+\frac{3}{4}\;e^{\frac{-4\nu}{3}} \\
+	\Pr(i\rightarrow j |\nu) & = & \frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}} \\
+\end{eqnarray*}
+
+\myNewSlide
+\section*{Transition probabilities under the JC69 model}
+\Large
+First base positions under a {\em site-specific rates} model:
+\begin{eqnarray*} 
+	\Pr(i\rightarrow i | \nu) & = & \frac{1}{4}+\frac{3}{4}\;e^{\frac{-4 r_1\nu}{3}} \\
+	\Pr(i\rightarrow j |\nu) & = & \frac{1}{4}-\frac{1}{4}\;e^{\frac{-4r_1\nu}{3}} \\
+\end{eqnarray*}
+
+\myNewSlide
+\includepdf[pages={11-12}]{../nonfreeimages/pol/polratehet.pdf} 
+
+
+\myNewSlide
+\Large
+\begin{compactitem}
+	\item {\bf Constant site} -- a site in which all of the taxa display the same character state.
+	\item {\bf Invariable site} -- a site in which only one character state is allowed. A site that cannot change state.
+\end{compactitem}
+All invariable sites are constant, but not all constant sites have to be invariable.
+
+
+\myNewSlide
+	\begin{eqnarray*} 
+	\Pr(i\rightarrow i | \mbox{ invariable}) & = & \frac{1}{4}+\frac{3}{4}\;e^{\frac{-4 0\nu}{3}} \\
+	 & = & \frac{1}{4}+\frac{3}{4}\;e^0 \\
+	 & = & 1 \\
+	\Pr(i\rightarrow j | \mbox{ invariable}) & = & \frac{1}{4}-\frac{1}{4}\;e^{\frac{-4 0\nu}{3}} \\
+	& = & 0
+\end{eqnarray*}
+
+\myNewSlide
+\section*{A site's likelihood under the JC+ I model}
+\normalsize
+$x_i$ is the data pattern for site $i$. General form:
+	\begin{eqnarray*} 
+		\Pr(x_i|\mbox{JC+I}) & = & p_{\mbox{inv}}\Pr(x_i|\mbox{ inv}) + (1-p_{\mbox{inv}})\Pr\left(x_i|\mbox{JC}, \frac{\bm \nu}{1-p_{\mbox{inv}}}\right)
+	 \end{eqnarray*} 	
+If $x_i$ is a  variable site:
+	\begin{eqnarray*} 
+		\Pr(x_i|\mbox{JC+I}) & = & (1-p_{\mbox{inv}})\Pr\left(x_i|\mbox{JC}, \frac{\bm \nu}{1-p_{\mbox{inv}}}\right)
+	 \end{eqnarray*} 	
+If $x_i$ is a constant site:
+	\begin{eqnarray*} 
+		\Pr(x_i|\mbox{JC+I}) & = & p_{\mbox{inv}}\Pr(x_i|\mbox{ inv}) + (1-p_{\mbox{inv}})\Pr\left(x_i|\mbox{JC}, \frac{\bm \nu}{1-p_{\mbox{inv}}}\right)
+	 \end{eqnarray*} 	
+
+\myNewSlide
+\Large
+Why $\frac{\bm \nu}{1-p_{\mbox{inv}}}$ ?
+
+\large
+We want the mean rate of change to be 1.0 over all sites (so we can interpret the branch lengths in terms of the expected \# of changes per site).
+
+If $r$ is the rate of change for the variable sites then:
+\begin{eqnarray*} 
+	1 & = & 0 p_{\mbox{inv}} + r \left(1-p_{\mbox{inv}}\right)\\
+	 & = & r \left(1-p_{\mbox{inv}}\right) \\
+	 r & = & \frac{1}{1-p_{\mbox{inv}}}
+\end{eqnarray*} 	
+
+\myNewSlide
+\section*{Variable (but unknown) rates}
+\begin{compactitem}
+	\item We expect more ``shades of grey'' rather than the on-or-off view of the pInvar model.
+	\item {\em a priori} we do not know which sites are fast and which are slow
+	\item We may be able to characterize the {\em distribution} of rates across sites -- high variance or low variance.
+\end{compactitem}
+
+\myNewSlide
+\includepdf[pages={20}]{../nonfreeimages/pol/polratehet.pdf} 
+
+\myNewSlide
+\section*{Gamma distribution}
+\begin{eqnarray*} 
+	f(r) & = & \frac{r^{\alpha-1}\beta^{\alpha}e^{-\beta r}}{\Gamma(\alpha)} \\
+	\mbox{mean} & = & \alpha/\beta \\
+\mbox{mean (in phylogenetics)}	& = & 1 \\
+	\mbox{(in phylogenetics) }\beta & = & \alpha \\
+	\mbox{variance} & = & \alpha/{\beta^2} \\
+\mbox{variance (in phylogenetics)}	& = & 1/{\alpha} \\
+\end{eqnarray*} 
+
+
+\myNewSlide
+\section*{Using Gamma-distributed rates across sites}
+\begin{compactitem}
+	\item We usually use a discretized version of the gamma with 4-8 categories (the computation time increases linearly with the number of categories).
+	\[\Pr(x_i|JC+G) = \sum_j^{\mbox{ncat}} \Pr(x_i|JC, r_j{\bm \nu})\Pr(r_j)\]
+	where:
+		\[\sum_j^{\mbox{ncat}} r_j\Pr(r_j) = 1\]
+
+\myNewSlide
+\section*{Discrete gamma (continued)}
+We ``break up'' the continuous gamma into intervals each of which has an equal probability, and use the mean rate within each interval as the representative rate for that rate category:
+\[\Pr(r_j) = \frac{1}{\mbox{ncat}}\]
+So:
+	\[\Pr(x_i|JC+G) = \frac{1}{\mbox{ncat}} \sum_j^{\mbox{ncat}} \Pr(x_i|JC, r_j{\bm \nu})\]
+
+\end{compactitem}
+
+\myNewSlide
+\includepdf[pages={21}]{../nonfreeimages/pol/polratehet.pdf} 
+
+\myNewSlide
+\includepdf[pages={23-24}]{../nonfreeimages/pol/polratehet.pdf} 
+
+\myNewSlide
+\includepdf[pages={2-4}]{../nonfreeimages/pol/pollrt.pdf} 
+
+\myNewSlide
+\includepdf[pages={6-9}]{../nonfreeimages/pol/pollrt.pdf} 
+
+\myNewSlide
+\includepdf[pages={11}]{../nonfreeimages/pol/pollrt.pdf} 
+
+
+\myNewSlide
+
+
+\bibliography{phylo}
+
+\end{document}     
+
+\myNewSlide
+\section*{How can we calculate the likelihood score}
+\Large 
+Under the JC (or K2P) model:
+\begin{eqnarray*}
+	\ln L & =  &  12 \ln\pi_A + 7 \ln\pi_C + 7 \ln\pi_G + 6 \ln\pi_T \\
+		 & =  &  12 \ln0.25 + 7 \ln0.25 + 7 \ln0.25 + 6 \ln0.25 \\
+		 & = & -44.361
+\end{eqnarray*}
+
+\myNewSlide
+\section*{How can we calculate the likelihood score}
+\Large 
+Under the F81 (or HKY or GTR) model:
+\begin{eqnarray*}
+	\ln L & =  &  12 \ln\pi_A + 7 \ln\pi_C + 7 \ln\pi_G + 6 \ln\pi_T \\
+\end{eqnarray*}
+But what are the values for the parameters: $\pi_A, \pi_C, \pi_G, \pi_T$ ?
+
+In many cases we refer to these parameters as ``nuisance parameters.''
+They must be specified in order to calculate the likelihood, but we are not interested in them by themselves.
+
+
+\myNewSlide
+\section*{ML parameter estimates}
+\large
+We can find the maximum likelihood estimates of the parameters to give us the ML score: the maximum likelihood obtainable under this model:
+\begin{eqnarray*}
+	\ln L & =  &  12 \ln\pi_A + 7 \ln\pi_C + 7 \ln\pi_G + 6 \ln\pi_T \\
+	 & =  &  12 \ln\widehat{\pi_A} + 7 \ln\widehat{\pi_C} + 7 \ln\widehat{\pi_G} + 6 \ln\widehat{\pi_T} \\
+	 & =  &  12 \ln0.375 + 7 \ln0.21875 + 7 \ln0.21875+ 6 \ln0.1875 \\
+	 & =  & -43.091 
+\end{eqnarray*}
+But how did I get the numbers to fill for the parameters?
+How do we know that $\widehat{\pi_A} = 0.375$ and $\widehat{\pi_C} = 0.21875$
+
+\myNewSlide
+\section*{ML parameter estimates}
+We might guess that:
+\begin{eqnarray*}
+	\widehat{\pi_A} & = &  \frac{12}{32} = 0.375\\
+	\widehat{\pi_C} & = &  \frac{7}{32} = 0.21875\\
+	\widehat{\pi_G} & = &  \frac{7}{32} = 0.21875\\
+	\widehat{\pi_T} & = &  \frac{6}{32} = 0.1875
+\end{eqnarray*}
+but how do we prove it?
+
+\myNewSlide
+\section*{ML parameter estimates}
+For simple problems we solve for the point in parameter space for which derivatives with respect to all parameters are 0 (we also have to consider boundary points).
+
+We would have to do constrained optimization because \[\pi_A + \pi_C + \pi_G + \pi_T = 1\]
+and that is a pain.
+
+\myNewSlide
+\section*{ML parameter estimates}
+\normalsize
+We can reparameterize:
+\begin{eqnarray*}
+	r & = & {\pi_A+\pi_G} \\
+   a  & = & \frac{\pi_A}{\pi_A+\pi_G} \\
+   c & = & \frac{\pi_C}{\pi_C+\pi_T}
+\end{eqnarray*}
+and always recover the original parameters:
+\begin{eqnarray*}
+	\pi_A & = & ra \\
+	\pi_G & = & r(1-a) \\
+	\pi_C & = & (1-r)c \\
+	\pi_T & = & (1-r)(1-c) \\
+\end{eqnarray*}
+
+\myNewSlide
+\section*{ML parameter estimates}
+\begin{eqnarray*}
+	\ln L & = & 12 \ln\pi_A + 7 \ln\pi_C + 7 \ln\pi_G + 6 \ln\pi_T \\
+	& = & 12 \ln\left[ra\right] + 7 \ln\left[(1-r)c\right] + 7 \ln\left[r(1-a)\right] + 6 \ln\left[(1-r)(1-c)\right] 
+\end{eqnarray*}
+Recall that:
+\begin{eqnarray*}
+	\frac{\partial \ln f(x)}{\partial x} =\frac{\frac{\partial f(x)}{\partial x}}{f(x)}
+\end{eqnarray*}
+
+
+\myNewSlide
+\begin{eqnarray*}
+	\ln L & = & 12 \ln\left[ra\right] + 7 \ln\left[(1-r)c\right] + 7 \ln\left[r(1-a)\right] + 6 \ln\left[(1-r)(1-c)\right]  \\
+	\frac{\partial \ln L}{\partial a} & = &\frac{12 r}{ra} + \frac{7(-r)}{r(1-a)} \\
+	& = & \frac{12}{a} -\frac{7}{(1-a)}\\
+	 0 & = & \frac{12}{\hat{a}} -\frac{7}{(1-\hat{a})}  \\
+	 \hat{a} & = & \frac{12}{19}
+\end{eqnarray*}
+
+\myNewSlide
+\begin{eqnarray*}
+	\ln L & = & 12 \ln\left[ra\right] + 7 \ln\left[(1-r)c\right] + 7 \ln\left[r(1-a)\right] + 6 \ln\left[(1-r)(1-c)\right]  \\
+	\frac{\partial \ln L}{\partial c} & = &\frac{7 (1-r)}{(1-r)c} + \frac{6-(1-r)}{(1-r)(1-a)} \\
+	& = & \frac{7}{c} -\frac{6}{(1-c)}\\
+	 0 & = & \frac{7}{\hat{c}} -\frac{6}{(1-\hat{c})}  \\
+	 \hat{c} & = & \frac{7}{13}
+\end{eqnarray*}
+
+\myNewSlide
+\begin{eqnarray*}
+	\ln L & = & 12 \ln\left[ra\right] + 7 \ln\left[(1-r)c\right] + 7 \ln\left[r(1-a)\right] + 6 \ln\left[(1-r)(1-c)\right]  \\
+	\frac{\partial \ln L}{\partial r} & = &\frac{12 a}{ra} + \frac{7(-c)}{(1-r)c} + \frac{7(1-a)}{r(1-a)} + \frac{6(-(1-c))}{(1-r)(1-c)} \\
+	& = & \frac{12}{r} -\frac{7}{(1-r)} + \frac{7}{r} - \frac{6}{1-r}\\
+	& = & \frac{19}{r} -\frac{13}{(1-r)}\\
+	 0 & = & \frac{19}{\hat{r}} -\frac{13}{(1-\hat{r})}  \\
+	 \hat{r} & = & \frac{19}{32}
+\end{eqnarray*}
+
+
+\myNewSlide
+ML inference displays ``scale invariance'' so we can just transform the ML estimates into our original parameters:
+\begin{eqnarray*}
+	\widehat{\pi_A} = \hat{r}\hat{a}  & = & \left(\frac{19}{32}\right)\left(\frac{12}{19}\right) = \frac{12}{32} \\
+	\widehat{\pi_G}  = \hat{r}(1-\hat{a})& = & \left(\frac{19}{32}\right)\left(\frac{7}{19}\right) = \frac{7}{32} \\
+	\widehat{\pi_C}  =  (1-\hat{r})\hat{c} & = & \left(\frac{13}{32}\right)\left(\frac{6}{13}\right) = \frac{7}{32} \\
+	\widehat{\pi_T}  =  (1-\hat{r})(1-\hat{c})& = & \left(\frac{13}{32}\right)\left(\frac{6}{13}\right) = \frac{6}{32} \\
+\end{eqnarray*}
+
+\myNewSlide
+\section*{Likelihoods on the simplest possible tree}
+\begin{center}
+{\Huge
+\tt GA$\rightarrow$GG}
+\end{center}
+\large
+\begin{eqnarray*}
+	L & = & L_1 L_2 \\
+	 & = & \Pr(G)\Pr(G\rightarrow G) \Pr(A)\Pr(A\rightarrow G)\\
+	 & = & \Pr(G)\Pr(G\rightarrow G|\nu) \Pr(A)\Pr(A\rightarrow G|\nu) \\
+	 & = & \left(\frac{1}{4}\right)\left(\frac{1}{4} + \frac{3}{4}\;e^{\frac{-4\nu}{3}}\right)\left(\frac{1}{4}\right)\left(\frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}}\right)
+\end{eqnarray*}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+	d & = & \frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}} \\
+	\left(\frac{1}{4} + \frac{3}{4}\;e^{\frac{-4\nu}{3}}\right) & = & 1 -3d \\
+	L & = & \left(\frac{1}{4}\right)\left(\frac{1}{4} + \frac{3}{4}\;e^{\frac{-4\nu}{3}}\right)\left(\frac{1}{4}\right)\left(\frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}}\right) \\
+	& = & \frac{(1-3d)d}{16} \\
+	\frac{\partial \ln L}{\partial d} & = &\frac{1-6d}{16}\\
+	0 & = &\frac{1-6\hat{d}}{16} \\
+	\hat{d}& = &\frac{1}{6}\\
+	\hat{\nu } & = & 0.82396 \\
+	L & = & 0.005208
+\end{eqnarray*}
+
+\myNewSlide
+\large
+You may recall that the JC distance correction from lecture 8 looked like this:
+\[\nu = \frac{-3}{4}\;\ln\left(1-\frac{4p}{3}\right) \]
+If you put in $p= 0.5$, because half the sites differ in our example then you the same branch length:
+\[\nu  = 0.82396 \]
+Our JC distance correction formula is actually an ML estimator of the branch length between a pair of taxa.
+
+\myNewSlide
+The first 30 nucleotides of the $\psi\eta$-globin gene
+{\tt
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{lc}
+gorilla & G{\color{red}A}A{\color{red}G}TCCTTGAGAAATAAACTGCACACTGG \\
+orangutan & G{\color{red}G}A{\color{red}C}TCCTTGAGAAATAAACTGCACACTGG\\
+\end{tabular}
+\end{center}
+\end{table}%
+}
+\vskip -2cm
+\[ L = \left[\left(\frac{1}{4}\right)\left(\frac{1}{4} + \frac{3}{4}\;e^{\frac{-4\nu}{3}}\right)\right]^28 \left[\left(\frac{1}{4}\right)\left(\frac{1}{4}-\frac{1}{4}\;e^{\frac{-4\nu}{3}}\right)\right]^2\]
+\begin{picture}(0,0)(0,40)
+	\put(0,0){\makebox(0,0)[l]{\includegraphics[scale=0.5]{../nonfreeimages/pol/GorOrangProfile.pdf}}}
+	\put(70,-20){$\hat{\nu}=0.06982$}
+	\put(70,-30){$\ln L= -51.13396$}
+\end{picture}
+
+\myNewSlide
+\includepdf[pages={9-12}]{../nonfreeimages/pol/pol.pdf} 
+
+\myNewSlide
+\begin{picture}(0,0)(-30,200)
+	\put(0,0){\makebox(0,0)[l]{\includegraphics{../images/pruning_tree.pdf}}}
+	\put(0,170){\begin{tabular}{|c|c|}
+\hline
+Taxon & Character \\
+\hline
+1 & A \\
+2 & C \\
+3 & C \\
+4 & C \\
+5 & G \\
+\hline
+\end{tabular}
+}
+\end{picture}
+
+\myNewSlide
+\[L = \sum_x \sum_y \sum_z \sum_w\Pr(x,y,z,w,A,C,C,C,G|{\bm\nu}) \]
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+L & = & \sum_x \sum_y \sum_z \sum_w\Pr(x)\Pr(y|x,\nu_6)\Pr(A|y,\nu_1)\Pr(C|y,\nu_2) \cdots \\
+	&& \Pr(z|x,\nu_8)\Pr(C|z,\nu_3)\Pr(w|z,\nu_7) \Pr(C|w,\nu_4)\Pr(G|w,\nu_5) 
+\end{eqnarray*}
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+L & = & \sum_x \sum_y \sum_z \Pr(x)\Pr(y|x,\nu_6)\Pr(A|y,\nu_1)\Pr(C|y,\nu_2) \cdots \\
+	&& \Pr(z|x,\nu_8)\Pr(C|z,\nu_3){\color{red}\Big(\sum_w\Pr(w|z,\nu_7) \Pr(C|w,\nu_4)\Pr(G|w,\nu_5) \Big)}
+\end{eqnarray*}
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+L & = & \sum_x \sum_y  \Pr(x)\Pr(y|x,\nu_6)\Pr(A|y,\nu_1)\Pr(C|y,\nu_2) \cdots \\
+	&& {\color{cyan}\Big(\sum_z\Pr(z|x,\nu_8)\Pr(C|z,\nu_3)}{\color{red}\Big(\sum_w\Pr(w|z,\nu_7) \Pr(C|w,\nu_4)\Pr(G|w,\nu_5) \Big)}{\color{cyan}\Big)}
+\end{eqnarray*}
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{eqnarray*}
+L & = & \sum_x   \Pr(x){\color{darkgreen}\Big(\sum_y\Pr(y|x,\nu_6)\Pr(A|y,\nu_1)\Pr(C|y,\nu_2)\Big)} \cdots \\
+	&& {\color{cyan}\Big(\sum_z\Pr(z|x,\nu_8)\Pr(C|z,\nu_3)}{\color{red}\Big(\sum_w\Pr(w|z,\nu_7) \Pr(C|w,\nu_4)\Pr(G|w,\nu_5) \Big)}{\color{cyan}\Big)}
+\end{eqnarray*}
+\begin{picture}(0,0)(-30,200)
+	\put(0,100){\makebox(0,0)[l]{\includegraphics{../images/pruning_treeC.pdf}}}
+\end{picture}
+
+\myNewSlide
+\includepdf[pages={13-14}]{../nonfreeimages/pol/pol.pdf} 
+

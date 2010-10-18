@@ -1,0 +1,22 @@
+#NEXUS
+begin data;
+    dimensions ntax = 6 nchar = 17;
+    format datatype = dna;
+    matrix
+t1    AAAAAAAAAAAAAAAAA
+t2    AAAAAAAAAAAAAAAAA
+t3    GGGGGGGGGGGGGGGGG
+t4    CCCCCCCCCCCCCCCCC
+anc24 ACGTACGTACGTACGTN
+root  AAAACCCCGGGGTTTTN
+;
+end;
+
+set storebr;
+begin trees;
+    tree o = [&U] (t1:0.05,t3:0.4,root:0.0,(t2:0.05,t4:0.4,anc24:0.0):0.05);
+end;
+
+lset nst = 2 basefr = eq rates = eq pinv = 0.0  userbr trat=1.0;
+lscore / sitelike;
+quit;

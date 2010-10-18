@@ -74,6 +74,7 @@ class CharModel(Model):
     def get_num_states(self):
         return self.__class__.NUM_STATES
     num_states = property(get_num_states)
+
     def get_max_branch_length(self):
         if self.branch_length_mode == BranchLengthModel.PROB_CHANGE:
             return float(self.num_states - 1) / self.num_states 
@@ -86,6 +87,13 @@ class CFN(CharModel):
     def __init__(self, **kwargs):
         CharModel.__init__(self, **kwargs)
 
+class CFNPinv(CFN):
+    def __init__(self, **kwargs):
+        self.pinv = Parameter(name='pinv', value=0.01, min_val=0.0, max_val=1.0)
+        parameter_list = [self.pinv]
+        CFN.__init__(self, param_list=parameter_list, **kwargs)
+    def get_pinv(self):
+        return self.pinv.value
 class CompatModel(CharModel):
     NUM_STATES = 2
     def __init__(self, param_list, **kwargs):
