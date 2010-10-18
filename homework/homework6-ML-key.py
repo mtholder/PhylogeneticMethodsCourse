@@ -55,7 +55,7 @@ for root in 'ACGT':
         t = anc_prob[baseAnc24]*calc_prob(baseAnc24, root, lenInternal, kappa)
         pr_root_to_24 += t
         
-        print "\n*** Pr from root=",root, "and other internal=", baseAnc24, "=", 0.25*f*t, "\n"
+        print "\n*** Pr from root=",root, "and other internal=", baseAnc24, "=", 0.25*f*t, "lnL =", math.log(0.25*f*t), "\n"
     total_prob += f*pr_root_to_24*0.25
 print "character likelihood =", total_prob
 print "character lnL =", math.log(total_prob)
