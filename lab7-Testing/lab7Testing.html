@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Phylogenetics 848: Topology testing  in PAUP Lab</title> 
+	<link href="../lab2-PaupMesquiteNEXUS/EEB349.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<table width="972" height="160" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="49" colspan="2" valign="top">
+			<p>
+				<span class="pagetitle">BIOL 848: Phylogenetic Methods</span><span class="pagetitle"></span> 
+			</p>
+		</td>
+		<td height="49" colspan="2" valign="top">
+			<p>Instructor: Mark Holder 
+			</p>
+		</td>
+	</tr>
+	<tr>
+	</tr>
+</table>
+<tr>
+<td>
+	Today's lab will be pretty short.  We are going to cover how we can use PAUP and the combination of PAUP+CONSEL to perform some of the topology tests that we have talked about recently.
+</td>
+</tr>
+
+<h2> Get a data file </h2> 
+<p>
+	Download (again) the data file <a href="../data/algae.nex">algae.nex</a>.
+	</p>
+
+
+<h2> PAUP's tree testing commands are in the -score commands: pscore, lscore and dscore. </h2> 
+<p>
+	As we discussed yesterday, the testing context is clearest when you have two trees before you conduct your analysis.
+	Then you can see if you reject the null hypothesis that each of them would be just as good an explanation if we had all of the possible data in the world. 
+	Expressed this way, it may seem like a strange null hypothesis, but you can think of it this way. 
+	If you have 2 trees it is very probable that the dataset will support one of them more than the other (ties in scores are relatively rare).  
+	The question is can you reject the tree that appears to be suboptimal?
+	Can you reject the null that suboptimal tree would in fact be just as good an explanation of the data if there were no sampling error?
+</p>
+<p>The key is seeing if we can reject the null that the characters are being drawn from a distribution that does not favor one tree over the other.
+Any particular data set may favor one tree, but the <i>expectation</i> of the difference in score is 0.
+</p>
+<p>I do not have two a priori trees to test for the <span class="filename">algae.nex</span> data set, so we will use to random trees.
+</p>
+<p> Execute the data file in PAUP, and then, to get two trees in memory execute the command:
+<pre class="command">generate random  model=equiprobable ntrees=2</pre>
+This draws two trees into memory and the distribution from which they are drawn places an equal probability on each tree topology.
+Use the <span class="command">PScore</span> command to get their parsimony scores. 
+If (by chance) you end up getting 2 trees that have the same score, use the <span class="command">generate</span> command again to get a couple of new trees in memory (we are going to look at methods to test if we can reject a tree that appears to be suboptimal, and the answer will be pretty obvious if the trees appear to be equally good on our data set).
+</p>
+
+<p>
+You might want them back so it is a good idea to save them to a file:
+<pre class="command">savetrees file = randalg.tre</pre>
+</p>
+<h3>Templeton and Winning sites tests</h3>
+<p>First lets look at the very general nonparametric tests that test the hypothesis that characters are equally likely to support each of the trees:
+<pre class="command">PScore / NonparamTest TestDetails</pre>
+You should see a table that summarizes the results for all characters that differ in parsimony length between the two trees.  
+You'll see the length on each tree, the difference in lengths, and finally the difference's "rank."
+</p>
+
+<p>Ranking the differences means that PAUP sorts all of the length differences according to there absolute value (starting at one for a character that has the smallest difference).
+If some of your characters differ between the trees by 2 steps and others by 1, then you will see differences in the ranks.  
+The numbers may look a little confusing; when more than one character are tied for the same difference, then the rank they are given is the mean rank that would be assigned if you could order them.
+So if there were 10 variable characters and 8 had an absolute value of 1, while one had a length difference of 2, and the other character showed a length difference of -2.
+Then a fully ordered list would be assign the ranks
+ 1, 2, 3, 4, 5, 6, 7, and 8 to the characters with an absolute value of the difference of one, and the other two ranks would be 9 and 10. 
+ Because of the 8-way tie for the low ranks and the 2 way tie for the high ranks, we use the means.
+ So the low ranked characters would have a rank of 4.5 (which is (1+2+3+4+5+6+7+8)/8), while the other characters would have a rank of 9.5 (the mean of 9 and 10).
+ </p>
+<p> Next in the output is PAUP's summary of the winning sites test and the Templeton test.
+The former test just treats the characters as binary decisions (for or against the first tree -- I used  coin-flip analogy in lecture to describe this).
+The Templeton test is the one that uses the magnitude of the differences as encapsulated by ranking the absolute values of the differences.</p>
+
+<p>Because the Templeton test uses more of the information, it tends to be more powerful.  So it usually leads to lower p-values than the winning sites test.  Was that the case for your data set?</p>
+
+<h3>KH Test</h3>
+<p><pre class="command">PScore / KHTest</pre>
+to perform the KHTest using the normal approximation to assess significance.
+You should see length difference, and the standard deviation of the difference in length (where the standard deviation is calculated over the class of characters whose length differs between the trees).
+</p>
+<p>
+When we use the Normal approximation for the KHTest, we transform the length difference by dividing it by the standard deviation.  
+This results in a t-statistic. 
+We can get the p-value from a t table (with the degrees of freedom determined by the number of sites that vary between the two trees).
+Make sure that you understand the output of the test.
+</p>
+<p>
+Often the KHTest will be more powerful than the Templeton test because it exploits properties of the Normal distribution rather than trying to assume as little as possible (as the non-parametric tests do).
+Was the p-value lower for your two trees when you conducte the KHTest than the p-value from the Templeton test?
+</p>
+
+
+<h2>Tests for the ML criterion</h2>
+<h2>KH Tests</h2><p>
+Switch PAUP to likelihood (it is in the <span class="command">set</span> command).
+Do a simple search to get a good tree, and then find an appropriate model by adding parameters and seeing if the increase in lnL justifies the addition of the parameters (you can use the AIC or the LRT to do this -- the AIC is easier to do in your head because the mean increase in lnL per parameter has to be greater than 1.0 to lead to a preference for the more complex model).
+</p>
+<p>To speed of computation execute the <span  class="command">LSet BaseFreq=prev RMat = prev</span> so that PAUP does not re-estimate the base frequencies and the rate matrix for all of the subsequent commands.</p>
+
+<p>When we are using ML then we have much larger set of sites that prefer one tree over another.
+In fact, it is quite common for <i>all</i> of the sites to display different likelihoods between the trees.
+</p>
+
+<p>Why would a constant site show a higher likelihood on one tree than another?</p>
+
+<p>Because we have a lot more sites that vary in score between trees, it becomes feasible to use bootstrapping to estimate the variance of the distribution of the difference in log-likelihoods (if we have a very small sample, bootstrapping is unreliable).
+</p>
+
+<p>Why would a constant site show a higher likelihood on one tree than another?</p>
+
+<p>
+Conduct use <span class="command">LScore ? </span>  to see the options and then see if you can conduct the KHTest using the normal approximation, the RELL bootstrap and the bootstrap with full optimization of likelihoods for each resampled dataset.
+</p>
+<p>Do the results of the different forms of the KHTest agree? How do they compare in terms of running time?</p>
+
+<h2>The SH Tests</h2><p>
+Generate 100 random trees and do the KH and SH Tests.
+Which test is more powerful? (which rejects more trees).
+</p>
+
+<p><b>Important Note</b>: that this is an inappropriate use of the KH Test because we don't have 2 trees a priori.  
+PAUP is comparing the best of the 100 trees to each of other 99 trees and seeing if it can reject each of the other trees.
+The test is based on the expectation of the site lnL difference being 0, so we have violated the assumptions of the test by focussing on the best of the 100 trees.</p>
+
+<h2>Consel and the AU-Test</h2>
+<p><a href="http://www.is.titech.ac.jp/~shimo/prog/consel/">Consel</a> is software written by Hidetoshi Shimodaira (the "S" is the SH-Test, and the author of the AU test).</p>
+<p>Recall from lecture, that the SH test (and the AU test) require you to test the plausible set of trees. 
+For the algae data set, there might be a wide range of trees that we would accept going in to the study (obviously the exact candidate set would depend on your botanical knowledge).  
+</p>
+<p>
+Imagine that our candidate set of trees before we analyze the data is any tree that has land plants monophyletic and vascular plants are monophyletic.
+To conduct the SH-test and the AU test, we'll need to get the candidate set of trees in memory, calculate the site likelihoods for the trees, and then feed those site likelihoods to CONSEL.
+Consel uses bootstrapping of these site-likelihoods (and multi-scale bootstrapping in the case of the AU test) to calculate a P-value for each tree in the candidate set.
+</p>
+<p>
+In PAUP (assuming that you have not quit it, and it still has the algae data set in memory), you will need to use
+<pre class="command">Cleartrees</pre>
+command to get rid of the previous trees.
+Next we'll need to set a constraint to make sure that we only consider the trees that are part of our candidate set.
+It is easiest to do this if you know the numbers for the taxa:
+<pre class="command">TStatus full</pre>
+will report the numbers.
+</p>
+<p>You can use
+<pre class="command">constraint land (Monophyly) = YourNewickTreeDescriptionHere</pre>
+to specify a constraint named "land". (Rice and Tobacco are the vascular plants, and the vascular plants + Marchantia are the land plants in this data set).
+Whenever you specify a constraint in PAUP, you should look at the tree to make sure that specified (use the "ShowConstr" command).</p>
+<p>
+Paup can generate all of the trees that are compatible with a constraint:
+<pre class="command">generate all constraint=land</pre>
+(don't do this with too many taxa in memory, or you won't be able to store all of the trees).
+Now we'll save the trees to a file so that we can look at them later (savetrees command).
+</p>
+<p>Choose a simple model (such as HKY with the base frequencies parameters set to their empirical values) so that the tree scoring will not be too slow for the lab.
+After you've chosen the model, use:
+<pre class="command">lscore / sitelike = yes scorefile=algaesitelike.txt</pre>
+To calculate the likelihood scores and save the site likelihoods to the file "algaesitelike.txt"</p>
+<h3>Reformatting fun</h3>
+Unfortunately, Consel won't read the sitelikelihood output from the most recent versions of PAUP (it will read output from other software - including RAxML if you specify the "puzzle" option for consel).
+So we'll have to transform paup's output before we can proceed.
+I wrote a python script (<a href="./paup-site-like-for-consel.py">paup-site-like-for-consel.py</a>) that will help.
+Download the script and run it from a terminal passing the path to algaesitelike.txt to it.
+It should write a file called "sitelikesforconsel.txt".
+
+</body>
+
+
+
+savetrees all_with_land.tre
+
+savetrees file='all-with-land.tre'
+
+set crit = like
+
+nst = 2 basefreq = emp 
+
+lset nst = 2 basefreq = emp 
+
+lscore
+
+lset nst = 2 basefreq = emp pinv= est
+
+lscore
+
+lset nst = 2 basefreq = emp pinv= est trat=est
+
+lscore
+
+
+</html>
