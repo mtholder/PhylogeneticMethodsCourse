@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Phylogenetics: Maximum Likelihood in PAUP Lab</title> 
+	<link href="../lab2-PaupMesquiteNEXUS/EEB349.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<table width="972" height="40" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="49" colspan="2" valign="top">
+			<p>
+				<span class="pagetitle">BIOL 848: Phylogenetic Methods</span><span class="pagetitle"></span> 
+			</p>
+		</td>
+	</tr>
+</table>
+<td>This is yet another lab borrowed from Paul Lewis. Thanks, Paul.</td>
+
+<td>
+	The goal of this lab exercise is to show you how to conduct use simulation to construct a null distribution for a phylogenetic hypothesis.
+</td>
+</tr>
+
+<h1> Background </h1> 
+<p>In this lab we will use the same <span class="filename">algae.nex</span> file that we have used in several other labs.  
+Recall that the cyanobacterium, <i>Anacystis</i>, and the cholorplast from <i>Olithodiscus</i> where the only two taxa to <u>lack</u> chlorophyll <i>b</i>.
+The other taxa are represented by chloroplast sequences that are thought to have descended from a single endosymbiontic organism (they all have both chlorophyll <i>a</i> and <i>b</i>). 
+Thus we expect the other taxa to form a clade.
+</p>
+<p> 
+Because we have a limited amount of time in the computer lab, we will be using parsimony as our optimality criterion in this lab.
+The general principles of using Monte Carlo simulation to construct a null distribution apply to any optimality criterion, so you can adapt the lab to hypothesis testing using ML or distance-based approaches.
+</p>
+
+
+<h2> Get a data file </h2> 
+<p>
+	Download (again) the data file <a href="../data/algae.nex">algae.nex</a>.
+	</p>
+
+
+<h2> Find the score of the most parsimonious tree. </h2> 
+<p>
+	Launch PAUP and perform an appropriate parsimony search to get the most parsimonious tree/trees in memory.
+	(Note the size of the data set and choose the appropiate PAUP commands).
+</p>
+
+<p>How many most parsimonious trees are there? <span title="2" style="border-bottom:1px dotted">answer</span></p>
+
+<p>How many steps are required to explain the data set on this tree? <span title="411" style="border-bottom:1px dotted">answer</span></p>
+
+<p>Does the tree display the chlorophyll <i>a/b</i> clade (you should specify <i>Anacystis</i> as the outgroup to see the trees rooted correctly)? <span title="no" style="border-bottom:1px dotted">answer</span></p>
+
+<h2>Find the most parsimonious tree that is consistent with our null hypothesis</h2>
+<p>
+Now we want to find the highest scoring tree that has a clade of <i>Euglena</i>, <i>Chlorella</i>, <i>Chlamydomonas</i>, <i>Marchantia</i>, <i>Rice</i>, and <i>Nicotiana</i>.
+We can do this in a number of ways.  For a small dataset (like this one), we could get all of the trees is memory, use PAUP's <span class="command">Filter</span> command to remove trees that do not have the group from memory,  and finally  use the <span class="command">SortTrees</span> command to find the best score among all of the trees that are left.
+</p>
+
+<h3>Specifying a constraint</h3>
+<ol>
+<li>We will actually use the more generic approach (the one that you would use even on a large dataset).  
+We will tell PAUP to do a search but also honor a topological constraint.  
+The first step is to tell PAUP to use the constraint.
+The command to do this is <pre class="command">Constraints some_name (MONOPHYLY) = newick_description_here</pre>
+In the place of "newick_description_here" you should put the paranthetical notation for a tree that has just the clade that you would like to constrain.<br />
+See if you can define a constraint tree called <b>ab</b> that puts Tobacco, Rice, Marchantia, Chlamydomonas, Chlorella, and Euglena in a clade (excluding Anacystis_nidulans and Olithodiscus).  
+Use the taxa names (rather than taxa numbers) to define constraint.  
+Note that you will have to use <code>Anacystis_nidulans</code> rather than <code>Anacystis nidulans</code> so that PAUP does not get confused by the space in the taxon name.
+</li>
+<li>Use the <span class="command">ShowConstr</span> command to see the constraint tree that you have defined and make sure that it looks right?</p>
+<p>What was the command? <span title="constrain ab (MONOPHYLY) = ((Tobacco, Rice, Marchantia, Chlamydomonas, Chlorella, Euglena), Anacystis_nidulans, Olithodiscus)" style="border-bottom:1px dotted">answer</span>
+</p>
+</ol>
+
+<p>You should be aware that you can also load a constraint from a tree file using the <span class="command">LoadConstr</span> command.  
+When you are dealing with large numbers of taxa and complex constraints it is often helpful to construct the constraint tree in Mesquite, save it to a file, and then read it into PAUP using the LoadConstr command.</p>
+
+<h3>A constrained search</h3>
+<ol><li>Now we will conduct a branch-and-bound search that honors the constraint tree that we have just defined:
+<pre class="command">BAndB enforce constraints=ab ;</pre>
+The <tt>enforce</tt> keyword tells paup to only consider trees that meet a constraint, and the <tt>constraints=ab</tt> keyword tell PAUP which tree to use as a constraint.
+Note that you can also use constraints with the <span class="command">HSearch</span> command of paup.
+<br />
+What has the parsimony score of the best tree compatible with the constraint? <span title="415" style="border-bottom:1px dotted">answer</span></li>
+<li>Use the <span class="command">ShowTrees</span> command to see the tree.  Does it satisfy the constraint? <span title="If not, you made a mistake." style="border-bottom:1px dotted">answer</span></li></ol>
+
+<h2>Hypothesis testing</h2>
+<p>As our test statistic, we will use the difference in parsimony score between the best (unconstrained) tree and the best tree that satisfies our null hypothesis. What is the value of the test statistic for our data? <span title="-4" style="border-bottom:1px dotted">answer</span></p>
+
+
+<p>To interpret the value of the test statistic we need to have some ideas what range of values would be produced if the null hypothesis were true.
+This is tricky to do. 
+For one thing, there are lots of trees that are compatible with the null hypothesis.
+It seems logical (but is not necessarily correct) to take the tree from the constrained search as the tree to repersent the null hypothesis.  
+After all, among all of the trees compatible with the data it is the one that best explains the data (according to parsimony).
+</p>
+<p>Even if we are satisfied about the choice of a tree that represents the best the null can do, we still have to have a way to find out what the distribution of the test statistic would be if this null were true.
+We will use Monte Carlo simulations for this. 
+In particular we will use seq-gen (available <a href="http://tree.bio.ed.ac.uk/software/seqgen/">here</a>) to generate a bunch of datasets that are compatible with the kind of data that we would see if the null were true. 
+Then we will calculate the test statistic on each of them.
+This will give us a <b>null distribution</b> of the test statistic. We can compare our real data to that.</p>
+<h3>Finding parameters</h3>
+<ol>
+<li>To simulate data, seq-gen needs a fully-specified model and a tree with branch lengths.
+We can use the tree that we found in the constrained search and the GTR+I+G model to get the necessary input. 
+Assuming that you have not quit PAUP and the tree found in the constrained search is still in memory:
+<pre class="command">
+set crit = like;
+lset nst=6 rmat=est basefreq=est rates = gamma shape = est pinv=est;
+lscore;
+savetrees file = model.tre brlens format=altnexus;
+</pre>
+Make sure that you understand these commands.
+<br />
+From the standard output of PAUP you should have the model parameter values for the simulation.
+If you look at the tree file you should have a tree with branch length.
+<br />
+Does the tree have taxa names in the newick representation instead of taxon numbers? <span title="If not you need to make sure you used format=altnexus" style="border-bottom:1px dotted">answer</span></li>
+<li>Unfortunately, seq-gen does not understand NEXUS tree files.  Save just the newick tree from the file to a new file called <span class="filename">model.txt</span>.
+<br />
+If you are a UNIX geek you do this by quitting paup and issuing the command:
+<pre>
+cat model.tre | grep PAUP_1 | awk '{print $5}' > model.txt
+</pre></li>
+</ol>
+
+<h3>Invoking seq-gen</h3>
+<ol>
+	<li>Download the Mac disk image of seq-gen  (from <a href="http://tree.bio.ed.ac.uk/software/seqgen/">here</a>) and drag the <tt>seq-gen</tt> executable to the directory that you are using for this lab.</li>
+	<li>To see the options for seq-gen use the command <pre>seq-gen -h</pre></li>
+	<li>To make sure everything is working do a simple test run using the HKY model:<pre>seq-gen -mHKY model.txt</pre>This should generate a dataset and print it to the screen.</li>
+	<li>The simulation used it default parameter values for the HKY model. We'd like to use the parameters that we inferred from our real data (because the parameter values will affect the dataset-to-dataset variance, and hence the distribution of our test statistic). All commands are given to seq-gen as command line flags. The ones that we will use are:
+	<ul>
+		<li><tt>-mGTR</tt> to specify the GTR model</li>
+		<li><tt>-a</tt> preceding the shape parameter value</li>
+		<li><tt>-i</tt> preceding the proportion of invariant sites</li>
+		<li><tt>-r</tt> preceding the 6 instantanteous rates of the GTR matrix (PAUP infers the first five and fixes the last one to 1.0)</li>
+		<li><tt>-f</tt> preceding the base frequencies</li>
+		<li><tt>-l920</tt> to simulate 920 sites (the same length as our real dataset).</li>
+		<li><tt>-n1000</tt> to generate 1000 datasets</li>
+		<li><tt>-on</tt> to request output in the NEXUS format</li>
+		<li><tt>-xdefpaup.nex</tt> to tell it the name of a file with text input to be inserted between each dataset.</li>
+	</ul>
+	Finally we'll want to redirect the output to file using the <tt>&gt;</tt> redirection operator.
+	We have to do one more thing before running seq-gen.</li>
+	<li>Save the following lines:<pre>begin paup;
+	execute run.nex;
+end;
+</pre> to a file called <span class="filename">defpaup.nex</span></li>
+	<li>My full seq-gen invocation was:
+	<pre>seq-gen -mGTR -a0.615276 -i0.357336 -r 0.64253 2.17067 0.75026 0.21462 4.68720 1.00000 -f 0.275521 0.209086 0.302208 0.213185 -l920 -n1000 -on -xdefpaup.nex model.txt > simdata.nex</pre>
+	Use the values that you got from PAUP's LScore to construct a similar command and run it.</li>
+	<li>Open <span class="filename">simdata.nex</span> in a text editor. Do you see the content of the <span class="filename">defpaup.nex</span> file?</li>
+</ol>
+
+<h3>Running PAUP on the simulated data</h3>
+<p>Now we have 1000 datasets.  How are we going to analyze them all?
+Fortunately we have the PAUP command <tt>execute run.nex;</tt> intercalated between each data set.  
+If we put the commands that we want paup to execute in the <span class="filename">run.nex</span> file then those commands will be executed for each dataset.
+</p><p>What do we want to do for each dataset? 
+Well we want to see the difference in score that we get between the true tree and the preferred (most-parsimonious) tree. 
+This will give us a distribution on the amount of spurious support we could get for a tree even when it is not correct.
+<ol>
+<li>Save the following commands to the <span class="filename">run.nex</span> file:
+<pre>
+BAndB;
+[!****This is the best tree's score****]
+pscore;
+gettrees file = model.tre;
+[!####This is the true tree's score####]
+pscore;
+</pre>
+These commands find the "best" tree, score it, get the null model tree (the true tree for the simulations), and score it.  
+We are using the output comments to make the output more visible.</li>
+<li>Finally to run all of the analyses it is helpful to have a simple "master" paup file:
+<pre>
+log start replace file=sim.log;
+execute simdata.nex;
+log stop;
+</pre>
+Save this file as <span class="filename">master.nex</span>
+</li>
+<li> invoke PAUP using the <tt>-n</tt> flag so that it goes in non-interactive mode (and does not pester you with 1000 questions):
+<pre>
+paup -n master.nex
+</pre>
+</li>
+<li>After a few seconds, you should have completed the analysis of all 100 datasets.</li></ol>
+
+<h3>Summarizing the output</h3>
+Behold the power of bash!<br /> 
+We are going to connect the standard output of one process to the standard input of another.  
+This is done with a "pipe" between the processes.  From our shell, this is done with the | symbol.
+<ol>
+<li>The command:
+<pre>cat sim.log</pre>
+spits out all 83,000 lines of the log file to the screen. Ugh!
+</li>
+<li>The command:
+<pre>cat sim.log | grep "Length "</pre>
+filters all of those lines so that only those with the word Length followed by a space are printed.
+This selects just the output from the PScore command that we did.
+</li>
+<li>Want to get just the scores of the first tree each time (without the word Length)? Try:
+<pre>cat sim.log | grep "Length " | awk '{print $2}'</pre></li>
+<li>We are close.  We now need to subtract the number in the second line from the first line; the number in the fourth line from the third line...
+This would give us the difference in score for each rep.
+I wrote a simple python script that you can download from <a href="consecutiveDiffs.py">here</a> to do that.
+Save the script as <span class="comand">consecutiveDiffs.py</span> in the same directory that you have been working in.
+</li>
+<li> Now 
+<pre>cat sim.log | grep "Length " | awk '{print $2}' | python consecutiveDiffs.py</pre>
+Should display the length differences.
+</li>
+<li>At this point (or really a couple of steps ago) you could take the data into Excel and find the critical value for the p=0.05 level by looking for the 50th largest difference.  We can finish the UNIX way by 
+<pre>cat sim.log | grep "Length " | awk '{print $2}' | python consecutiveDiffs.py | sort -g</pre>
+to sort the values numerically.
+</li>
+<li>And finally:
+<pre>cat sim.log | grep "Length " | awk '{print $2}' | python consecutiveDiffs.py | sort -g | head -n50</pre> to show the 50 most extreme length differences.</li>
+<li>Was the observed difference in this tail?</li>
+</ol>
+</body>
+</html>
+

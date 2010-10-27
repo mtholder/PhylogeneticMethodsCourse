@@ -1,0 +1,6 @@
+hs nomultrees;
+[!****This is the best tree's score****]
+pscore;
+gettrees file = null.nex;
+[!####This is the true tree's score####]
+pscore;

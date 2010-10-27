@@ -1,0 +1,34 @@
+#NEXUS 
+
+Begin trees;  [Treefile saved Sun Oct 12 21:36:53 2008]
+[!
+>Data file = /Users/mholder/Desktop/phylogenetics/BIOL-848/data/algae.nex
+>Heuristic search settings:
+>  Optimality criterion = parsimony
+>    Character-status summary:
+>      Of 920 total characters:
+>        All characters are of type 'unord'
+>        All characters have equal weight
+>        659 characters are constant
+>        132 variable characters are parsimony-uninformative
+>        Number of parsimony-informative characters = 129
+>    Gaps are treated as "missing"
+>  Starting tree(s) obtained via stepwise addition
+>  Addition sequence: simple (reference taxon = Tobacco)
+>  Number of trees held at each step during stepwise addition = 1
+>  Branch-swapping algorithm: tree-bisection-reconnection (TBR)
+>  Steepest descent option not in effect
+>  Initial 'MaxTrees' setting = 100
+>  Branches collapsed (creating polytomies) if maximum branch length is zero
+>  'MulTrees' option in effect
+>  Keeping only trees compatible with constraint-tree "ao"
+>  Trees are unrooted
+>
+>Heuristic search completed
+>   Total number of rearrangements tried = 166
+>   Score of best tree(s) found = 415
+>   Number of trees retained = 1
+>   Time used = <1 sec (CPU time = 0.00 sec)
+]
+tree PAUP_1 = [&U] (Tobacco:0.007296,Rice:0.022313,(Marchantia:0.006141,((Chlamydomonas:0.103649,(Euglena:0.127728,(Anacystis_nidulans:0.111674,Olithodiscus:0.104411):0.028294):0.015621):0.007227,Chlorella:0.036246):0.035847):0.019320);
+End;

@@ -1,4 +1,4 @@
-import math
+import math, sys
 base1 = 'A'
 base2 = 'A'
 base3 = 'G'
@@ -31,7 +31,7 @@ def calc_prob(to_b, from_b, nu, kappa):
     print "Pr(", from_b, "->", to_b, " | nu =", nu, ") =", p
     return p
 
-kappa = 2
+kappa = float(sys.argv[1])
 
 for nu in [0.05, 0.4]:
     print "Pr(A->A | nu = ", nu, ") = ", prob_no_change(nu, kappa)
