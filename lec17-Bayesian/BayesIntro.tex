@@ -1,0 +1,403 @@
+\documentclass{seminar}
+\setlength{\oddsidemargin}{0.in}
+\usepackage{seminar}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{marvosym}
+\large
+\slideframe{none}
+\begin{document}
+\pagenumbering{none}
+\pagestyle{empty}
+\begin{slide}
+\begin{center}
+\Huge Bayesian Phylogenetics \par\Large Mark Holder (with {\bf big} thanks to Paul Lewis)
+\end{center}
+\newslide
+\centerslidesfalse
+Outline
+\begin{itemize}
+	\item Intro 
+		\begin{itemize}
+			\item {\bf What} is Bayesian Analysis? 
+			\item {\bf Why} be a Bayesian?
+		\end{itemize}
+	\item {\bf What is required} to do a Bayesian Analysis? (Priors)
+	\item {\bf How} can the required calculations be done? (MCMC)
+	\item Prospects and Warnings
+\end{itemize}
+\newslide
+\large Simple Example:  
+
+Vesicouretural Reflux (VUR) - valves between the ureters and bladder do not shut fully.
+\begin{itemize}
+	\item leads to urinary tract infections 
+	\item if not corrected, can cause serious kidney damage
+	\item effective diagnostic tests are available, but they are expensive and invasive
+\end{itemize}
+\newslide
+\begin{itemize}
+	\item $\approx$ 1\% of children will have VUR
+	\item $\approx$ 80\% of children with VUR will see a doctor about an infection
+	\item $\approx$ 2\% of {\em all} children will see doctor about an infection\\[30pt]
+\end{itemize}
+\Large Should a child with 1 infection be screened for VUR?\large
+\newslide
+\includegraphics[scale=.50]{../images/VUR1.pdf}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.50]{../images/VUR2.pdf}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.50]{../images/VUR3.pdf}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.40]{../images/VUR4.pdf}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.40]{../images/VUR5.pdf}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.40]{../images/VUR6.pdf}}
+
+\newslide
+\[ Pr(V|I) = \frac{Pr(V) Pr(I|V)}{Pr(I)}\]
+\\[15pt]
+\begin{eqnarray*}
+Pr(V|I) &= & \frac{0.01\times 0.8}{0.02} \\[15pt]
+	& = & 0.40 \\
+\end{eqnarray*}
+\newslide
+Pr(I) is higher for females.
+\begin{tabular}{ccc}
+$Pr(I | \mbox{\Female}) = 0.03$ & &$Pr(I|\mbox{\Male}) = 0.01$\\[45pt]
+\end{tabular}
+
+\begin{tabular}{ccc}
+$Pr(V|I,\mbox{\Female}) =  \frac{0.01\times 0.8}{0.03}$&\vline &$Pr(V|I,\mbox{\Male}) =  \frac{0.01\times 0.8}{0.01}$ \\[15pt]
+$Pr(V|I,\mbox{\Female}) =  0.267$& \vline&$Pr(V|I,\mbox{\Male}) =  0.8$ \\[15pt]
+\end{tabular}
+
+\newslide
+\Large Bayes' Rule\\[45pt]
+\[Pr(A|B) = \frac{Pr(A)Pr(B|A)}{Pr(B)}\]\\[45pt]\large
+\[Pr(\mbox{Hypothesis}|\mbox{Data}) = \frac{Pr(\mbox{Hypothesis})Pr(\mbox{Data}|\mbox{Hypothesis})}{Pr(\mbox{Data})}\]
+\newslide
+\[Pr(\mbox{Tree}|\mbox{Data}) = \frac{Pr(\mbox{Tree})Pr(\mbox{Data}|\mbox{Tree})}{\bf Pr(\mbox{\bf Data})}\]\\[15pt]
+We can ignore ${\bf Pr(\mbox{\bf Data})}$ \\[15pt]
+(2nd half of this lecure)
+\newslide
+\[Pr(\mbox{Tree}|\mbox{Data}) \propto {\bf Pr(\mbox{\bf Tree})}Pr(\mbox{Data}|\mbox{Tree})\]\\[30pt]
+$Pr(\mbox{Tree})$ is the {\em prior} probability of the tree.\\[15pt]
+\newslide
+\[Pr(\mbox{Tree}|\mbox{Data}) \propto Pr(\mbox{Tree}) {\bf Pr(\mbox{\bf Data}|\mbox{\bf Tree}) }\]\\[30pt]
+$Pr(\mbox{Tree})$ is the {\em prior} probability of the tree.\\[15pt]
+${\bf Pr(\mbox{\bf Data}|\mbox{\bf Tree}) }$ is the likelihood of the tree.\\[30pt]
+\[Pr(\mbox{Tree}|\mbox{Data}) \propto Pr(\mbox{Tree}) L(\mbox{\bf Tree}) \]\\[30pt]
+\newslide
+%L \[{\bf Pr(\mbox{\bf Tree}|\mbox{\bf Data}) } \propto Pr(\mbox{Tree})Pr(\mbox{Data}|\mbox{Tree})\]\\[30pt]
+\[{\bf Pr(\mbox{\bf Tree}|\mbox{\bf Data}) } \propto Pr(\mbox{Tree})L(\mbox{Tree})\]\\[30pt]
+$Pr(\mbox{Tree})$ is the {\em prior} probability of the tree.\\[15pt]
+%L $Pr(\mbox{Data}|\mbox{Tree})$ is the likelihood of the tree.\\[15pt]
+ $L(\mbox{Tree})$ is the likelihood of the tree.\\[15pt]
+${\bf Pr(\mbox{\bf Tree}|\mbox{\bf Data}) }$ is the {\em posterior} probability of the tree.\\[15pt]
+
+\newslide
+The posterior probability is a great way to evaluate trees:\\[15pt]
+\begin{itemize}
+	\item Ranks trees
+	\item Intuitive measure of confidence
+	\item Is the ideal ``weight" for a tree in secondary analyses
+	\item Closely tied to the likelihood
+\end{itemize}
+
+\newslide
+%L \large Our models don't give us $Pr(\mbox{Data}|\mbox{Tree})$\\[10pt]
+%L They give us things like $Pr(\mbox{Data}|\mbox{Tree}, \kappa, \alpha, \nu_1, \nu_2, \nu_3, \nu_4, \nu_5)$\\[15pt]
+\large Our models don't give us $L(\mbox{Tree})$\\[10pt]
+They give us things like $L(\mbox{Tree}, \kappa, \alpha, \nu_1, \nu_2, \nu_3, \nu_4, \nu_5)$\\[15pt]
+\rotatebox{270}{\includegraphics[scale=.20]{../images/treeWBrLen}}
+
+
+\newslide
+\Large
+``Nuisance Parameters"\\[20pt]
+Aspects of the evolutionary model that we don't care about, but are in the likelihood equation.
+\newslide
+\rotatebox{270}{\includegraphics[scale=.40]{../images/kappProf}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.40]{../images/kappProfwMLE}}
+%\newslide 
+%Marginalizing over (integrating out) nuisance parameters\\[15pt]
+%L \[Pr(\mbox{Data}|\mbox{Tree})  = \int Pr(\mbox{Data}|\mbox{Tree}, \kappa) Pr(\kappa) d\kappa  \]\\[20pt]
+%\[L(\mbox{Tree})  = \int L(\mbox{Tree}, \kappa) Pr(\kappa) d\kappa  \]\\[20pt]
+
+%So the posterior for a tree is
+%L \[ Pr(\mbox{Tree}|\mbox{Data}) \propto Pr(\mbox{Tree}) \int Pr(\mbox{Data}|\mbox{Tree}, \kappa) Pr(\kappa) d\kappa  \]
+%\[ Pr(\mbox{Tree}|\mbox{Data}) \propto Pr(\mbox{Tree}) \int L(\mbox{Tree}, \kappa) Pr(\kappa) d\kappa  \]
+
+\newslide 
+Marginalizing over (integrating out) nuisance parameters\\[10pt]
+%L \[\int Pr(\mbox{Data}|\mbox{Tree}, \kappa) Pr(\kappa) d\kappa  \]\\[10pt]
+\[L(\mbox{Tree}) = \int L(\mbox{Tree}, \kappa) Pr(\kappa) d\kappa  \]\\[10pt]
+\begin{itemize}
+	\item Removes the nuisance parameter
+	\item Takes the entire likelihood function into account
+	\item Avoids estimation errors
+	\item Requires a prior for the parameter
+\end{itemize}
+\newslide 
+\large When there is substantial uncertainty in a parameter's value, marginalizing can give qualitatively different answers than using the MLE.\\
+\rotatebox{270}{\includegraphics[scale=.25]{../images/MargVsMLE}}
+\newslide 
+%L \[ Pr(\mbox{Tree}|\mbox{Data}) \propto Pr(\mbox{Tree}) \int Pr(\mbox{Data}|\mbox{Tree}, \omega) Pr(\omega) d\omega  \]
+%L If we want to learn about $\omega$ not the tree we can marginalize over the tree
+%L \[ Pr(\omega |\mbox{Data}) \propto Pr(\omega) \sum_i Pr(\mbox{Data}|\mbox{Tree}_i, \omega) Pr(\mbox{Tree}_i)  \]
+%Usually we are interseted in the probability of a {\em tree} being correct:\\
+%\[ Pr(\mbox{Tree}|\mbox{Data}) \propto Pr(\mbox{Tree}) \int L(\mbox{Tree}, \omega) Pr(\omega) d\omega  \]\\[20pt]
+
+%But, if we only want to learn about $\omega$ (or any other parameter) we can marginalize over the tree:\\[20pt]
+
+%\[ Pr(\omega |\mbox{Data}) \propto Pr(\omega) \sum_i L(\mbox{Tree}_i, \omega) Pr(\mbox{Tree}_i)  \]
+\newslide 
+\rotatebox{270}{\includegraphics[scale=.4]{../images/JointProbDistribution}}
+\newslide 
+\rotatebox{270}{\includegraphics[scale=.4]{../images/MargOverOmega}}
+\newslide 
+\rotatebox{270}{\includegraphics[scale=.4]{../images/MargOverTrees.pdf}}
+\newslide 
+\Large The Bayesian Perspective \large \\
+
+\begin{tabular}{lcl}
+	{\bf Pros}  & \vline & {\bf Cons} \\ \hline
+	Posterior probability &\vline & Is it robust?\\
+	is the ideal measure &\vline &\\
+	of support & \vline& \\ \hline
+	Focus of inference is	& \vline& \\
+	flexible & \vline&	\\ \hline
+	Marginalizes over  & \vline&  Requires a prior \\ 
+	nuisance parameters & \vline &\\ 
+%	\hline
+%	Uses entire	& \vline& Is this robust ?\\
+%	likelihood function & \vline&	\\ 
+\end{tabular}
+\centerslidesfalse
+\newslide  %%%PRIORS Section
+\Large Priors\large\\[30pt]
+\begin{itemize}
+	\item Probability distributions
+	\item Specified {\bf \em before} analyzing the data
+	\item Needed for
+		\begin{itemize}
+			\item Hypotheses (trees)
+			\item Parameters
+		\end{itemize}
+\end{itemize}
+\newslide
+\Large
+{\bf Probability Distributions} \\[20pt]
+Reflect the action of random forces
+\newslide
+{\bf Probability Distributions} \\[20pt]
+Reflect the action of random forces\\[30pt]
+OR\\[20pt]
+ (if you're a Bayesian)\\[20pt]
+Reflect your uncertainty
+\newslide
+\includegraphics[scale=.35]{../images/zwicklPriorPost1}\\
+\tiny slide courtesy of Derrick Zwickl
+\newslide
+\includegraphics[scale=.35]{../images/zwicklPriorPost2}\\
+slide courtesy of Derrick Zwickl
+\newslide
+\includegraphics[scale=.35]{../images/zwicklPriorPostComp}\\
+slide courtesy of Derrick Zwickl\\
+\newslide
+\Large	Considerations when choosing a prior for a parameter
+\begin{itemize}
+	\item What values are most likely?
+\end{itemize}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.4]{../images/subjectpPrior}}
+%\newslide
+%	\Large Choosing a prior to reflect prior knowledge\large\\[25pt]
+%\begin{itemize}
+%	\item Posterior from previous study can be your prior.
+%	\item General advice when trying to capture your ``intuition''
+%		\begin{itemize} 
+%			\item Focus on {\bf probabilities} for a range of values (e.g $10 <\kappa<15$) - {\bf not} on probability {\bf density}
+%			\item Prefer fat-tailed distributions
+%			\item Prefer parameterizations that are compact (don't go to $\infty$)
+%		\end{itemize}
+%\end{itemize}
+\newslide
+\Large	Considerations when choosing a prior for a parameter
+\begin{itemize}
+	\item What values are most likely?
+	\item {\bf How do you express ignorance?}	
+		\begin{itemize}
+			\item {\bf {\em vague} distributions}
+		\end{itemize}
+\end{itemize}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.4]{../images/flat}}
+\newslide
+	``Non-informative" priors
+\begin{itemize}
+	\item Misleading term
+	\item Used by many Bayesians to mean ``prior that is expected to have the smallest effect on the posterior" 
+	\item {\bf Not} always a uniform prior
+\end{itemize}
+\newslide
+\Large	Considerations when choosing a prior for a parameter
+\begin{itemize}
+	\item What values are most likely?
+	\item How do you express ignorance?	
+		\begin{itemize}
+			\item {\em vague} distributions
+			\item {\bf How easily can the likelihood discriminate between parameter values?}
+		\end{itemize}
+\end{itemize}
+\newslide
+{\includegraphics[scale=.4]{../images/approxbeta}}
+% coin-toss demonstration
+\newslide
+%Jeffrey's Prior and Reference Priors
+%\begin{itemize}
+%	\item Used when you do not want to include prior information.
+%	\item	Not always tractable for phylogenetic problems (but can inspire better default priors).
+%	\item Based on the expected shape of the likelihood function -- flat areas receive less support in the prior.
+%\end{itemize}
+
+%
+
+%\newslide
+%\Large	Considerations when choosing a prior for a parameter
+%\begin{itemize}
+%	\item What values are most likely?
+%	\item How do you express ignorance? (minimally informative priors)
+%	\item Ease of calculation ({\em was} important in pre-MCMC Bayesian analyses)
+%	\item Are some errors better than others?	
+%\end{itemize}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.4]{../images/KimuraIntro}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.4]{../images/K80ParamCompare}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.4]{../images/K80ContrastWithLike}}
+\newslide
+\includegraphics[scale=.4]{../images/GTRPosterior}\\
+\newslide
+	Minimizing the effect of priors
+\begin{itemize}
+	\item Flat $\neq$ non-informative
+	%\item Phylogenetic models are too complex for the analytical approaches (Jeffrey's priors, reference priors)
+	\item Familiar model parameterizations may perform poorly in a Bayesian analysis with flat priors.
+\end{itemize}
+	
+\newslide
+\Large	Considerations when choosing a prior for a parameter
+\begin{itemize}
+	\item What values are most likely?
+	\item How do you express ignorance? (minimally informative priors)
+	\item {\bf Are some errors better than others?	}
+\end{itemize}
+%\newslide
+%\rotatebox{270}{\includegraphics[scale=.4]{../images/3DBrLenProf}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.4]{../images/2Dprof}}
+\newslide
+\rotatebox{270}{\includegraphics[scale=.4]{../images/TreePostVsbrLenPrior}}
+\newslide
+\Large We might make analyses more conservative by 
+\begin{itemize}
+	\item Favoring short internal branch lengths
+	\item Placing some prior probability on ``star'' trees (Lewis {\em et al.})
+\end{itemize}
+%\newslide
+%\Large	Considerations when choosing a prior for a parameter
+%\begin{itemize}
+%	\item What values are most likely?
+%	\item How do you express ignorance? (minimally informative priors)
+%	\item Are some errors better than others?	
+%	\item {\bf Ease of calculation ({\em was} important in pre-MCMC Bayesian analyses)}
+%\end{itemize}
+\newslide
+	\Large We need to worry about sensitivity of our conclusions to all ``inputs"
+\begin{itemize}
+	\item Data
+	\item Model
+	\item Priors
+\end{itemize}
+Often priors will be the {\em least} of our concerns
+\newslide
+\includegraphics[scale=.35]{../images/zwicklPriorPostComp}\\
+\tiny slide courtesy of Derrick Zwickl\\
+\newslide
+	\Large The prior can be a benefit (not just a necessity) of Bayesian analysis
+\begin{itemize}
+	\item Incorporate previous information
+	\item Make the analysis more conservative\\[20pt]
+\end{itemize}
+But...
+\newslide
+
+It can be hard to say ``I don't know"\\[20pt]
+
+	\large Priors can strongly affect the analysis {\em if}...
+\begin{itemize}
+	\item The prior strongly favors some parameter values, OR
+	\item The data (via the likelihood) are not very informative (little data or complex model)\\[20pt]
+\end{itemize}
+
+ Because Bayesian inference relies on marginalization, the priors for {\em all} parameters can affect the posterior probabilities of the hypotheses of interest.
+%\newslide
+%\Large Advantages of the Bayesian Perspective \\
+
+%\begin{itemize}
+%	\item Posterior probability  is the ideal measure of support.
+%	\item Flexible inference -- tree or parameters
+%	\item We can marginalize over nuisance parameters.
+%\end{itemize}
+
+\newslide
+\Large How do we calculate a posterior probability?\large \\[10pt]
+
+\begin{center}
+\[Pr(\mbox{Tree}|\mbox{Data}) = \frac{Pr(\mbox{Tree})L(\mbox{Tree})}{\bf Pr(\mbox{\bf Data})}\]\\[15pt]
+
+\Large In particular, how do we calculate ${\bf Pr(\mbox{\bf Data})}$?\large \\[10pt]
+\newslide
+\Large $Pr(\mbox{Data})$ is the marginal probability of the data, so\large
+\[ Pr(\mbox{Data})  = \sum_i Pr(\mbox{Tree}_i)L(\mbox{Tree}_i)\]\\[10pt]
+%or we could write it:
+%\[ Pr(\mbox{Data})  = \sum_i Pr(\mbox{Tree}_i)Pr(\mbox{Data}|\mbox{Tree}_i)\]\\[10pt]
+But this is a sum over all trees (there are {\bf \em lots} of trees).\\[20pt]
+Recall that even $L(\mbox{Tree}_i)$ involves multiple integrals.
+\newslide
+\large
+\[ Pr(\mbox{D})  =\sum\int\int\int\int\int \mbox{Posterior Probability Density} \]\\[30pt]
+\[L(\mbox{Tree}_i, \kappa, \alpha, \nu_1, \nu_2,\nu_3,\nu_4, \nu_5) Pr(\mbox{Tree}_i) Pr(\kappa) Pr(\alpha) Pr(\nu_1) Pr(\nu_2) \cdots\]\\[30pt]
+
+\newslide
+\Large {\bf M}arkov {\bf c}hain {\bf M}onte {\bf C}arlo
+\begin{itemize}
+	\item Simulates a walk through parameter/tree space.
+	\item Lets us estimate posterior probabilities for any aspect of the model
+	\item Relies on the {\bf \em ratio} of posterior densities between two points
+\end{itemize}
+\newslide
+\Large
+\begin{eqnarray*}
+R & = & \frac{Pr(\mbox{Point}_2|\mbox{Data})}{Pr(\mbox{Point}_1|\mbox{Data})} \\[15pt]
+R & = & \frac{\frac{Pr\left(\mbox{Point}_2\right)L\left(\mbox{Point}_2\right)}{Pr\left(\mbox{Data}\right)}}{\frac{Pr\left(\mbox{Point}_1\right)L\left(\mbox{Point}_1\right)}{Pr\left(\mbox{Data}\right)}}\\[15pt]
+R & = & \frac {Pr\left(\mbox{Point}_2\right)L\left(\mbox{Point}_2\right)}{Pr\left(\mbox{Point}_1\right)L\left(\mbox{Point}_1\right)}\\[15pt]
+\end{eqnarray*}
+%\Large What is a heated chain?\large
+%
+%$R$ is the ratio of posterior probability densities.
+
+%Instead of using $R$ in the acceptance/rejection decisions, a heated chain uses $R^{\frac{1}{1+H}}$\\[15pt]
+%Heating a chain makes the surface it explores {\bf flatter}.\\[10pt]
+
+%In MrBayes: $H = \mbox{Temperature}*(\mbox{The Chain's index})$\\
+%The cold chain has index 0
+\end{center}
+
+\end{slide}
+\end{document}

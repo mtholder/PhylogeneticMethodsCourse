@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<title>Phylogenetics 848: Topology testing  in PAUP Lab</title> 
-	<link href="../lab2-PaupMesquiteNEXUS/EEB349.css" rel="stylesheet" type="text/css">
+	<link href="../lab2-PaupMesquiteNEXUS/BIOL848.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <table width="972" height="160" border="0" cellpadding="0" cellspacing="0">
@@ -164,35 +164,32 @@ After you've chosen the model, use:
 <pre class="command">lscore / sitelike = yes scorefile=algaesitelike.txt</pre>
 To calculate the likelihood scores and save the site likelihoods to the file "algaesitelike.txt"</p>
 <h3>Reformatting fun</h3>
+<p>
 Unfortunately, Consel won't read the sitelikelihood output from the most recent versions of PAUP (it will read output from other software - including RAxML if you specify the "puzzle" option for consel).
 So we'll have to transform paup's output before we can proceed.
 I wrote a python script (<a href="./paup-site-like-for-consel.py">paup-site-like-for-consel.py</a>) that will help.
 Download the script and run it from a terminal passing the path to algaesitelike.txt to it.
 It should write a file called "sitelikesforconsel.txt".
+</p>
+<p>
+On Mac download the <a href="./consel-mac.tar.gz">mac version of consel</a> that I compiled.
+Windows users should grab <a href="./consel-mingwin.tar.gz">this windows version of consel</a> that I compiled with cygwin.
+</p>
+<p>Consel has a pdf manual included which you may want to look at.
+Depending on where you unpack consel the directories for the next few commands may differ slightly (I wrote the commands assuming that you unpacked the archive such that they make a subdirectory called consel in the directory that you are working in).
+Basically want to run:
+<pre class="command">./consel/bin/makermt --paup sitelikesforconsel.txt 
+./consel/bin/consel sitelikesforconsel
+./consel/bin/catpv sitelikesforconsel
+</pre>
+The first command formats the input for consel (into two scary binary files with extensions .vt and .rmt). consel does the hypothesis testing an stores the output in file with .pv and .ci extensions. 
+Then catpv displays the output of consel in a more readable form.
+</p>
+<p>We have not talked about the WeightedSH test, but the guide at <a href="http://www.is.titech.ac.jp/~shimo/prog/consel/quick.html">http://www.is.titech.ac.jp/~shimo/prog/consel/quick.html</a> should help you interpret the output (or you can ask me if you have questions).</p>
+<p>Which trees can be rejected on the basis of this dataset?</p>
+<p>Can you find the non-rejected trees in the tree file that you saved from PAUP?</p>
+
 
 </body>
-
-
-
-savetrees all_with_land.tre
-
-savetrees file='all-with-land.tre'
-
-set crit = like
-
-nst = 2 basefreq = emp 
-
-lset nst = 2 basefreq = emp 
-
-lscore
-
-lset nst = 2 basefreq = emp pinv= est
-
-lscore
-
-lset nst = 2 basefreq = emp pinv= est trat=est
-
-lscore
-
 
 </html>

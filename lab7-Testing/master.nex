@@ -1,4 +1,0 @@
-#NEXUS 
-log start file=sh.log;
-execute outfile;
-log stop;

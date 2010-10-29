@@ -23,5 +23,18 @@ try:
     assert(first_line[-1] == "-lnL")
 except:
     sys.exit('Expecting the first line to begin with "Tree\t-lnL\t...\tSite\t-lnL"')
-ofstream = open(ofname, 'w')
 
+ofstream = open(ofname, 'w')
+ofstream.write('Tree\t-lnL\tSite\t-lnL\n')
+buffered = []
+for line in fiter:
+    if line.startswith('\t'):
+        buffered.append(line.strip().split())
+    else:
+        sp = line.strip().split()
+        ofstream.write('\t'.join(sp[:2]) + '\n')
+        for b in buffered:
+            ofstream.write('\t\t%s\n' % '\t'.join(b[:2]))
+            buffered = []
+sys.stderr.write('The file "%s" should now contain the site lnL values in a form that is readable by consel.\n' % ofname)
+            
