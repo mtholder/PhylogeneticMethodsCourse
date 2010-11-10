@@ -1,0 +1,1087 @@
+\documentclass[landscape]{foils} 
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+\pdffalse % we are not running PDFLaTeX
+\else
+\pdfoutput=1 % we are running PDFLaTeX
+\pdftrue
+\fi
+
+\ifpdf
+\usepackage[pdftex]{graphicx}
+\else
+\usepackage{graphicx}
+\fi
+
+\ifpdf
+\DeclareGraphicsExtensions{.pdf, .jpg, .tif, .png}
+\else
+\DeclareGraphicsExtensions{.eps, .jpg}
+\fi
+
+%\usepackage{pslatex}
+\usepackage{tabularx,dcolumn, graphicx, amsfonts,amsmath}  
+\usepackage[sectionbib]{natbib}
+\bibliographystyle{apalike}
+\usepackage{picinpar}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{paralist} %compactenum
+\setlength{\voffset}{-0.5in}
+%\setlength{\hoffset}{-0.5in}
+%\setlength{\textwidth}{10.5in}
+\setlength{\textheight}{7in}
+\setlength{\parindent}{0pt}
+%\pagestyle{empty}
+%\renewcommand{\baselinestretch}{2.0}
+\DeclareMathSymbol{\expect}{\mathalpha}{AMSb}{'105}
+\def\p{\rm p}
+\def\pp{\rm P}
+% this are commands that come with the color package
+\usepackage{color}
+\usepackage{fancyhdr}
+
+
+\pagestyle{empty}
+%define colors
+\definecolor{mediumblue}{rgb}{0.0509,0.35,0.568}
+\definecolor{blue}{rgb}{0.0109,0.15,0.468}
+\definecolor{black}{rgb}{0.04,0.06,0.2}
+\definecolor{darkblue}{rgb}{0.03,0.1,0.2}
+\definecolor{darkgreen}{rgb}{0.03,0.5,0.2}
+\definecolor{lightblue}{rgb}{0.85,0.9333,0.95}
+\definecolor{lightblue2}{rgb}{0.270588, 0.45098, 0.701961}
+\definecolor{white}{rgb}{1.0,1.0,1.0}
+\definecolor{yellow}{rgb}{0.961,0.972,0.047}
+\definecolor{red}{rgb}{0.9,0.1,0.1}
+\definecolor{orange}{rgb}{1.0,0.4,0.0}
+\definecolor{grey}{rgb}{0.5,0.5,0.5}
+\definecolor{violet}{rgb}{0.619608, 0.286275, 0.631373}
+\definecolor{mybackgroundcolor}{rgb}{1.0,1.0,1.0}
+
+%\definecolor{light}{rgb}{.5,0.5,0.0}
+\definecolor{light}{rgb}{.3,0.3,0.3}
+
+% sets backgroundcolor for whole document 
+\pagecolor{mybackgroundcolor}
+% sets text color
+%\color{black}
+% see below for an example how to change just a few words
+% using \textcolor{color}{text}
+
+\font \riesig=cmssbx10 scaled 13000
+\font \gigant=cmssbx10 scaled 12000
+\font \gross=cmssbx10 scaled 7000
+\font \mittel=cmssbx10 scaled 5000
+\font \courier=pcrb scaled 2000
+\newcommand{\notetoself}[1]{{\textsf{\textsc{\color{red} #1}}}\\}
+
+\newcommand{\answer}[1]{{\sf \color{red} #1}}
+
+\newcommand{\patternSpace}{\ensuremath{\mathcal{D}}}
+\newcommand{\variablePatternSpace}{\ensuremath{\mathcal{D}_v}}
+
+
+\newcommand{\section}{\secdef \newsection\newsection}
+%\renewcommand{\labelitemi}{\includegraphics[width=5mm]{images/bullet.pdf}}
+\newcommand{\newsection}[1]{%
+{
+	\par\flushleft\large\sf\bfseries \vskip -2cm #1\\\rule[0.7\baselineskip]{\textwidth}{0.5mm}\par}}
+
+\newcommand{\subsection}{\secdef \test\test}
+\newcommand{\test}[1]{%
+	{\par\flushleft\normalsize\sf\bfseries #1: }}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\prob}{{\rm Prob~}}
+\def\showy#1{{\normalsize\sf\bfseries #1}}
+\def\donotuse#1{}
+
+\newcommand{\entrylabel}[1]{\mbox{#1}\hfil}
+\newenvironment{entry}
+	{\begin{list}{}%
+		{\renewcommand{\makelabel}{\entrylabel}%
+		\setlength{\labelwidth}{35pt}%
+		\setlength{\leftmargin}{\labelwidth+\labelsep}%
+	}%
+	{\end{list}}}
+
+\newcommand{\poltext}{{\copyright\ 2002--2007 by Paul O. Lewis -- Modified by  Mark Holder with permission from Paul Lewis}}
+
+\newcommand{\pol}{{\footnotesize \poltext}}
+\newcommand{\myBackground}{\begin{picture}(0,0)(0,0)  \put(-40,-70){\makebox(0,0)[l]{\includegraphics[width=33cm]{images/baby_blue.jpg}}} \end{picture}}
+\newcommand{\myFooter}{}
+%\begin{picture}(0,0)(0,0)
+%	\put(0,-185){\pol}
+%\end{picture}}
+\newcommand{\myNewSlide}{\newpage\myFooter} % \myBackground}
+
+
+
+\usepackage{pdfpages}
+
+
+\newcommand{\hilite}[1]{{\color{red} \bf #1}}
+
+
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{backref,  pdfpagemode=FullScreen,  linkcolor=blue, citecolor=red, colorlinks=true, hyperindex=true}
+\usepackage{cancel}
+\renewcommand{\Pr}{p}
+
+\begin{document}
+\pagecolor{white}
+\MyLogo{}
+\unitlength=1mm
+
+
+\begin{flushleft}
+\begin{center}
+\rule{\textwidth}{2mm}\\
+{\LARGE Phycas demonstration -- polytomy priors, slice sampling, and steppingstone sampling \\}
+\vskip 2mm
+\rule[2mm]{\textwidth}{2mm}
+\end{center}
+\vskip 2cm
+Mark Holder\\
+Department of Ecology and Evolutionary Biology\\
+University of Kansas\\
+Lawrence, Kansas
+
+\end{flushleft}
+
+
+\myNewSlide
+\section*{marginal likelihood estimation}
+In ML model selection we judge models by their ML score and the number of parameters.
+In Bayesian context we:
+\begin{compactitem}
+	\item Use model averaging if we can ``jump'' between models (reversible jump methods, Dirichlet Process Prior, Bayesian Stochastic Search Variable Selection),
+	\item Compare models on the basis of their marginal likelihood.
+\end{compactitem}
+
+The Bayes Factor between two models:
+\[B_{10} = \frac{\Pr(D|M_1)}{\Pr(D|M_0)}\]
+ is a form of likelihood ratio.\\
+\myNewSlide
+
+\myNewSlide
+Bayes factor:
+\[B_{10} = \frac{\Pr(D|M_1)}{\Pr(D|M_0)}\]
+\vskip 2cm
+Let's unpack, $\Pr(D|M_1)$, the marginal probability of the data under the model, $M_1$:
+\[\Pr(D|M_1) = \int\Pr(D|\theta, M_1)\Pr(\theta)d\theta \]
+where $\theta$ is the set of parameters in the model.
+
+
+{\small (The next slides are from Paul Lewis' lecture last week)}
+
+\includepdf[pages={96-97}]{../nonfreeimages/pol/POLBayesian_MBL_29July2010.pdf} 
+
+\myNewSlide
+\includepdf[pages={100-101}]{../nonfreeimages/pol/POLBayesian_MBL_29July2010.pdf} 
+
+\myNewSlide
+{\bf Important point:} (but not the focus of the lab) Bayes Factor comparison remove the effect of the prior on the model itself, but the priors on nuisance parameters still matter!
+
+Think about your priors - using a very parameter-rich model may not be overparameterized if you have prior knowledge about the parameter values.
+
+
+\myNewSlide
+\section*{Marginal likelihood formula (again)}
+\[\Pr(D|M_1) = \int\Pr(D|\theta, M_1)\Pr(\theta)d\theta \]
+where $\theta$ is the set of parameters in the model.
+
+We could estimate $\Pr(D|M_1)$ by drawing points from the prior on $\theta$ and calculating the mean likelihood.
+
+\myNewSlide
+\section*{Calculating $\Pr(D|M)$}
+\normalsize
+An analogy: the density of a particle represents the likelihood of a set of parameter values\\
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/moderateMixture.pdf}}}
+	\put(100,-40){Consider particles suspended in syrup}
+	\put(100,-55){$\frac{2}{3}$ of the particles are blue with mass = 9}
+	\put(100,-70){$\frac{1}{3}$ of the particles are red with mass = 18}
+	\put(100,-100){Mean mass in the population is:}
+	\put(120,-115){\large{$\frac{2}{3}* 9 + \frac{1}{3}* 18 = 12$}}
+	
+\end{picture}
+
+\myNewSlide
+\normalsize
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/moderateMixtureSampling.pdf}}}
+	\put(100,-40){If everything is mixed well, then taking}
+	\put(100,-55){the mean mass from a sample gives a good}
+	\put(100,-70){estimate of the mean mass in the population}
+	\put(100,-100){41 blue and 18 red in the bottom:}
+	\put(120,-115){\large{$\frac{41* 9 + 18* 18}{59} \approx 11.75$}}
+\end{picture}
+
+
+
+
+\myNewSlide
+\normalsize
+Now, imagine a ``Bayesian centrifuge'' that enriches the bottom of the flask for heavy particles
+in exactly the same way that Bayesian MCMC prefers to sample points with high likelihood:\\
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/moderateMixtureSampling.pdf}}}
+	\put(120,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/centrifugedModerate.pdf}}}
+	\put(100,-75){{\Huge $\rightarrow$}}
+\end{picture}
+
+
+\myNewSlide
+\normalsize
+ \begin{picture}(-0,0)(-0,0)
+     \put(-30,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/centrifugedModerate.pdf}}}
+     \put(100,-10){The arithmetic mean of our ``centrifuged''}
+\put(100,-25){sample is a horribly biased estimator of the}
+\put(100,-40){mean mass:}
+     \put(100,-60){52 blue and 52 red in the bottom}
+     \put(120,-80){\large$\frac{52* 9 + 52* 18}{104} = 13.5$}
+     \put(100,-100){Interestingly, the harmonic mean of}
+     \put(100,-115){a centrifuged sample is good estimator:}
+     \put(120,-135){\large$\frac{104}{\frac{52}{9} + \frac{52}{18} } = 12$}
+\end{picture}
+
+\myNewSlide
+\section*{Harmonic mean estimator of the marginal likelihood}
+\begin{itemize}
+	\item appealing because it comes ``for free'' after we have sampled the posterior using MCMC,
+	\item unfortunately the estimator can have a huge variance associated with it in some (very common) cases. For example if:
+	\begin{itemize}
+		\item the vast majority of parameter space has very low likelihood, and
+		\item  a very small region has high likelihoods.
+	\end{itemize}
+\end{itemize}
+
+
+\myNewSlide
+
+\normalsize
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/extremeSampling.pdf}}}
+	\put(100,-10){Think of a mixture in which most points}
+	\put(100,-25){(show in white) are only slightly denser than}
+	\put(100,-40){the syrup, and a few particles are made}
+	\put(100,-55){of lead.}
+\end{picture}
+
+\myNewSlide
+\normalsize
+Now, a moderate sample taken from bottom after our ``Bayesian centrifuge'' will probably result in a 
+collection  composed entirely of the heavy particles:\\
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/extremeSampling.pdf}}}
+	\put(120,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/centrifugedExtreme.pdf}}}
+	\put(100,-75){{\Huge $\rightarrow$}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(-0,0)(-0,0)
+	\put(20,-10){\makebox(-0,-150)[l]{\includegraphics[scale=1]{../images/posterior_prior_densities.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{From Dr.~Radford Neal's blog}
+{\tiny
+\url{http://radfordneal.wordpress.com/2008/08/17/the-harmonic-mean-of-the-likelihood-worst-monte-carlo-method-ever}
+}
+
+``The total unsuitability of the harmonic mean estimator should have been apparent within an hour of its discovery.''
+
+\myNewSlide
+Two models with the same likelihood function, but different priors on the parameter ($x$).  The result is marginal likelihoods that differ (by almost a factor of 2):\\
+\begin{picture}(-0,0)(-0,0)
+	\put(0,10){\makebox(-0,-150)[l]{\includegraphics[scale=1]{../images/same_like_diff_marglike.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Steppingstone sampling}
+Xie, Lewis, Fan, Kuo, and Chen \citep[][accepted]{XieLFKC} and Fan, Wu, Chen, Kuo, and Lewis\citep[][in review]{FanWuChenKuoLewis2010}
+introduced a new method for estimating the marginal likelihood
+from several MCMC runs conducted with differing power posteriors densities:
+\[p_{\beta}(\theta|D,M) = \frac{\left[\Pr(D|\theta,M)\Pr(\theta,M)\right]^{\beta}\pi(\theta)^{(1-\beta)}}{c_{\beta}} \]
+where $0\leq \beta \leq 1$ and $c_{\beta}$ is a normalizing constant.\par
+
+Intermediate values of $\beta$ blend the posterior and the reference distribution.  This is similar to the ``heating'' in MCMCMC.
+
+\myNewSlide
+\section*{Steppingstone sampling }
+When $\beta=1$:
+
+\[p_{\beta}(\theta|D,M) = \frac{\left[\Pr(D|\theta,M)\Pr(\theta,M)\right]^{\beta}\pi(\theta)^{(1-\beta)}}{c_{\beta}} \]
+
+\[p_{1}(\theta|D,M) = \frac{\left[\Pr(D|\theta,M)\Pr(\theta,M)\right]}{c_{1}} \]
+
+
+$p_{1}(\theta|D)$ is the posterior.
+
+$c_1 = \Pr(D|M)$, in other words, $c_1$ is the marginal likelihood.
+
+\myNewSlide
+\section*{Steppingstone sampling }
+When $\beta=0$:
+\[p_{\beta}(\theta|D,M) = \frac{\left[\Pr(D|\theta,M)\Pr(\theta,M)\right]^{\beta}\pi(\theta)^{(1-\beta)}}{c_{\beta}} \]
+
+\[p_{0}(\theta|D,M) = \frac{\pi(\theta)}{c_{0}} \]
+
+
+$\pi(\theta)$ is the reference distribution.
+
+If we choose some analytically tractable reference distribution, $\pi(\theta)$, then we can calculate the density exactly and $c_0 = 1$.
+
+\myNewSlide
+\section*{Steppingstone sampling}
+\begin{eqnarray*}
+\Pr(D|M) & = & \frac{\Pr(D|M)}{1.0} \\
+	  & = & \frac{c_1}{c_0} \\
+		& = & \left(\frac{c_{1}}{c_{0.38}}\right)\left(\frac{c_{0.38}}{c_{0.1}}\right)\left(\frac{c_{0.1}}{c_{0.01}}\right)\left(\frac{c_{0.01}}{c_{0}}\right)\\
+		& = & \left(\frac{c_{1}}{\cancel{c_{0.38}}}\right)\left(\frac{\cancel{c_{0.38}}}{\cancel{c_{0.1}}}\right)\left(\frac{\cancel{c_{0.1}}}{\cancel{c_{0.01}}}\right)\left(\frac{\cancel{c_{0.01}}}{c_{0}}\right)
+\end{eqnarray*}
+This corresponds to using $\beta$  of $\{0, 0.01, 0.1, 0.38, 1\}$ as stepping stones between the reference distribution and the posterior.
+
+\myNewSlide
+\begin{picture}(-0,0)(-0,0)
+	\put(60,30){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../nonfreeimages/pol/Stepping_Stones_over_the_River_Mole.jpg}}}
+	\put(50,-130){$\Pr(D|M) = \frac{c_1}{c_0} =  \left(\frac{c_{1}}{c_{0.38}}\right)\left(\frac{c_{0.38}}{c_{0.1}}\right)\left(\frac{c_{0.1}}{c_{0.01}}\right)\left(\frac{c_{0.01}}{c_{0}}\right)$}
+	\put(0,-175){{\tiny Photo by Johan Nobel \url{http://www.flickr.com/photos/43147325@N08/4326713557/} downloaded from Wikimedia}}
+\end{picture}
+
+
+\myNewSlide
+\normalsize
+Back to the centrifuge example: The ``steppingstones'' correspond to different speeds of our centrifuge
+and repeat the experiment. If we only change the speed a bit we'll get a similar result:\\
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/extremeSampling.pdf}}}
+	\put(120,5){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/centrifugedExtreme.pdf}}}
+	\put(100,-75){{\Huge $\rightarrow$}}
+\end{picture}
+
+\myNewSlide
+\normalsize
+By repeating the experiment with lower and lower speeds of the centrifuge we can eventually
+find a sample that gives us a good mixture of heavy and light particles:\\
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,10){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/extremeSampling.pdf}}}
+	\put(120,10){\makebox(-0,-150)[l]{\includegraphics[scale=0.6]{../images/slowCentrifugedExtreme.pdf}}}
+	\put(100,-60){{\Huge $\rightarrow$}}
+\end{picture}
+\vskip 12.3cm 
+Using information from all of our experiments we can estimate the mean mass accurately.
+
+
+\myNewSlide
+We can use a technique called importance sampling to estimate the ratio of the normalizing constants between adjacent steppingstones.
+
+Importance sampling: we simulate points from one distribution, and then reweight the points to transform them into samples from 
+a target distribution that we are interested in:\\
+
+\begin{picture}(-0,0)(-0,0)
+	\put(30,14){\makebox(-0,-150)[l]{\includegraphics[scale=0.9]{../images/import_fig_densities.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\begin{picture}(-0,0)(-0,0)
+	\put(65,50){\makebox(-0,-150)[l]{\includegraphics[scale=0.55]{../images/import_fig_densities.pdf}}}
+	\put(65,-50){\makebox(-0,-150)[l]{\includegraphics[scale=0.55]{../images/import_wts_densities.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\begin{picture}(-0,0)(-0,0)
+	\put(65,50){\makebox(-0,-150)[l]{\includegraphics[scale=0.55]{../images/import_fig_densities.pdf}}}
+	\put(65,-50){\makebox(-0,-150)[l]{\includegraphics[scale=0.55]{../images/import_wts_densities.pdf}}}
+	\put(-30,-50){\makebox(-0,-150)[l]{\includegraphics[scale=0.55]{../images/importance_distribution.pdf}}}
+	\put(160,-50){\makebox(-0,-150)[l]{\includegraphics[scale=0.55]{../images/weighted_importance_dist.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\section*{Importance sampling}
+The method works well if the importance distribution is:
+\begin{itemize}
+	\item fairly similar to the target distribution, and
+	\item not ``too tight'' to allow sampling the full range of the target distribution
+\end{itemize}
+
+
+\myNewSlide
+In phylogenetics our posterior distribution is too peaked and our prior is too vague to allow us to 
+use them in importance sampling:\\
+\begin{picture}(-0,0)(-0,0)
+	\put(20,-10){\makebox(-0,-150)[l]{\includegraphics[scale=1]{../images/posterior_prior_densities.pdf}}}
+\end{picture}
+
+\myNewSlide
+The key to steppingstone sampling is to use a slightly vaguer distributions as importance distributions in a series of steps:\\
+\begin{picture}(-0,0)(-0,0)
+	\put(20,-10){\makebox(-0,-150)[l]{\includegraphics[scale=1]{../images/stepping_stone_densities.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\section*{Path sampling}
+
+\citet{LartillotP2006} introduced two forms of path sampling (which they called ``thermodynamic integration''), one of which is similar to steppingstone sampling in that it morphs the prior into the posterior through power posterior distributions.
+
+Phycas also implements a discrete step version of Lartillot and Philippe's ``annealing-melting integration.''
+
+\myNewSlide
+\begin{picture}(-0,0)(-0,0)
+	\put(10,15){The Bayes Factor for a complex model compared to a simple (true) model. }
+	\put(10,5){(estimated twice to assess repeatability)}
+	\put(0,-35){Harmonic mean}
+ 	\put(120,-25){Original Steppingstone \citep{XieLFKC}:}
+ 	\put(120,-35){(blends posterior and prior)}
+ 	\put(-20,-80){\makebox(-0,-300)[l]{\includegraphics[scale=.75]{../images/marg_like_comp.pdf}}}
+ 	\put(100,55){\makebox(-0,-300)[l]{\includegraphics[scale=.75]{../images/orig_step_marg_like.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-15){Original Steppingstone \citep{XieLFKC}:}
+ 	\put(0,-25){(blends posterior and prior)}
+ 	\put(130,-15){New Steppingstone \citep{FanWuChenKuoLewis2010}:}
+ 	\put(130,-25){(blends posterior and a simple}
+ 	\put(135,-35){version of the posterior fit using}
+ 	\put(135,-45){tractable distributions)}
+ 	\put(-35,45){\makebox(-0,-300)[l]{\includegraphics[scale=.75]{../images/orig_step_marg_like.pdf}}}
+ 	\put(120,178){\makebox(-0,-300)[l]{\includegraphics[scale=.75]{../images/marg_like_comp.pdf}}}
+\end{picture}
+
+\myNewSlide
+\bibliography{phylo}
+\end{document}
+\myNewSlide
+\section*{Phycas uses slice sampling for model parameter updates}
+\normalsize
+\begin{picture}(-0,0)(-0,0)
+	\put(30,30){\makebox(-50,-150)[l]{\includegraphics[scale=1.3]{images/sliceNeal.pdf}}}
+	\put(0,-0){\normalsize An algorithm developed by \citet{Neal2003}. Figure 1 from that paper:}
+\end{picture}
+\vskip 8cm
+The take home message for you: slice sampling can be more computationally intensive, but should be less sensitive to tuning of proposal parameters than the Metropolis-Hasting.
+
+Phycas comes with an interactive application for seeing how slice sampling works.
+
+
+\myNewSlide
+\section*{Creating a more conservative analysis}
+{\large 
+Allowing for polytomies in Bayesian analyses:
+\begin{itemize}
+	\item polytomies express uncertainty
+	\item must place a prior probability on unresolved trees
+	\item new MCMC proposals must be invented \citep[see][for details]{LewisHH2005}
+\end{itemize}
+}
+
+
+\myNewSlide
+\section*{Delete Edge Move}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-30){\makebox(-50,-150)[l]{\includegraphics[scale=1]{images/delEdgeMove.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Effects of allowing for polytomies}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,5){\makebox(-50,-150)[l]{\includegraphics[scale=1]{images/algalPolytomyTree.pdf}}}
+	\put(160, -80){\small data from \citet{ShoupL2003}}
+\end{picture}
+
+\myNewSlide
+\section*{Polytomy priors}
+{\large 
+\begin{compactitem}
+	\item True polytomies (also known as ``hard polytomies'')  are not common -- using a prior to favor polytomies does not reflect our true beliefs about speciation (or DNA replication).
+	\item Allowing unresolved trees is one way to make the Bayesian tree inference more conservative -- ``Would this data be convincing to some whose prior beliefs made him/her skeptical about {\em any} resolution of the tree?''
+	\item Even strong priors in favor of polytomies do not give up too much power
+	\item Phycas sampling trees that contain polytomies. It also supports separate priors for the lengths of internal and terminal branches (as suggested by Yang and Rannala).
+\end{compactitem}
+
+}
+
+
+\myNewSlide
+\section*{The lab}
+The lab exercise:
+\begin{itemize}
+	\item  introduces you to basic use of Phycas and its conventions,
+	\item contains a brief exercise on steppingstone sampling,
+	\item demonstrates the use of polytomy priors
+\end{itemize}
+	
+\myNewSlide{}
+\section*{Coming soon in Phycas}
+\begin{itemize}
+	\item tree searching with data augmented by sampled ancestral states; we are using uniformization techniques \citep{Lartillot2006gibbs,RodriguePL2008} to generate these ancestral states.
+	\item codon models
+\end{itemize}
+
+
+\myNewSlide{}
+\section*{Uniformization in phycas}
+
+We have implemented methods toggle between
+data augmentation (using uniformization to sample character mappings), topology-changing-moves that
+use Felsenstein's pruning algorithm over a small portion of the tree.
+
+
+Calculating the likelihood from mappings has the potential to be much faster
+than traditional likelihood calculations (with the drawback that MCMC must be used to
+sample over the space of character histories).
+
+Having character mappings also enables parallelization schemes that break up the tree
+into independent regions.
+Such approaches are similar to Goloboff's sectorial searching strategies.
+They should scale well to large numbers of taxa.
+
+These methods are currently being tested.
+
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-30){\makebox(-50,-150)[l]{\includegraphics[scale=.9]{pruning.pdf}}}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-30){\makebox(-50,-150)[l]{\includegraphics[scale=.9]{mapping.pdf}}}
+\end{picture}
+
+
+\myNewSlide{}
+\section*{Thanks}
+We thank you for trying out Phycas and providing feedback!
+
+We would like to thank Michael Cummings and the Workshop on Molecular Evolution for hosting the Phycas demo.
+Funding sources include the CIPRES grant (NSF-DBI-0306047) to Dave Swofford, a NESCent sabbatical fellowship to Paul Lewis. 
+
+Phycas is built using 5 open source projects: \href{http://www.boost.org/}{boost}, \href{http://sourceforge.net/projects/ncl/}{ncl} (the NEXUS Class Library),  \href{http://iterm.sourceforge.net/}{iTerm},  \href{http://ipython.scipy.org/moin/}{IPython}, and (of course) \href{http://www.python.org/}{python}
+
+
+\myNewSlide
+This slide shows the math to demonstrate that  we can use the harmonic mean to estimate the marginal likelihood, $P(D)$.
+Consider, a model that has a discrete parameter $v$ that can take two values ($r$ and $b$).
+$h$ in the harmonic mean of the likelihoods for parameters values sampled from the posterior distribution
+\begin{eqnarray*}
+h & = & \frac{1}{\Pr(v=r|D)\left[\frac{1}{\Pr(D|v=r)}\right] + \Pr(v=b|D)\left[\frac{1}{\Pr(D|v=b)}\right]}\\
+ & = & \frac{1}{\left[\frac{\Pr(v=r)\Pr(D|v=r)}{\Pr(D)}\right]\left[\frac{1}{\Pr(D|v=r)}\right] + \left[\frac{\Pr(v=b)\Pr(D|v=b)}{\Pr(D)}\right]\left[\frac{1}{\Pr(D|v=b)}\right]}\\
+ & = & \frac{1}{\left[\frac{\Pr(v=r)}{\Pr(D)}\right]+ \left[\frac{\Pr(v=b)}{\Pr(D)}\right]}\\
+ & = & \frac{\Pr(D)}{\Pr(v=r) + \Pr(v=b)}\\
+ & = & \Pr(D)\\
+\end{eqnarray*}
+
+
+
+
+
+\myNewSlide
+\section*{The harmonic mean as an importance sampling estimator}
+\normalsize
+The marginal likelihood is the expected value of the likelihood over points drawn from the prior:
+\begin{eqnarray*}
+\Pr(D) = \mathbb{E}_{p(\theta)}[\Pr(D|\theta)] & = & \int \Pr(D|\theta)\Pr(\theta) d\theta
+\end{eqnarray*}
+In importance sampling, we draw parameter values ${\bm \theta}$ from a different density, $g(\theta)$, but multiple the points by a weight, $w$:
+\begin{eqnarray*}
+\mathbb{E}_{p(\theta)}[\Pr(D|\theta)] & = & \frac{\frac{1}{n}\sum_{i=1}^n \Pr(D|\theta_i)w_i}{b}
+\end{eqnarray*}
+where $b$ is a normalization constant.
+
+\myNewSlide
+The appropriate weight is the ratio of the target density and our importance density:
+\[w_i = \frac{\Pr(\theta_i)}{g(\theta_i)}\]
+And it turns out that the normalization constant is simply a sum of the importance weights:
+\begin{eqnarray*}
+b & = & \frac{1}{n}\sum_{i=1}^n\frac{\Pr(\theta_i)}{g(\theta_i)}
+\end{eqnarray*}
+
+
+\begin{eqnarray*}
+\mathbb{E}_{p(\theta)}[\Pr(D|\theta)] & = & \frac{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(D|\theta_i)\Pr(\theta_i)}{g(\theta_i)}}{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(\theta_i)}{g(\theta_i)}}
+\end{eqnarray*}
+
+
+
+
+\myNewSlide
+\begin{eqnarray*}
+\mathbb{E}_{p(\theta)}[\Pr(D|\theta)] & = & \frac{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(D|\theta_i)\Pr(\theta_i)}{g(\theta_i)}}{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(\theta_i)}{g(\theta_i)}}
+\end{eqnarray*}
+
+If the importance distribution, $g(\theta)$, is the prior then the importance weights are all 1:
+\begin{eqnarray*}
+\mathbb{E}_{p(\theta)}[\Pr(D|\theta)] & = & \frac{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(D|\theta_i)\Pr(\theta_i)}{\Pr(\theta_i)}}{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(\theta_i)}{\Pr(\theta_i)}} \\
+ & = & \frac{1}{n}\sum_{i=1}^n\Pr(D|\theta_i)
+\end{eqnarray*}
+Recall that the points, ${\bm \theta}$,  are draw by sampling from the importance distribution, so this sum of likelihoods is already weighted by the prior.
+
+\myNewSlide
+\begin{eqnarray*}
+\mathbb{E}_{p(\theta)}[\Pr(D|\theta)] & = & \frac{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(D|\theta_i)\Pr(\theta_i)}{g(\theta_i)}}{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(\theta_i)}{g(\theta_i)}}
+\end{eqnarray*}
+
+If the importance distribution, $g(\theta)$ is the posterior then:
+\begin{eqnarray*}
+\mathbb{E}_{p(\theta)}[\Pr(D|\theta)] & = & \frac{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(D|\theta_i)\Pr(\theta_i)}{\Pr(D|\theta_i)\Pr(\theta_i)}}{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(\theta_i)}{\Pr(D|\theta_i)\Pr(\theta_i)}} \\
+ & = & \frac{1}{\frac{1}{n}\sum_{i=1}^n\frac{\Pr(\theta_i)}{\Pr(D|\theta_i)\Pr(\theta_i)}} \\
+ & = & \frac{n}{\sum_{i=1}^n\frac{1}{\Pr(D|\theta_i)}} \\
+\end{eqnarray*}
+This is the justification of the harmonic mean estimator of the marginal likelihood.
+
+\myNewSlide
+\section*{Lartillot and Philippe's thermodynamic integration}
+Like the steppingstone sampler, the  thermodyanmic integration method (or path sampling) use power posterior densities with $0\leq\beta\geq 1$:
+\[p_{\beta}(\theta|D) = \frac{\Pr(D|\theta)^{\beta}\Pr(\theta)}{c_{\beta}}\]
+with $c_0 = 0$ and $c_1 = \Pr(D)$.
+
+Lartillot and Philippe showed that 
+\[	\frac{\partial \ln c_\beta}{\partial \beta} = \mathbb{E}_{p_{\beta}}\left[\frac{\partial\ln\left[\Pr(D|\theta)^{\beta}\Pr(\theta)\right]}{\partial\beta}\right] \]
+
+Note that by definition of a definite integral:
+\[\int_0^1 \frac{\partial \ln c_\beta}{\partial \beta}d\beta = \ln c_1 - \ln c_0 = \ln\Pr(D) \]
+
+\myNewSlide
+Thus, 
+\[  \ln\Pr(D) = \int_0^1 \mathbb{E}_{p_{\beta}}\left[\frac{\partial\ln\left[\Pr(D|\theta)^{\beta}\Pr(\theta)\right]}{\partial\beta}\right] d\beta  \]
+By differentiating we see that:
+\begin{eqnarray*} 
+\frac{\partial\ln\left[\Pr(D|\theta)^{\beta}\Pr(\theta)\right]}{\partial\beta} & = & \frac{\partial [\ln\Pr(\theta) + \beta \ln \Pr(D|\theta)]}{\partial\beta} \\
+ & = & \ln \Pr(D|\theta)
+\end{eqnarray*}
+
+This gives us:
+\[ \ln\Pr(D) = \int_0^1 \mathbb{E}_{p_{\beta}} \left[  \ln \Pr(D|\theta) \right]  d\theta  \]
+
+The integration is not analytically tractable, but we can calculate $ \mathbb{E}_{p_{\beta}} \left[  \ln \Pr(D|\theta) \right]$ by conducting MCMC at the a power posterior distribution $p_{\beta}$ and taking an average of the log-likelihoods.
+
+Then we can use standard numerical integration techniques to estimate the integral.
+\myNewSlide
+Figure from \citet{LartillotP2006};\\
+\begin{picture}(-0,0)(-0,0)
+	\put(-50,-110){\makebox(-50,-150)[l]{\includegraphics[scale=1.5]{LartillotPhillipeThermInt.pdf}}}
+\end{picture}
+
+
+
+
+\myNewSlide
+\section*{Simulating from stars}
+\begin{picture}(-0,0)(-0,0)
+	\put(-10,0){\makebox(-50,-150)[l]{\includegraphics[scale=.8]{images/starSim.pdf}}}
+	\put(21,-40){\large model tree}
+	\put(113,10){\large inferred trees}
+	\put(178,10){\large ``expected'' support}
+	\put(205,-20){\Huge $\frac{1}{3}$}
+	\put(205,-70){\Huge $\frac{1}{3}$}
+	\put(205,-130){\Huge $\frac{1}{3}$}
+\end{picture}
+
+\myNewSlide
+\section*{Results of star tree simulations}
+100,000 sites simulated
+\begin{center}
+{\normalsize
+\begin{tabular}{|ccccccc|}
+\hline
+{Tree 1} & {Tree 2} & { Tree 3} & \vline \vline& { Tree 1} & { Tree 2} & { Tree 3} \\
+\hline
+0.3029 & 0.2922 & \hilite{0.4049} & \vline \vline & 0.2990 & 0.3288 & \hilite{0.3722} \\
+\hilite{0.4607}  & 0.1362 & 0.4031&  \vline \vline & 0.3172 & 0.0464 & \hilite{0.6364} \\
+\hilite{0.6704}  & 0.0975 & 0.2321&  \vline \vline & 0.1584 & \hilite{0.7969}  & 0.0447 \\
+\hilite{0.6120}  & 0.1852 & 0.2028&  \vline \vline & \hilite{0.4625}  & 0.3600 & 0.1775 \\
+\hilite{0.3605}  & 0.3570 & 0.2825&  \vline \vline & \hilite{0.7077}  & 0.0881 & 0.2042 \\
+\hilite{0.5455}  & 0.2505 & 0.2040&  \vline \vline & 0.0884 & 0.0262 & \hilite{0.8854}  \\ 
+0.4253  & \hilite{0.4254} & 0.1493&  \vline \vline & \hilite{0.9551}  & 0.0422 & 0.0027 \\
+0.1595 & \hilite{0.7465}  & 0.0940&  \vline \vline & 0.1826 & \hilite{0.5511}  & 0.2663 \\
+\hilite{0.4436}  & 0.1697 & 0.3867&  \vline \vline & 0.3043 & \hilite{0.4224}  & 0.2733 \\
+\hilite{0.3994}  & 0.3904 & 0.2102&  \vline \vline & \hilite{0.6559}  & 0.0707 & 0.2734 \\
+0.1151 & \hilite{0.5912}  & 0.2937&  \vline \vline & 0.0073 & \hilite{0.9892}  & 0.0035 \\
+\hilite{0.8333} & 0.0951 & 0.0716 &  \vline \vline & 0.2703 & \hilite{0.4112} & 0.3185  \\
+\hilite{0.8317} & 0.0736 & 0.0947 &  \vline \vline &  & & \\
+ \hline
+\end{tabular}
+}
+\end{center}
+
+\myNewSlide
+\section*{Tree geometry}
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,20){\makebox(-50,-150)[l]{\includegraphics[scale=1]{images/polPaperAirplane.pdf}}}
+	\put(0,-150){{\tiny figure courtesy of Paul Lewis}}
+\end{picture}
+
+\myNewSlide
+\section*{Coin-flipping analogy}
+\begin{picture}(-0,0)(-0,0)
+	\put(-15,20){\makebox(-50,-150)[l]{\includegraphics[scale=1]{images/uniformPriorFlips.pdf}}}
+	\put(130, 0){\large $p$ is the probability of Heads}
+	\put(130, -10){\large Uniform prior, no data.}
+	\put(130, -20){\large $\Pr(\mbox{Head-biased})=0.5$}
+\end{picture}
+
+\myNewSlide
+\section*{Coin-flipping analogy}
+\begin{picture}(-0,0)(-0,0)
+	\put(-20,20){\makebox(-50,-150)[l]{\includegraphics[scale=1]{images/5flips.pdf}}}
+	\put(150, 0){\large  $X =\{ \mbox{3 Tails, 2 Heads}\}$}
+	\put(150, -10){\large  $\Pr(\mbox{Head-biased})\approx0.344$}
+\end{picture}
+
+\myNewSlide
+\section*{Coin-flipping analogy}
+\begin{picture}(-0,0)(-0,0)
+	\put(-15,20){\makebox(-50,-150)[l]{\includegraphics[scale=1]{images/500flips.pdf}}}
+	\put(130, -10){\large  $X =\{ \mbox{246 Tails, 254 Heads}\}$}
+	\put(130, -20) {\large $\Pr(\mbox{Head-biased})\approx0.64$}
+\end{picture}
+
+\myNewSlide
+{\large
+%For the coin-flipping case, one can show (analytically or with simulations) that, when 
+Despite the fact that 
+$p=0.5$:
+
+\[ \Pr(\mbox{Head-biased}|\mbox{Data}) \sim \mbox{Uniform}(0,1) \]
+
+even as the sample size $\rightarrow \infty$.
+
+Similarly, if we simulate from a star tree we can get strong support for a spurious grouping -- no matter how many sites we simulate.
+}
+
+
+\myNewSlide
+\section*{The nature of the phenomenon}
+{\large 
+\begin{itemize}
+	\item Polytomies are given 0 prior probability.% in current Bayesian phylogenetic approaches
+	\item We are asking methods to choose between several {\em incorrect} answers.
+	\item {\em Not} a damning flaw in Bayesian analyses (or an indication of a bug in the software).
+\end{itemize}
+}
+
+\myNewSlide
+\section*{Behavior of Bayesian inference on trees  drawn from the prior}
+From \citet{HuelsenbeckR2004}:\\
+\begin{picture}(-0,0)(-0,0)
+	\put(0,20){\makebox(-50,-150)[l]{\includegraphics[scale=2.5]{images/HuelsenbeckRBayesianSim.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Behavior of Bayesian inference when the inference model is too simple}
+From \citet{HuelsenbeckR2004}:\\
+\begin{picture}(-0,0)(-0,0)
+	\put(0,20){\makebox(-50,-150)[l]{\includegraphics[scale=2.5]{images/HuelsenbeckRModelSensitivity.pdf}}}
+\end{picture}
+
+
+
+
+
+\myNewSlide
+\section*{Different priors on the internal and external branches}
+To create more conservative analyses, \citet{YangR2005} suggested using strong priors that favor short lengths for the internal branches of the tree.
+
+They recommended data-size dependent priors:\\
+larger datasets $\rightarrow$ stronger priors for short internal branch lengths.
+
+\myNewSlide
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,5){\makebox(-50,-150)[l]{\includegraphics[scale=1]{images/3DBrLenProf.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{picture}(-0,0)(-0,0)
+	\put(-30,5){\makebox(-50,-150)[l]{\includegraphics[scale=1]{images/2Dprof.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Simulation study by Sukumaran et al. (in prep)}
+\begin{picture}(-0,0)(-0,0)
+	\put(-0,-10){\makebox(-50,-150)[l]{\includegraphics[scale=1]{jeetSimTree.pdf}}}
+	\put(0,-120){short branch length = 0.02}
+	\put(0,-130){long branch = $\{0.3, 0.6, 0.9\}$ }
+\end{picture}
+
+
+\myNewSlide
+\section*{Simulation study by Sukumaran et al. (in prep)}
+\begin{picture}(-0,0)(-0,0)
+	\put(-15,-10){\makebox(-50,-150)[l]{\includegraphics[scale=0.5]{jeetSimResults.pdf}}}
+	\put(0,-120){$x$-axis shows the number of sites in the simulated datasets}
+	\put(0,-130){{\color{black} black} = mean posterior of the true (model) tree }
+	\put(0,-140){{\color{red} red} = mean posterior of the long-branch attraction tree }
+\end{picture}
+
+
+\myNewSlide
+\normalsize
+\bibliography{phylo}
+
+\end{document}
+
+
+\myNewSlide{}
+\myNewSlide{}
+\section*{How can we depict sampling error in phylogenetic data sets?}
+
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords.pdf}}}
+\put(140,-00){I highly recommend \citet{Kim2000}}
+\put(140,-10){for a more in-depth depiction}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords.pdf}}}
+	\thicklines
+	\put(25,0){\line(1,0){50}}
+	\put(25,0){\line(-1,-1){4}}
+	\put(25,0){\line(-1,1){4}}
+	\put(75,0){\line(1,-1){4}}
+	\put(75,0){\line(1,1){4}}
+	\put(80,0){\vector(4,-1){27}}
+	\put(80,4){C}
+	\put(80,-8){D}
+	\put(14,4){A}
+	\put(14,-8){B}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords.pdf}}}
+	\thicklines
+	\put(0,-50){\line(1,0){50}}
+	\put(0,-50){\line(-1,-1){4}}
+	\put(0,-50){\line(-1,1){4}}
+	\put(50,-50){\line(1,-1){4}}
+	\put(50,-50){\line(1,1){4}}
+	\put(22,-58){\vector(1,-2){28}}
+	\put(55,-46){B}
+	\put(55,-58){D}
+	\put(-12,-46){A}
+	\put(-12,-58){C}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords.pdf}}}
+	\thicklines
+	\put(160,-50){\line(1,0){50}}
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(210,-50){\line(1,-1){4}}
+	\put(210,-50){\line(1,1){4}}
+	\put(182,-58){\vector(-1,-3){18}}
+	\put(215,-46){B}
+	\put(215,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords.pdf}}}
+	\thicklines
+	\put(160,-50){\line(1,0){25}}
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(185,-50){\line(1,-1){4}}
+	\put(185,-50){\line(1,1){4}}
+	\put(170,-58){\vector(-1,-1){38}}
+	\put(190,-46){B}
+	\put(190,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords.pdf}}}
+	\thicklines
+	%\put(160,-50){\line(1,0){25}}
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(160,-50){\line(1,-1){4}}
+	\put(160,-50){\line(1,1){4}}
+	\put(160,-60){\vector(-3,-1){51}}
+	\put(165,-46){B}
+	\put(165,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(140,-00){``model manifold'' for trees}
+	\put(140,-10){with terminal branches=0.05}
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-modmani.pdf}}}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(140,-00){``model manifold'' with}
+	\put(140,-10){parsimony's partition of the space}
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-modpartition.pdf}}}
+\end{picture}
+
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-modpartitionSparse.pdf}}}
+	\put(140,-00){When you have short sequences}
+	\thicklines
+	\put(160,-50){\line(1,0){25}}
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(185,-50){\line(1,-1){4}}
+	\put(185,-50){\line(1,1){4}}
+	\put(169,-58){\vector(-1,-1){36}}
+	\put(190,-46){B}
+	\put(190,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-modpartitionModerate.pdf}}}
+	\put(140,-00){When you have moderate}
+	\put(145,-10){sequence lengths}
+	\thicklines
+	\put(160,-50){\line(1,0){25}}
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(185,-50){\line(1,-1){4}}
+	\put(185,-50){\line(1,1){4}}
+	\put(169,-58){\vector(-1,-1){36}}
+	\put(190,-46){B}
+	\put(190,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-modpartitionDense.pdf}}}
+	\put(140,-00){When you have long sequences}
+	\thicklines
+	\put(160,-50){\line(1,0){25}}
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(185,-50){\line(1,-1){4}}
+	\put(185,-50){\line(1,1){4}}
+	\put(169,-58){\vector(-1,-1){36}}
+	\put(190,-46){B}
+	\put(190,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-modpartitionHuge.pdf}}}
+	\put(140,-00){When you have {\bf very} long sequences}
+	\thicklines
+	\put(160,-50){\line(1,0){25}}
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(185,-50){\line(1,-1){4}}
+	\put(185,-50){\line(1,1){4}}
+	\put(169,-58){\vector(-1,-1){36}}
+	\put(190,-46){B}
+	\put(190,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+\myNewSlide{}
+\Large
+The previous slides show the intuitive behavior of a consistent method:
+\begin{compactitem}
+	\item When we have little data, we often get the tree wrong.
+	\item As data set size increase:
+		 \begin{compactitem}
+			\item we infer the tree correctly more often
+			\item we eventually get strong support for the correct tree from almost all data sets
+		\end{compactitem}
+\end{compactitem}
+
+
+\myNewSlide{}
+\normalsize
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-starsparse.pdf}}}
+	\put(140,-00){When you have short sequences}
+	\thicklines
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(160,-50){\line(1,-1){4}}
+	\put(160,-50){\line(1,1){4}}
+	\put(159,-62){\vector(-3,-1){52}}
+	\put(165,-46){B}
+	\put(165,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-starmoderate.pdf}}}
+	\put(140,-00){When you have moderate}
+	\put(145,-10){sequence lengths}
+	\thicklines
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(160,-50){\line(1,-1){4}}
+	\put(160,-50){\line(1,1){4}}
+	\put(159,-62){\vector(-3,-1){52}}
+	\put(165,-46){B}
+	\put(165,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-stardense.pdf}}}
+	\put(140,-00){When you have long sequences}
+	\thicklines
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(160,-50){\line(1,-1){4}}
+	\put(160,-50){\line(1,1){4}}
+	\put(159,-62){\vector(-3,-1){52}}
+	\put(165,-46){B}
+	\put(165,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-starhuge.pdf}}}
+	\put(140,-00){When you have {\bf very} long sequences}
+	\thicklines
+	\put(160,-50){\line(-1,-1){4}}
+	\put(160,-50){\line(-1,1){4}}
+	\put(160,-50){\line(1,-1){4}}
+	\put(160,-50){\line(1,1){4}}
+	\put(159,-62){\vector(-3,-1){52}}
+	\put(165,-46){B}
+	\put(165,-58){C}
+	\put(148,-46){A}
+	\put(148,-58){D}
+\end{picture}
+\myNewSlide{}
+\begin{picture}(-0,0)(-0,0)
+	\put(0,-0){\makebox(30,-150)[l]{\includegraphics[scale=1.]{images/treespace-coords-starhugeclose.pdf}}}
+\end{picture}
+
+
+\end{document}

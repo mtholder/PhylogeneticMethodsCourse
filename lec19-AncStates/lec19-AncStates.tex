@@ -1,0 +1,262 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\usepackage{pdfpages}
+\usepackage{bm}
+\usepackage{ifsym}
+\newcommand{\hilite}[1]{{\color{red} \bf #1}}
+\newcommand{\disruption}{\theta}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+\begin{center}
+{\Large Some of these slides have been borrowed from Dr.\ Paul Lewis, Dr.\ Joe Felsenstein. Thanks!}
+\vskip 15mm
+\large Paul has many great tools for teaching phylogenetics at his web site: \\
+\url{http://hydrodictyon.eeb.uconn.edu/people/plewis}
+\end{center}
+
+
+
+
+\myNewSlide
+\includepdf[pages={5-22}]{../nonfreeimages/pol/pol-ancstates.pdf}
+
+\myNewSlide
+\section*{Estimation of where changes take place}
+\large
+\begin{compactenum}
+	\item What is the probability that a change $0\rightarrow1$ took place on a particular branch in the tree?
+	\item What is the probability that the character changed state exactly $x$ times on the tree ?  
+\end{compactenum}
+
+Should we answer these questions with a joint or marginal ancestral character state reconstruction?
+
+\myNewSlide
+\Huge
+{\center{No}}
+
+
+\myNewSlide
+\large
+We should figure out the probability of explaining the character state distribution with exactly the set of changes we are interested in.
+
+Marginalize over all states that are not crucial to the question
+
+\myNewSlide
+\begin{compactenum}
+	\item What is the probability that a change $0\rightarrow1$ took place on a particular branch in the tree? -- fix the ancestral node to 0 and the descendant to 1, calculate the likelihood and divide that by the total likelihood.
+	\item {\color{grey}What is the probability that the character changed state exactly $x$ times on the tree ?  }
+\end{compactenum}
+
+\myNewSlide
+\begin{compactenum}
+	\item {\color{grey}What is the probability that a change $0\rightarrow1$ took place on a particular branch in the tree?}
+	\item What is the probability that the character changed state exactly $x$ times on the tree ?  -- Sum the likelihoods over all reconstructions that have exactly $x$ changes.  This is not easy to do!  Recall that $\Pr(0\rightarrow 1|\nu,\theta)$ from our models accounts for multiple hits.  A solution is to sample histories according to their posterior probabilities and summarize these samples.
+\end{compactenum}
+
+
+\myNewSlide
+\includepdf[pages={5-16}]{../nonfreeimages/pol/pol-mapping.pdf}
+
+\myNewSlide
+\section*{Sojourn times are exponentially distributed}
+\large
+If $\lambda$ is the total rate of leaving state $0$, then you can simulate a soujourn 
+by:
+\begin{compactitem}
+	\item drawing a time according to the cumulative distribution function of the exponential distribution ($1 - e^{-\lambda t}$).
+	\item pick the ``destination'' state by normalizing the rates away from state 0 such that the rates sum to one.
+\end{compactitem}
+
+This is picking $j$ and $t$ by:
+\[\Pr(0\rightarrow j, t) = \Pr(\mbox{mut. at }t)\Pr(j|\mbox{mut.})\]
+But we want quantities like:
+\[\Pr(0\rightarrow j, t|0\rightarrow 2, \nu_1)\]
+
+\myNewSlide
+\section*{Conditioning on the data}
+We simulate according to $\Pr(0\rightarrow j, t|0\rightarrow 2, \nu_1)$ by rejection sampling:
+\begin{compactenum}
+	\item Simulate a series of draws of the form: $\Pr(0\rightarrow j, t)$ until the sum of $t$ exceeds $\nu_1$,
+	\item If we ended up in the correct state, then accept this series of sojourns as the mapping.
+	\item If not, go back to step 1.
+\end{compactenum}
+
+
+
+\myNewSlide
+\includepdf[pages={20-22}]{../nonfreeimages/pol/pol-mapping.pdf}
+
+\myNewSlide
+\section*{``Stochastic character mapping'' or ``Mutational Mapping''}
+\begin{compactitem}
+	\item allows you to sample from the posterior distribution of histories for characters
+	\item conditional on an assumed model
+	\item conditional on the observed data
+	\item implemented in Simmap (v1 by J. Bollback; v2 by J. Bollback and J. Yu) and Mesquite (module by P. Midford)
+\end{compactitem}
+
+\myNewSlide
+\section*{``Stochastic character mapping'' }
+You can calculate summary statistics on the set of simulated histories to answer almost any type of question that depends on knowing ancestral character states or the number of changes:
+\begin{compactitem}
+	\item What proportion of the evolutionary history was `spent' in state 0?
+	\item What is the posterior probability that there were between 2 and 4 changes of state?
+	\item Does the state in one character appear to affect the probability of change at another? -- Map both characters and do a contingency analysis.
+\end{compactitem}
+	
+See \citet{MininS2008MB,MininS2008PRSoc,ObrienMS2009} for rejection free approaches to generate mappings.
+
+\myNewSlide
+
+Often we are more interested in the ``forces'' driving evolutionary patterns than the outcome.
+
+Perhaps we should focus on fitting a model of character evolution rather than the ancestral character state estimates.
+
+\myNewSlide
+Rather than:
+\begin{compactenum}
+	\item estimate a tree,
+	\item estimate character states,
+	\item figure out what model of character evolution best fits those ancestral character state reconstructions.
+\end{compactenum}
+
+Rather than:
+\begin{compactenum}
+	\item estimate a tree,
+	\item figure out what model of character evolution best fits tip data
+\end{compactenum}
+
+Or even:
+\begin{compactenum}
+	\item Jointly estimate character evolution in trees in MCMC (marginalizing over trees when answering questions about character evolution).
+\end{compactenum}
+
+
+
+\myNewSlide
+\includepdf[pages={35}]{../nonfreeimages/joe/joe-compmethods.pdf}
+
+\myNewSlide
+\includepdf[pages={2-3}]{../nonfreeimages/pol/pol-mapping.pdf}
+
+\myNewSlide
+\section*{Model-based approach to detecting correlated evolution}
+View the problem as model-selection or use LRT if you prefer the hypothesis testing framework.
+
+Consider two binary characters. Under the simplest model, there is only one rate:
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{lr|c|c|c|c|}
+& & 0 & 1 & 2 & 3 \\
+& & (0,0) & (0,1) & (1,0) & (1,1) \\
+\hline
+0 & (0,0) & - & $q$ & $q$ & 0 \\
+1 & (0,1) & $q$ & -  & 0 & $q$ \\
+2 & (1,0) & $q$ & 0 & - & $q$  \\
+3 & (1,1) & 0 & $q$ &  $q$ & - \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+Why are there 0's?
+\myNewSlide
+Under a model assuming character independence:
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{lr|c|c|c|c|}
+& & 0 & 1 & 2 & 3 \\
+& & (0,0) & (0,1) & (1,0) & (1,1) \\
+\hline
+0 & (0,0) & - & $f_{01}$ & $s_{01}$ & 0 \\
+1 & (0,1) & $q_{\ast0}$ & -  & 0 & $q_{1\ast}$ \\
+2 & (1,0) & $q_{0\ast}$ & 0 & - & $q_{\ast1}$  \\
+3 & (1,1) & 0 & $q_{0\ast}$ &  $q_{\ast0}$ & - \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+Under a the most general model:
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{lr|c|c|c|c|}
+& & 0 & 1 & 2 & 3 \\
+& & (0,0) & (0,1) & (1,0) & (1,1) \\
+\hline
+0 & (0,0) & - & $q_{01}$ & $q_{02}$ & 0 \\
+1 & (0,1) & $q_{10}$ & -  & 0 & $q_{13}$ \\
+2 & (1,0) & $q_{20}$ & 0 & - & $q_{23}$  \\
+3 & (1,1) & 0 & $q_{31}$ &  $q_{32}$ & - \\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+\myNewSlide
+\begin{figure}
+\begin{center}
+\label{altTrees}
+\begin{picture}(0,0)(50,0)
+	\thicklines
+	\put(-20,-30){\circle{30}} 
+	\put(150,-30){\color{red}\circle{30}} 
+	\put(-35,-180){\line(0,1){30}} 
+	\put(-35,-180){\line(1,0){30}} 
+	\put(-5,-150){\line(0,-1){30}} 
+	\put(-5,-150){\line(-1,0){30}} 
+	\put(10,-28){\vector(1,0){100}} 
+	\put(110,-35){\vector(-1,0){100}} 
+
+	\put(-25,-33){\large 0,0} 
+	\put(144,-33){\large 0,{\color{red}1}} 
+	\put(-28,-168){\large 1,0} 
+	\put(142,-168){\large 1,{\color{red}1}} 
+
+	\put(10,-158){\vector(1,0){100}} 
+	\put(110,-165){\vector(-1,0){100}} 
+	\put(135,-180){\color{red}\line(0,1){30}} 
+	\put(135,-180){\color{red}\line(1,0){30}} 
+	\put(165,-150){\color{red}\line(0,-1){30}} 
+	\put(165,-150){\color{red}\line(-1,0){30}} 
+	\put(-25,-140){\vector(0,1){90}} 
+	\put(-15,-50){\vector(0,-1){90}} 
+	\put(144,-140){\vector(0,1){90}} 
+	\put(154,-50){\vector(0,-1){90}} 
+
+	\put(60,-20){${s}_{0{\color{red}1}}$} 
+	\put(60,-42){${s}_{{\color{red}1}0}$} 
+	\put(60,-150){${s}_{0{\color{red}1}}$} 
+	\put(60,-172){${s}_{{\color{red}1}0}$} 
+
+	\put(52,-21){\Large$\circ$} 
+	\put(52,-43){\Large$\circ$} 
+	\put(54,-150){\line(0,1){5}} 
+	\put(54,-150){\line(1,0){5}} 
+	\put(59,-145){\line(0,-1){5}} 
+	\put(59,-145){\line(-1,0){5}} 
+	\put(54,-173){\line(0,1){5}} 
+	\put(54,-173){\line(1,0){5}} 
+	\put(59,-168){\line(0,-1){5}} 
+	\put(59,-168){\line(-1,0){5}} 
+
+	\put(-40,-90){${f}_{{\color{black}1}0}$} 
+	\put(-10,-90){${f}_{0{\color{black}1}}$} 
+	\put(125,-90){${\color{red}{f}_{10}}$} 
+	\put(160,-90){${\color{red}{f}_{01}}$} 
+\end{picture}
+\end{center}
+\vskip 4.1cm
+\end{figure}
+
+\myNewSlide
+We can calculate maximum likelihood scores under any of these models and do model selection.
+
+Or we could put priors on the parameter values and using Bayesian model selection ({\em e.g.} reversible
+jump methods in BayesTraits).
+\myNewSlide
+\bibliography{phylo}
+
+\end{document}
