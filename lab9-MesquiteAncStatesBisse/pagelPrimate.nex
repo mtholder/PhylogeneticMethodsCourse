@@ -1,0 +1,204 @@
+#NEXUS
+
+[MTH filled in 1s for character one for Macaca_fascicularis  and Macaca_mulatta
+and 0 for character two for Trachypithecus_phayrei
+
+because Mesquites' correl analysis does not allow missing data right now
+]
+
+Begin Data;
+    Dimensions NTax = 60 NChar = 2;
+    format datatype = standard;
+    matrix
+Cercocebus_torquatus	1	1
+Cercopithecus_aethiops	0	1
+Cercopithecus_mona	0	0
+Cercopithecus_nictitans	0	0
+Colobus_angolensis	0	1
+Colobus_guereza	0	0
+Colobus_polykomos	0	1
+Gorilla_gorilla	0	0
+Homo_sapiens	0	0
+Hylobates_agilis	0	0
+Hylobates_concolor	0	0
+Hylobates_gabriellae	0	0
+Hylobates_hoolock	0	0
+Hylobates_klossii	0	0
+Hylobates_lar	0	0
+Hylobates_leucogenys	0	0
+Hylobates_moloch	0	0
+Hylobates_muelleri	0	0
+Hylobates_pileatus	0	0
+Hylobates_syndactylus	0	0
+Macaca_brunnescens	1	1
+Macaca_cyclopis	0	1
+Macaca_fascicularis	1	1
+Macaca_hecki	1	1
+Macaca_maura	1	1
+Macaca_mulatta	1	1
+Macaca_nemestrina	1	1
+Macaca_nigra	1	1
+Macaca_nigriscens	1	1
+Macaca_ochreata	1	1
+Macaca_silenus	1	1
+Macaca_sylvanus	1	1
+Macaca_tonkeana	1	1
+Mandrillus_leucophaeus	1	1
+Mandrillus_sphinx	1	1
+Nasalis_larvatus	0	0
+Pan_paniscus	1	1
+Pan_troglodytes	1	1
+Papio_anubis	1	1
+Papio_cynocephalus	1	1
+Papio_hamadryas	1	1
+Pongo_pygmaeus	0	0
+Pongo_pygmaeus_abelii	0	0
+Presbytis_francoisi	0	0
+Presbytis_phayrei	0	0
+Presbytis_senex	0	0
+Procolobus_badius	1	1
+Pygathrix_nemaeus	0	1
+Pygathrix_roxellana	0	1
+Rhinopithecus_avunculus	0	1
+Rhinopithecus_bieti	0	1
+Semnopithecus_entellus	0	1
+Trachypithecus_cristatus	0	0
+Trachypithecus_francoisi	0	0
+Trachypithecus_geei	0	0
+Trachypithecus_johnii	0	0
+Trachypithecus_phayrei	0	0
+Trachypithecus_pileatus	0	0
+Trachypithecus_vetulus	0	0
+Macaca_arctoides	0	1
+;
+end;
+
+
+
+begin trees;
+	translate
+		0 Macaca_nigra,
+
+		1 Macaca_nigriscens,
+
+		2 Macaca_hecki,
+
+		3 Macaca_maura,
+
+		4 Macaca_brunnescens,
+
+		5 Macaca_ochreata,
+
+		6 Macaca_tonkeana,
+
+		7 Macaca_nemestrina,
+
+		8 Cercopithecus_aethiops,
+
+		9 Macaca_mulatta,
+
+		10 Macaca_fascicularis,
+
+		11 Macaca_arctoides,
+
+		12 Macaca_silenus,
+
+		13 Macaca_sylvanus,
+
+		14 Macaca_cyclopis,
+
+		15 Mandrillus_leucophaeus,
+
+		16 Mandrillus_sphinx,
+
+		17 Cercocebus_torquatus,
+
+		18 Papio_cynocephalus,
+
+		19 Papio_hamadryas,
+
+		20 Papio_anubis,
+
+		21 Colobus_guereza,
+
+		22 Colobus_polykomos,
+
+		23 Colobus_angolensis,
+
+		24 Procolobus_badius,
+
+		25 Pygathrix_roxellana,
+
+		26 Rhinopithecus_avunculus,
+
+		27 Rhinopithecus_bieti,
+
+		28 Pygathrix_nemaeus,
+
+		29 Nasalis_larvatus,
+
+		30 Presbytis_senex,
+
+		31 Trachypithecus_vetulus,
+
+		32 Trachypithecus_geei,
+
+		33 Trachypithecus_pileatus,
+
+		34 Semnopithecus_entellus,
+
+		35 Trachypithecus_johnii,
+
+		36 Presbytis_francoisi,
+
+		37 Trachypithecus_francoisi,
+
+		38 Presbytis_phayrei,
+
+		39 Trachypithecus_cristatus,
+
+		40 Trachypithecus_phayrei,
+
+		41 Cercopithecus_mona,
+
+		42 Cercopithecus_nictitans,
+
+		47 Pan_paniscus,
+
+		48 Pan_troglodytes,
+
+		49 Homo_sapiens,
+
+		50 Gorilla_gorilla,
+
+		51 Pongo_pygmaeus,
+
+		52 Pongo_pygmaeus_abelii,
+
+		53 Hylobates_lar,
+
+		54 Hylobates_muelleri,
+
+		55 Hylobates_agilis,
+
+		56 Hylobates_klossii,
+
+		57 Hylobates_pileatus,
+
+		58 Hylobates_moloch,
+
+		59 Hylobates_hoolock,
+
+		60 Hylobates_gabriellae,
+
+		61 Hylobates_leucogenys,
+
+		62 Hylobates_concolor,
+
+		63 Hylobates_syndactylus;
+
+		tree tree.4034000.15416.780025 = ((((50:0.0588307616,(49:0.104012062,(47:0.0282290747,48:0.0315765304):0.0554946675):0.0329501666):0.0426983115,(51:0.0251573893,52:0.0551316902):0.1463900494):0.0395670808,(((59:0.0523988569,(((54:0.0276044998,56:0.0222622678):0.0046935253,(53:0.0367862382,55:0.0286287803):0.0009582239):0.0023664775,(57:0.0317350434,58:0.0218112768):0.0027621753):0.0296324431):0.0151935715,(62:0.0327227713,(60:0.0005186144,61:0.0091000238):0.0074756321):0.0903720789):0.0070283343,63:0.0465381007):0.1511698494):0.074664666,(((42:0.0836837255,41:0.0379133668):0.0445920932,((24:0.0611933241,(23:0.0529047121,(21:0.0021824707,22:0.0003506028):0.0396782781):0.136612539):0.0877755346,((((((26:0.0327958721,25:0.0121754356):0.0137990863,27:0.03724473):0.0493082437,29:0.0953156048):0.0241011018,28:0.1051551751):0.0293417744,((33:0.0021382802,32:0.0033470735):0.0019751451,((34:0.0463384684,35:0.0526349521):0.0037027995,(30:0.0283599642,31:0.0395901642):0.0289963339):0.0219024286):0.1047481676):0.0152189428,(((38:0.0365967917,(37:0.0097211914,36:0.0047009174):0.0499147573):0.0040476424,40:0.0470963398):0.0238253504,39:0.0176233569):0.09653373):0.0315491779):0.0919897131):0.0039492116,((((13:0.0307018239,12:0.0536725942):0.0592920968,((5:0.0094407235,(((7:0.056297853,6:0.0157698152):0.0138182548,((3:0.03071411,2:0.021056726):0.0030959709,(1:0.0369602103,0:0.0238817505):0.0116969351):0.0039852518):0.0078202148,4:0.0290116063):0.0114442374):0.0121322516,((10:0.0588655976,11:0.0392636742):0.0098481897,(9:0.0113244196,14:0.0084768347):0.0300233709):0.0256866921):0.0050557812):0.0607510692,(19:0.0113340095,(20:0.0437810911,18:0.0013729088):0.015929828):0.1161923311):0.0060944782,((8:0.0234578399,16:0.0214395513):0.0441894206,(17:0.0306131396,15:0.0407962536):0.0274376082):0.0516524159):0.0627377783):0.210435905);
+
+end;
+
+
