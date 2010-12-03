@@ -204,17 +204,21 @@ class Tree(object):
         if self.char_model.conditioning == DataConditioning.NONE:
             return v
         
-        if self.char_model.conditioning == DataConditioning.VARIABLE:
+        if self.char_model.conditioning == DataConditioning.VARIABLE \
+            or ( self.char_model.conditioning == DataConditioning.VARIABLE_SHOW_CONST):
             sub_list = v[1:]
         else:
             assert(self.char_model.conditioning == DataConditioning.PARSIMONY_INFORMATIVE)
             sub_list = [v[3], v[5], v[6]]
         s = sum(sub_list)
         t = tuple([i/s for i in sub_list])
+        if (self.char_model.conditioning == DataConditioning.VARIABLE_SHOW_CONST):
+            t = tuple([0.0] + list(t))
         #debug('conditioned = %s' % str(t))
         return t
     def get_pat_names(self):
-        if self.char_model.conditioning == DataConditioning.NONE:
+        if self.char_model.conditioning == DataConditioning.NONE \
+            or self.char_model.conditioning == DataConditioning.VARIABLE_SHOW_CONST:
             return PATTERN_NAMES
         elif self.char_model.conditioning == DataConditioning.VARIABLE:
             return tuple(PATTERN_NAMES[1:])

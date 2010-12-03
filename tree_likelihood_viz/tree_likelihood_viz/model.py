@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 class DataConditioning:
-    NONE, VARIABLE, PARSIMONY_INFORMATIVE = range(3)
+    NONE, VARIABLE, PARSIMONY_INFORMATIVE, VARIABLE_SHOW_CONST = range(4)
 
 class Parameter(object):
     def __init__(self, name, value, min_val=None, max_val=None):
@@ -94,6 +94,12 @@ class CFNPinv(CFN):
         CFN.__init__(self, param_list=parameter_list, **kwargs)
     def get_pinv(self):
         return self.pinv.value
+
+class CFNVar(CFN):
+    def __init__(self, **kwargs):
+        CFN.__init__(self, **kwargs)
+        self.conditioning = DataConditioning.VARIABLE_SHOW_CONST
+
 class CompatModel(CharModel):
     NUM_STATES = 2
     def __init__(self, param_list, **kwargs):

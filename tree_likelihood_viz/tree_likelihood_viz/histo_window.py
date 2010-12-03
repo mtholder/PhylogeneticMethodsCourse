@@ -180,6 +180,7 @@ class LnLWorkspace(QtGui.QDialog):
         freqs = [i.calc_pat_probs() for i in self.prob_sources]
         return [calc_ln_L_from_counts(c, f) for f in freqs]
     def set_counts(self, pattern_count_data):
+        sys.stderr.write("pattern_count_data = %s\n" % str(pattern_count_data))
         for n, x in enumerate(pattern_count_data):
             try:
                 self.data_counts[n].setText(str(int(x)))
