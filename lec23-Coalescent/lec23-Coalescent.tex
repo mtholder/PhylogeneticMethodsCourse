@@ -1,0 +1,143 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\usepackage{pdfpages}
+\usepackage{bm}
+\usepackage{ifsym}
+\newcommand{\hilite}[1]{{\color{red} \bf #1}}
+\newcommand{\disruption}{\theta}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+\begin{center}
+{\Large Some of these slides have been borrowed from Dr.\ Paul Lewis, Dr.\ Joe Felsenstein. Thanks!}
+\vskip 15mm
+\large Paul has many great tools for teaching phylogenetics at his web site: \\
+\url{http://hydrodictyon.eeb.uconn.edu/people/plewis}
+\end{center}
+
+
+\myNewSlide
+\includepdf[pages={2-39}]{../nonfreeimages/joe/joe-coal.pdf}
+\includepdf[pages={46}]{../nonfreeimages/joe/joe-coal.pdf}
+\section*{Inconsistency of estimation from concatenated gene sequences}
+\citet{DegnanR2006} show that the most likely topology for a gene tree
+is not necessarily the tree that agrees with the 
+phylogenetic tree.
+
+For some phylogenetic shapes (e.g. imbalanced trees
+with short internal nodes) there exists (at least) one other tree shape
+that has a higher probability of agreeing with a gene tree.
+
+Argues for explicitly considering the coalescent process in phylogenetic inference.
+\includepdf[pages={40-45}]{../nonfreeimages/joe/joe-coal.pdf}
+%\includepdf[pages={48-50}]{../nonfreeimages/joe/joe-coal.pdf}
+%\includepdf[pages={55}]{../nonfreeimages/joe/joe-coal.pdf}
+\includepdf[pages={51-54}]{../nonfreeimages/joe/joe-coal.pdf}
+\includepdf[pages={56-57}]{../nonfreeimages/joe/joe-coal.pdf}
+
+\myNewSlide
+\section*{``Skyline'' and ``Skyride'' plots in BEAST}
+\begin{picture}(0,0)(0,0)
+	\put(-50,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/MininBS2008.pdf}}}
+	\put(-20,-120){{\tiny Figure from Minin, Bloomquist, and Suchard 2008}}
+\end{picture}
+
+
+
+
+\myNewSlide
+\section*{BEST \citet{LiuP2007,EdwardsLP2007} }
+\begin{compactitem}
+	\item $X$ -- sequence data
+	\item $G$ -- a genealogy (gene tree -- with branch lengths)
+	\item $S$ -- a species tree
+	\item $\bm{\theta}$ -- demographic parameters
+	\item $\bm{\Lambda}$ -- parameters of molecular sequence evolution
+\end{compactitem}
+
+\begin{eqnarray*}
+	\Pr(S,\bm{\theta}|X) & =  & \frac{\Pr(S,\bm{\theta})\Pr(X|S,\bm{\theta})}{\Pr(X)} \\
+				& =  & \Pr(S)\Pr(\bm{\theta})\int\Pr(X|G)\Pr(G|S,\bm{\theta})dG \\
+				& \propto  & \Pr(S)\Pr(\bm{\theta})\int\left[\int \Pr(X|G, \bm{\Lambda}) \Pr(\bm{\Lambda}) d\bm{\Lambda}\right]\Pr(G|S,\bm{\theta})dG 
+\end{eqnarray*}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\begin{compactenum}
+	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\begin{compactenum}
+	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+		\begin{compactenum}
+		\item Use a tweaked version of MrBayes to sample $N$ sets of gene trees, $\bm{G}$, from \[\Pr^{\dag}(\bm{G}|X) = \frac{\Pr^{\dag}(\bm{G})\Pr(X|\bm{G})}{\Pr^{\dag}(X)}\]
+			\item $Pr^{\dag}(\bm{G})$ is an approximate prior on gene trees from using a ``maximal'' species tree.
+		\end{compactenum}
+	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\begin{compactenum}
+	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+		\begin{compactenum}
+		\item From each set of gene trees (${G}_j$ for $1\leq j\leq N$) generate $k$ species trees using coalescent theory:
+			 \[\Pr(S_i|\bm{G}_j) = \frac{\Pr(S_i)\Pr(\bm{G}_j|S_i)}{\Pr(\bm{G}_j)}\]
+		\end{compactenum}
+	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\begin{compactenum}
+	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+		\begin{compactenum}
+		\item Estimate $\widehat{\Pr}(\bm{G}_j)$ by using the harmonic mean estimator from the MCMC in step 2.
+		\item Compute a normalization factor \[\beta = \sum_{j=1}^N \frac{\widehat{\Pr}(\bm{G}_j)}{\Pr(\bm{G}_j)} \]
+		  \item Reweight all sampled species trees by \[ \frac{\widehat{\Pr}(\bm{G}_j)}{\Pr(\bm{G}_j)}\beta\]
+		\end{compactenum}
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- conclusions}
+\begin{compactenum}
+	\item very expensive computationally (long MrBayes runs are needed)
+	\item should correctly deal with the variability in gene tree caused by the coalescent process.
+\end{compactenum}
+
+\myNewSlide
+\section*{$\ast$BEST}
+Similar model to BEST, but {\em much} more efficient implementation.
+
+Both will be very sensitive to migration, but they represent the state-of-the-art for estimating species trees from gene trees.
+
+\myNewSlide
+\section*{Gene tree in a species tree w/ variable population size}
+\begin{picture}(0,0)(0,0)
+	\put(-50,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/HeledD2010Fig1.pdf}}}
+	\put(-20,-120){{\tiny Figure from Heled and Drummond 2010}}
+\end{picture}
+
+
+\myNewSlide
+\section*{Multiple gene tree in a species tree w/ variable population size}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-130){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/HeledD2010Fig9.pdf}}}
+	\put(-20,-120){{\tiny Figure from Heled and Drummond 2010}}
+\end{picture}
+
+
+\myNewSlide
+\bibliography{phylo}
+
+\end{document}

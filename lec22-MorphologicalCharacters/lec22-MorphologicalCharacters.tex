@@ -1,0 +1,129 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\usepackage{pdfpages}
+\usepackage{bm}
+\usepackage{ifsym}
+\newcommand{\hilite}[1]{{\color{red} \bf #1}}
+\newcommand{\disruption}{\theta}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+\myNewSlide
+\Large
+\begin{enumerate}
+	\item Can we use the CFN model for morphological traits?
+	\item Can we use something like the GTR model for morphological traits?
+	\item Stochastic Dollo.
+	\item Continuous characters.
+\end{enumerate}
+
+\myNewSlide
+\section*{M$k$ models}
+$k$-state variants of the Jukes-Cantor model -- all rates equal.
+
+$$\Pr(i\rightarrow i|\nu) = \frac{1}{k} + \left(\frac{k-1}{k}\right)e^{-\left(\frac{k}{k-1}\right)\nu}$$\\
+$$\Pr(i\rightarrow j|\nu) = \frac{1}{k} - \left(\frac{1}{k}\right)e^{-\left(\frac{k}{k-1}\right)\nu} $$
+
+\myNewSlide
+\section*{Sampling morphological characters}
+Using our models assumes that our characters can be thought of as having been a random sample from a universe of $iid$ characters.
+
+\begin{compactenum}
+	\item We never have constant morphological characters.
+	\begin{compactenum}
+		\item There are plenty of attributes that do not vary.
+		\item The ``rules'' of coding morphological characters are well-defined.
+		\item How many constant characters ``belong'' in our matrix?
+	\end{compactenum}
+\end{compactenum}
+
+\myNewSlide
+\section*{Solutions to the lack of constant characters}
+
+\begin{compactenum}
+	\item Score our taxa for a random selection of characters -- {\em not} a selection of characters that are chosen because they are appropriate for our group.  (Is this possible or desirable?)
+	\item Account for the fact that our data is filtered.
+\end{compactenum}
+
+\myNewSlide
+\section*{M$k_v$ model}
+Introduced by \citet{Lewis2001} using a trick Felsenstein used for restriction site data.
+
+We condition our inference on the fact that we know that (by design) our characters are variable.
+
+If ${\mathcal V}$ is the set of variable data patterns, then we do inference on:
+
+$$ \Pr(x_i|T,\nu, x_i\in {\mathcal V}) $$
+rather than:
+$$ \Pr(x_i|T,\nu) $$
+
+\myNewSlide
+\section*{Conditional likelihood}
+
+If $x_i\in {\mathcal V}$, then:
+$$  \Pr(x_i|T,\nu, x_i\in {\mathcal V}) \Pr(x_i\in {\mathcal V} |T,\nu) = \Pr(x_i|T,\nu)  $$
+
+So:
+$$ \Pr(x_i|T,\nu, x_i\in {\mathcal V}) = \frac{\Pr(x_i|T,\nu)}{\Pr(x_i\in {\mathcal V} |T,\nu)}$$
+
+
+\myNewSlide
+Note that:
+$$\Pr(x_i\in {\mathcal V} |T,\nu) = 1 - \Pr(x_i\notin {\mathcal V} |T,\nu)$$
+
+If $ {\mathcal C}$ is the set of constant data patterns:
+$$x_i\notin {\mathcal V} \equiv x_i\in {\mathcal C}$$
+So:
+$$\Pr(x_i\in {\mathcal V} |T,\nu) = 1 - \Pr(x_i\in {\mathcal C} |T,\nu)$$
+There are not that many constant patterns, so we can just calculate the likelihood for each one of them.
+
+\myNewSlide
+\section*{Inference under M$2_v$}
+\begin{compactenum}
+	\item Calculate $\Pr(x_i|T,\nu)$ for each site $i$
+	\item Calculate $$\Pr(x\in{\mathcal C}|T,\nu) = \Pr(000\ldots0 |T,\nu) + \Pr(111\ldots1 |T,\nu)$$
+	\item For each site, calculate:
+		$$ \Pr(x_i|T,\nu, x_i\in{\mathcal V}) = \frac{\Pr(x_i|T,\nu)}{1 - \Pr(x\in{\mathcal C}|T,\nu)} $$
+	\item Take the product of $\Pr(x_i|T,\nu, x_i\in{\mathcal V})$ over all characters.
+\end{compactenum}
+
+\myNewSlide
+\section*{M$k_v$ and M$k_{pars-inf}$}
+The following were proved by \citet{AllmanHR2010}
+\begin{compactenum}
+	\item M$k_v$ is a consistent estimator of the tree and branch lengths,
+	\item If you filter your data to only contain parsimony-informative charecters:
+		\begin{compactenum}
+			\item A four-leaf tree cannot be identified!
+			\item Trees of eight or more leaves can be identified using inference under M$k_{pars-inf}$
+		\end{compactenum}
+\end{compactenum}
+
+\myNewSlide
+\section*{Can we estimate biases in state-transitions and state frequencies from morphological data?}
+
+\myNewSlide
+\section*{Can we estimate biases in state-transitions and state frequencies from morphological data?}
+Of course! (remember Pagel's model, which we have already encountered).
+
+But we have to bear in mind that $0$ in one character has nothing to do with $0$ in another.
+
+This means that we have to use character-specific parameters or mixtures models (to reduce the number of parameters).  Typically this is done in a Bayesian setting.
+
+\myNewSlide
+\section*{Other tidbits about likelihood modeling of non-molecular data}
+\large
+\begin{compactenum}
+	\item We can use the No-common-mechanism model \citep{TuffleyS1997} to generate a likelihood score from a parsimony score (for combined analyses).
+	\item By setting some rates to 0 we can test transformation assumptions about irreversibility.
+	\item Modification to the pruning algorithm lead to models of Dollo's law (no independent gain of a character state). For further details, see \citet{AlekseyenkoLS2008}.
+	\item The use of ontologies to describe characters may revolutionize modeling of morphological data and the prospects for constructing ``morphological super-matrices''
+\end{compactenum}
+
+
+\myNewSlide
+\bibliography{phylo}
+
+\end{document}

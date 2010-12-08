@@ -5,6 +5,7 @@
 \usepackage{pdfpages}
 \usepackage{bm}
 \usepackage{ifsym}
+\usepackage{amssymb}
 \newcommand{\hilite}[1]{{\color{red} \bf #1}}
 \newcommand{\disruption}{\theta}
 \begin{document}
@@ -21,12 +22,13 @@
 \includepdf[pages={24}]{../nonfreeimages/joe/joe-coal.pdf}
 \includepdf[pages={23}]{../nonfreeimages/joe/joe-coal.pdf}
 \includepdf[pages={25}]{../nonfreeimages/joe/joe-coal.pdf}
-\includepdf[pages={30}]{../nonfreeimages/joe/joe-coal.pdf}
+%\includepdf[pages={30}]{../nonfreeimages/joe/joe-coal.pdf}
 \includepdf[pages={31}]{../nonfreeimages/joe/joe-coal.pdf}
 \includepdf[pages={36}]{../nonfreeimages/joe/joe-coal.pdf}
 
 \myNewSlide
 \section*{Inconsistency of estimation from concatenated gene sequences}
+\large
 \citet{DegnanR2006} show that the most likely topology for a gene tree
 is not necessarily the tree that agrees with the 
 phylogenetic tree.
@@ -74,18 +76,19 @@ An efficient algorithm for calculating $R_{min}(S)$ for lots of leaves and long 
 	\item Seems like it should not be too hard (and it isn't for few leaves) - connected to integer programming approaches
 	\item Tightly connected to the ``perfect phylogeny'' and ``compatibility'' literature in phylogenetics
 	\item First studied by \citet{HudsonK1985}
-	\item Several lower bounds on $R_{min}(S)$ published by \citet{MyersG2003,SongH2004}
+	\item Several lower bounds on $R_{min}(S)$ published by \citet{MyersG2003,SongH2004}. Violation of infinite-sites assumption studied in \citet{LiuF2008}
 	\item Exact calculation \citet{Hein1990,Hein1993,SongH2003}
 \end{itemize}
 
 \myNewSlide
 \section*{Exact calculation of \citet{SongH2004}}
+\normalsize
 \begin{enumerate}
 	\item Recombination events $\rightarrow$ SPR operations on rooted trees;
 	\item Calculate the ``SPR-distance'' between trees (with some restriction induced by the ages of nodes);
 	\item We can tell which trees are compatible with each parsimony-informative site
 	\item Dynamic programming lets us walk from the beginning to the end of the sequences storing the path to that gives us the minimal number of recombinations and that is compatible with every site.
-	\item Impractical for large trees (over 9 unique sequences) -- we have to be able to enumerate labelled histories
+	\item Impractical for large trees (over 9 unique sequences) -- we have to be able to enumerate ordered trees (aka ``labelled histories'')
 \end{enumerate}
 
 \myNewSlide
@@ -124,6 +127,128 @@ $s_5$ & 1 & 1 & 1 & 1 \\
 	\put(100,-120){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/SongH2003Fig3.pdf}}}
 \end{picture}
 
+
+\myNewSlide
+\section*{The dynamic programming bit}
+\begin{picture}(0,0)(0,0)
+	\put(-50,11){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/SongH2003Fig1.pdf}}}
+	\put(40,-100){\begin{tabular}{ccccccccc}
+	& 1 & & 2 & & 3 & & 4 \\
+\hline
+	$T_i$ & {\color{red}0} & {\color{red}$\rightarrow$} & {\color{red}0} & $\rightarrow$ & $\infty$& $\rightarrow$  & $\infty$ \\
+	& & $\searrow\mkern-18mu\nearrow$ & & {\color{red}$\searrow$}$\mkern-18mu\nearrow$ & & $\searrow\mkern-18mu\nearrow$\\
+	$T_j$ & $\infty$ & $\rightarrow$ & $\infty$ & & {\color{red}1} & $\rightarrow$ & $\infty$ \\
+	& & $\searrow\mkern-18mu\nearrow$ & & $\searrow$$\mkern-18mu\nearrow$ & & {\color{red}$\searrow$}$\mkern-18mu\nearrow$\\
+	$T_k$ & $\infty$ & $\rightarrow$ & $\infty$ & $\rightarrow$ & $\infty$ &&  {\color{red}2} \\
+	$\vdots$ &  & $\searrow\mkern-18mu\nearrow$ & & $\searrow\mkern-18mu\nearrow$ & & $\searrow\mkern-18mu\nearrow$\\
+	$T_{57}$ & $0$ & $\rightarrow$ & $\infty$ & $\rightarrow$ & $\infty$ & $\rightarrow$ &  $\infty$ \\
+	$\vdots$ &  & $\searrow\mkern-18mu\nearrow$ & & $\searrow\mkern-18mu\nearrow$ & & $\searrow\mkern-18mu\nearrow$\\
+	$T_{85}$ & $\infty$ & $\rightarrow$ & $\infty$ & $\rightarrow$ & $3$ & $\rightarrow$&  $3$ \\
+	$\vdots$ &  & $\searrow\mkern-18mu\nearrow$ & & $\searrow\mkern-18mu\nearrow$ & & $\searrow\mkern-18mu\nearrow$\\
+	\end{tabular}}
+\end{picture}
+
+
+
+\myNewSlide
+\section*{The need to consider constraints in SPR moves on ordered trees}
+\begin{picture}(0,0)(0,0)
+	\put(30,-20){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/SongH2003Fig6.pdf}}}
+\end{picture}
+\myNewSlide
+\section*{The need to consider constraints in rooted SPR moves (continued)}
+\begin{picture}(0,0)(0,0)
+	\put(0,-20){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/SongH2003Fig7.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Faster (but still slow) calculation of $R_{min}(S)$}
+\large
+\citet{LyngsoSH2005} developed a branch and bound algorithm that move backward in time rejecting partial trees that are incompatible with the data.
+\begin{compactitem}
+	\item Avoid considering recombination in ``subsumed prefix'' and ``subsumed suffix''
+\end{compactitem}
+
+\myNewSlide
+\section*{Subsumed prefix and suffix shown in red}
+\begin{picture}(0,0)(0,0)
+	\put(30,-120){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/PrefixSuffixARG.pdf}}}
+\end{picture}
+
+
+\myNewSlide
+\section*{Faster (but still slow) calculation of $R_{min}(S)$}
+\large
+\citet{LyngsoSH2005} developed a branch and bound algorithm that move backward in time rejecting partial trees that are incompatible with the data.
+\begin{compactitem}
+	\item Avoid considering recombination in ``subsumed prefix'' and ``subsumed suffix''
+	\item Consider only a restricted set of events that is plausibly on the minimal path,
+	\item implemented in {\tt beagle} and a quicker heuristic in {\tt kwarg} (see \href{http://www.stats.ox.ac.uk/~lyngsoe/section26/}{http://www.stats.ox.ac.uk/~lyngsoe/section26} )
+\end{compactitem}
+
+\myNewSlide
+\section*{Decomposing theory for phylogenetic networks}
+\large
+\citet{GusfieldBBS2007}:
+\begin{compactitem}
+	\item prove that we can use the incompatibility graph to generate a fully-decomposed phylogenetic network (in polynomial time - perl scripts at \url{http://csiflabs.cs.ucdavis.edu/~gusfield/software.html}
+	\item disprove previous conjectures that this network can be used to find the minimum \# of recombination nodes {\em in general},
+	\item fully-decomposed phylogenetic network is helpful if the network is a {\em galled} tree,
+	\item conduct simulations to show that cases in which the fully decomposed network does not help us find the min.~\# recombination nodes are rare.
+\end{compactitem}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)
+	\put(0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/GusfieldBBS2007.pdf}}}
+\put(-0,-0){M:}
+\put(-0,-50){\begin{tabular}{cccccc}
+ & 1 & 2 & 3 & 4 & 5\\
+ \hline
+$a$ & 0 & 0 & 0 & 1 & 0 \\
+$b$ & 1 & 0 & 0 & 1 & 0 \\
+$c$ & 0 & 0 & 1 & 0 & 0 \\
+$d$ & 1 & 0 & 1 & 0 & 0 \\
+$e$ & 0 & 1 & 1 & 0 & 0 \\
+$f$ & 0 & 1 & 1 & 0 & 1 \\
+$g$ & 0 & 0 & 1 & 0 & 1 \\
+\end{tabular}
+}
+\put(-0,-150){\small from Gusfield, {\em et al} 2007}
+\end{picture}
+
+
+\myNewSlide
+\section*{Calculating $R_{min}(S)$}
+\large
+\begin{compactitem}
+	\item Not fully using the likelihood --  branch length information $\therefore$  not misled by singleton sequencing errors (\citet{LyngsoSH2008} implement parsimony-based approximations for the likelihood on ARGs, but these are not practical yet).
+	\item Infinite-sites assumption
+	\item Many approaches (Gusfield's) need to be extended to deal with missing data and three-state characters.
+\end{compactitem}
+
+
+\myNewSlide
+\section*{Estimating ARGs  (usually done in a Bayesian context)}
+\begin{compactitem}
+	\item Change points between trees (marginalizing over branch lengths). {\tt cBrother} \citep{SuchardWDS2002,SuchardWDS2003,FangDMSD2007} 
+	\item Change points between trees  and substitution process. {\tt DualBrother} \citep{MininDFS2005}
+	\item ARGs for horizontal transmission in phylogenetic contexts. {\tt SMARTIE} \citep{BloomquistS2010}
+	\item ML estimates conditional the number of breakpoints by iteratively examining low numbers using a GA: {\tt GARD} \citep{KosakovskyPondPGWF2006}; {\tt SCUEAL} \citep{KosakovsyPondEtAl2009}
+	\item Using approximate SPR-distance to specify a prior on the next site's tree:  \href{http://www.biomcmc.org/software/biomc2}{biomc2} \citep{OliveiraMartinsLK2008,OliveiraMartinsK2010} (still marginalizes over branch lengths).
+\end{compactitem}
+
+\myNewSlide
+\section*{General impressions/questions}
+\begin{compactitem}
+	\item Still difficult in on a chromosome scale (even for small \# of leaves).
+	\item \citet{McVeanC2005} use ``Sequentially Markov Coalescent'' as an approximation -- prohibit coalescence between chromosomes that don't have any overlap in ancestral material
+	\item To what extent can we model sequencing/assembly error?
+	\item Does marginalizing over branch lengths lead to significant artifacts? -- if not biomc2 looks promising for sampling from the posterior.
+\end{compactitem}
+	
+
+
+\small
 
 \myNewSlide
 \bibliography{phylo}

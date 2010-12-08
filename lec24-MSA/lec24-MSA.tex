@@ -1,0 +1,1117 @@
+\documentclass[landscape]{foils} 
+\input{../common-preamble-start}
+\input{../preamble.tex}
+\input{../common-preamble-end}
+\usepackage{pdfpages}
+\usepackage{bm}
+\usepackage{ifsym}
+\newcommand{\hilite}[1]{{\color{red} \bf #1}}
+\newcommand{\disruption}{\theta}
+\begin{document}
+\pagecolor{white}
+\unitlength=1mm
+
+\myNewSlide
+\includepdf[pages={17}]{../nonfreeimages/joe/joe-coal.pdf}
+\includepdf[pages={24}]{../nonfreeimages/joe/joe-coal.pdf}
+
+\myNewSlide
+\section*{``Skyline'' and ``Skyride'' plots in BEAST}
+\begin{picture}(0,0)(0,0)
+	\put(-50,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/MininBS2008.pdf}}}
+	\put(-20,-130){{\tiny Figure from Minin, Bloomquist, and Suchard 2008}}
+\end{picture}
+
+
+
+
+\myNewSlide
+\section*{BEST \citet{LiuP2007,EdwardsLP2007} }
+\begin{compactitem}
+	\item $X$ -- sequence data
+	\item $G$ -- a genealogy (gene tree -- with branch lengths)
+	\item $S$ -- a species tree
+	\item $\bm{\theta}$ -- demographic parameters
+	\item $\bm{\Lambda}$ -- parameters of molecular sequence evolution
+\end{compactitem}
+
+\begin{eqnarray*}
+	\Pr(S,\bm{\theta}|X) & =  & \frac{\Pr(S,\bm{\theta})\Pr(X|S,\bm{\theta})}{\Pr(X)} \\
+				& =  & \Pr(S)\Pr(\bm{\theta})\int\Pr(X|G)\Pr(G|S,\bm{\theta})dG \\
+				& \propto  & \Pr(S)\Pr(\bm{\theta})\int\left[\int \Pr(X|G, \bm{\Lambda}) \Pr(\bm{\Lambda}) d\bm{\Lambda}\right]\Pr(G|S,\bm{\theta})dG 
+\end{eqnarray*}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\large
+\begin{compactenum}
+	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\begin{compactenum}
+	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+		\begin{compactenum}
+		\item Use a tweaked version of MrBayes to sample $N$ sets of gene trees, $\bm{G}$, from \[\Pr^{\dag}(\bm{G}|X) = \frac{\Pr^{\dag}(\bm{G})\Pr(X|\bm{G})}{\Pr^{\dag}(X)}\]
+			\item $Pr^{\dag}(\bm{G})$ is an approximate prior on gene trees from using a ``maximal'' species tree.
+		\end{compactenum}
+	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\begin{compactenum}
+	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+		\begin{compactenum}
+		\item From each set of gene trees (${G}_j$ for $1\leq j\leq N$) generate $k$ species trees using coalescent theory:
+			 \[\Pr(S_i|\bm{G}_j) = \frac{\Pr(S_i)\Pr(\bm{G}_j|S_i)}{\Pr(\bm{G}_j)}\]
+		\end{compactenum}
+	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\normalsize
+\begin{compactenum}
+	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+		\begin{compactenum}
+		\item Estimate $\widehat{\Pr}(\bm{G}_j)$ by using the harmonic mean estimator from the MCMC in step 2.
+		\item Compute a normalization factor \[\beta = \sum_{j=1}^N \frac{\widehat{\Pr}(\bm{G}_j)}{\Pr(\bm{G}_j)} \]
+		  \item Reweight all sampled species trees by \[ \frac{\widehat{\Pr}(\bm{G}_j)}{\Pr(\bm{G}_j)}\beta\]
+		\end{compactenum}
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- conclusions}
+\large
+\begin{compactenum}
+	\item very expensive computationally (long MrBayes runs are needed)
+	\item should correctly deal with the variability in gene tree caused by the coalescent process.
+\end{compactenum}
+
+
+\myNewSlide
+\section*{Gene tree in a species tree w/ variable population size}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Mod.pdf}}}
+	\put(-20,-140){{\tiny Figure modified from Heled and Drummond 2010}}
+	\put(33,-132){{\color{black}\small A}}
+	\put(65,-132){{\color{black}\small C}}
+	\put(120,-132){{\color{black}\small B}}
+	\put(23,-122){{\color{grey}\small A1}}
+	\put(33,-122){{\color{grey}\small A2}}
+	\put(43,-122){{\color{grey}\small A3}}
+	\put(53,-122){{\color{grey}\small C1}}
+	\put(68,-122){{\color{grey}\small C2}}
+	\put(83,-122){{\color{grey}\small C3}}
+	\put(103,-122){{\color{grey}\small B2}}
+	\put(125,-122){{\color{grey}\small B1}}
+	\put(148,-122){{\color{grey}\small B3}}
+	\put(-20,-50){$G$ in grey}
+	\put(-20,-60){$S$ in black}
+\end{picture}
+
+\myNewSlide
+\section*{MCMC update to gene tree}
+\begin{picture}(0,0)(0,0)
+	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+	\put(105,-70){\Huge$\rightarrow$}
+	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModGene1.pdf}}}
+	\put(15,-135){\large Changing $G$ affects $\Pr(X|G,\bm{\Lambda})$ and $\Pr(G|S,\bm{\theta})$}
+\end{picture}
+
+\myNewSlide
+\section*{Another MCMC update to gene tree}
+\begin{picture}(0,0)(0,0)
+	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+	\put(105,-70){\Huge$\rightarrow$}
+	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModGene2.pdf}}}
+	\put(-15,-135){\large Some changes to $G$ are incompatible with $S$ (and will be rejected).}
+\end{picture}
+
+
+\myNewSlide
+\section*{MCMC update to species tree}
+\begin{picture}(0,0)(0,0)
+	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+	\put(105,-70){\Huge$\rightarrow$}
+	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModSp1.pdf}}}
+	\put(-20,-135){\large Changing $S$ affects $\Pr(G|S,\bm{\theta})$, but not $\Pr(X|G,\bm{\Lambda})$.}
+	\put(-20,-145){\large Note that the red dots are ``flags'' for when a lineage enters a new species;}
+	\put(-20,-155){\large the heights are determined by the species tree.}
+\end{picture}
+
+\myNewSlide
+\section*{Another MCMC update to species tree}
+\begin{picture}(0,0)(0,0)
+	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+	\put(105,-70){\Huge$\rightarrow$}
+	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModSp2.pdf}}}
+	\put(-15,-135){\large Some changes to $S$ are incompatible with $C$ (and will be rejected).}
+\end{picture}
+
+\myNewSlide
+\section*{An MCMC update to the population size}
+\begin{picture}(0,0)(0,0)
+	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+	\put(105,-70){\Huge$\rightarrow$}
+	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModPopSize.pdf}}}
+	\put(-15,-135){\large $N_e \in \bm{\theta}$, so changing $N_e$ affects $\Pr(G|S,\bm{\theta})$, but not $\Pr(X|G,\bm{\Lambda})$.}
+\end{picture}
+
+
+\myNewSlide
+\section*{Multiple gene tree in a species tree w/ variable population size}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-130){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/HeledD2010Fig9.pdf}}}
+	\put(-20,-120){{\tiny Figure from modified Heled and Drummond 2010}}
+\end{picture}
+
+\myNewSlide
+\section*{$^{\ast}$BEST}
+Similar model to BEST, but {\em much} more efficient implementation.
+
+Both attempt to sample the posterior distribution of species trees, gene trees, demographic parameter values and mutational parameter values.
+
+Both will be very sensitive to migration, but they represent the state-of-the-art for estimating species trees from gene trees.
+
+\myNewSlide
+\section*{Multiple Sequence Alignment - main points}
+\begin{compactitem}
+	\item The goal of MSA is to introduce gaps such that residues in the same column are homologous (all residues in the column descended from a residue in their common ancestor).
+	\item The problem is recast as:
+		\begin{compactitem}
+			\item reward matches (+ scores)
+			\item penalize rare substitutions  (- scores),
+			\item penalize gaps  (- scores),
+			\item try to find an alignment that maximizes the total score
+		\end{compactitem}
+	\item pairwise alignment is tractable
+	\item MSA is usually done progressively
+	\item progressive alignment algorithms are heuristic, and do not optimize an evolutionary defensible criterion
+\end{compactitem}
+\myNewSlide
+\section*{Multiple Sequence Alignment tools}
+\begin{compactitem}
+	\item clustal variants are popular, but not very reliable.
+	\item simultaneous inference of MSA and tree is the most defensible (but computationally demanding
+	\item Promising tools for MSA (roughly in order of computational tractability):
+	\begin{compactenum}
+		\item Simultaneous MSA + Trees (Handel, BAliPhy, BEAST, AliFritz$\ldots$)
+		\item FSA (fast statistical alignment); Infernal (for rRNA); Prank
+		\item MAFFT, Muscle, ProbCons
+	\end{compactenum}
+	\item Iterative ``meta-solutions'' (e.g. SAT\`e ) allow MSA uncertainty to be incorporated in tree inference.
+	\item GBlocks (and similar tools) cull ambiguously aligned regions.
+\end{compactitem}
+
+\myNewSlide
+\Large
+\begin{center}
+\begin{tabular}{ll}
+human & {\tt KRSV }\\
+chimp &  {\tt KRV }\\
+orang &  {\tt KPRV} \\
+\end{tabular}
+\end{center}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)  \put(0,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/PrunedFourTaxonAlignMatters.pdf}}}
+\end{picture}
+
+\myNewSlide
+\Large
+\begin{center}
+\begin{tabular}{ll}
+human & {\tt KRSV }\\
+chimp &  {\tt KRV }\\
+gorilla &  {\tt KSV }\\
+orang &  {\tt KPRV} \\
+\end{tabular}
+\par
+How should we align these sequences?
+\par
+
+\begin{tabular}{|ll|c|ll|}
+human & {\tt KRSV } & &  human & {\tt KRSV }  \\
+chimp &  {\tt KR-V } & OR & chimp &  {\tt K-RV }\\
+gorilla &  {\tt KS-V } & & gorilla &  {\tt K-SV }\\
+orang &  {\tt KPRV}&  & orang &  {\tt KPRV} \\
+\end{tabular}\\
+\end{center}
+
+\myNewSlide
+\section*{Pairwise alignment}
+Gap penalties and a substitution matrix imply a score for any alignment.  Pairwise alignment involves finding the alignment that maximizes this score.
+\begin{itemize}
+	\item substitution matrices assign positive values to matches or similar substitutions (for example Leucine$\rightarrow$Isoleucine).
+	\item unlikely substitutions receive negative scores
+	\item gaps are rare and are heavily penalized (given large negative values).
+\end{itemize}
+
+\myNewSlide
+\section*{Scoring an alignment. Simplest case}
+Costs:
+\begin{center}
+\begin{tabular}{cc}
+Match & 1 \\
+Mismatch & 0 \\
+Gap & -5 \\
+\end{tabular}
+\end{center}
+
+Alignment:\\
+{\tt
+\small
+\begin{tabular}{lcccccccccccccccccccc}
+{\em Pongo}   &V&D&E&V&G&G&E&L&G&R&L&F&V&V&P&T&Q\\ 
+{\em Gorilla} &V&E&V&A&G&D&L&G&R&L&L&I&V&Y&P&S&R\\
+\hline
+{\bf Score}   &1&0&0&0&1&0&0&0&0&0&1&0&1&0&1&0&0\\
+\end{tabular}
+}
+
+Total score = 5
+
+
+\myNewSlide
+\section*{Scoring an different alignment. Simplest case}
+\begin{center}
+\begin{tabular}{cc}
+Match & 1 \\
+Mismatch & 0 \\
+Gap & -5 \\
+\end{tabular}
+\end{center}
+{\tt
+\small
+\begin{tabular}{lcccccccccccccccccccccc}
+{\em Pongo}   &V&D &E&V&G&G&E&L&G&R&L&- &F&V&V&P&T&Q\\ 
+{\em Gorilla} &V&- &E&V&A&G&D&L&G&R&L&L &I&V&Y&P&S&R\\
+\hline
+{\bf Score}   &1&-5&1&1&0&1&0&1&1&1&1&-5&0&1&0&1&0&0\\
+\end{tabular}
+}
+
+Total score = 0
+
+\myNewSlide
+\section*{BLOSUM 62 Substitution matrix}
+\setlength{\hoffset}{-0.75in}
+{
+\tiny
+{\tt
+\begin{tabular}{c|cc|cc|cc|cc|cc|cc|cc|cc|cc|cc|}
+& {\bf A} & {\bf R} & {\bf N} & {\bf D} & {\bf C} & {\bf Q} & {\bf E} & {\bf G} & {\bf H} & {\bf I} & {\bf L} & {\bf K} & {\bf M } & {\bf F} & {\bf P} & {\bf S} & {\bf T} & {\bf W} & {\bf Y} & {\bf V} \\
+\hline
+{\bf A} & 4 & &&&&&&&&&&&&&&&&&& \\
+{\bf R} & -1 & 5 &  &&&&&&&&&&&&&&&&&\\
+\hline
+{\bf N} & -2 & 0 & 6 &&&&&&&&&&&&&&&&&\\
+{\bf D} &-2  &-2&1&6&&&&&&&&&&&&&&&&\\
+\hline
+{\bf C} &0  &-3 & -3 & -3 &9&&&&&&&&&&&&&&&\\
+{\bf Q} &-1  &1&0&0&-3&5&&&&&&&&&&&&&&\\
+\hline
+{\bf E} &-1  &0&0&2&-4&2&5&&&&&&&&&&&&&\\
+{\bf G} &0  &-2&0&-1&-3&-2&-2&6&&&&&&&&&&&&\\
+\hline
+{\bf H} &-2&0&1&-1&-3&0&0&-2&8&&&&&&&&&&&\\
+{\bf I} & -1&-3&-3&-3&-1&-3&-3&-4&-3&4&&&&&&&&&&\\
+\hline
+{\bf L} &-1  &-2&-3&-4&-1&-2&-3&-4&-3&2&4&&&&&&&&&\\
+{\bf K} &-1&2&0&-1&-3&1&1&-2&-1&-3&-2&5&&&&&&&&\\
+\hline
+{\bf M} &-1&-1&-2&-3&-1&0&-2&-3&-2&1&2&-1&5&&&&&&&\\
+{\bf F} &-2&-3&-3&-3&-2&-3&-3&-3&-1&0&0&-3&0&6&&&&&&\\
+\hline
+{\bf P} &-1&-2&-2&-1&-3&-1&-1&-2&-2&-3&-3&-1&-2&-4&7&&&&&\\
+{\bf S} &1&-1&1&0&-1&0&0&0&-1&-2&-2&0&-1&-2&-1&4&&&&\\
+\hline
+{\bf T} & 0 &-1 &0&-1&-1&-1&-1&-2&-2&-1&-1&-1&-1&-2&-1&1&5&&&\\
+{\bf W} & -3 &-3 &-4&-4&-2&-2&-3&-2&-2&-3&-2&-3&-1&1&-4&-3&-2&11&&\\
+\hline
+{\bf Y} & -2 &-2 &-2&-3&-2&-1&-2&-3&2&-1&-1&-2&-1&3&-3&-2&-2&2&7&\\
+{\bf V} & 0& -3&-3&-3&-1&-2&-2&-3&-3&3&1&-2&1&-1&-2&-2&0&-3&-1&4\\
+\hline
+& {\bf A} & {\bf R} & {\bf N} & {\bf D} & {\bf C} & {\bf Q} & {\bf E} & {\bf G} & {\bf H} & {\bf I} & {\bf L} & {\bf K} & {\bf M } & {\bf F} & {\bf P} & {\bf S} & {\bf T} & {\bf W} & {\bf Y} & {\bf V} \\
+\end{tabular}
+}
+}
+
+
+\myNewSlide
+\section*{Scoring an alignment with the BLOSUM 62 matrix}
+\setlength{\hoffset}{-0.75in}
+{\tt
+\small
+\begin{tabular}{lcccccccccccccccccccc}
+{\em Pongo} &V&D&E&V&G&G&E&L&G&R&L&F&V&V&P&T&Q\\ 
+{\em Gorilla} &V&E&V&A&G&D&L&G&R&L&L&I&V&Y&P&S&R\\
+\hline
+{\bf Score} &4&2&-2&0&6&-6&-3&-4&-2&-2&4&0&4&-1&7&4&1\\
+\end{tabular}
+}
+\par
+The score for the alignment is 
+\[D_{ij} = \sum_{k} d_{ij}^{(k)} \]
+If $i$ indicates {\em Pongo} and $j$ indicates {\em Gorilla}
+\[D_{ij} = 12\]
+
+\myNewSlide
+\section*{Scoring an alignment with gaps}
+\setlength{\hoffset}{-0.0in}
+If the GP is -8:\par
+{\tt
+\small
+\begin{tabular}{lcccccccccccccccccccccc}
+{\em Pongo} &V&D&E&V&G&G&E&L&G&R&L&- &F&V&V&P&T&Q\\ 
+{\em Gorilla} &V&- &E&V&A&G&D&L&G&R&L&L&I&V&Y&P&S&R\\
+\hline
+{\bf Score} &4&-8&5&5&0&6&2&4&6&5&4&-8&0&4&-1&7&4&1\\
+\end{tabular}
+}
+\par
+By introducing gaps we have improved the score:
+\[D_{ij} = 40\]
+
+\myNewSlide
+\section*{Gap Penalties}
+Gaps are penalized more heavily than substitutions to avoid alignments like this:\\
+{\tt
+\begin{center}
+\begin{tabular}{lc}
+{\em Pongo} &	VDEVGGE-LGRLFVVPTQ\\ 
+{\em Gorilla} &  VDEVGG-WLGRLFVVPTQ\\
+\end{tabular}
+\end{center}
+}
+\myNewSlide
+\setlength{\hoffset}{0in}
+\section*{Gap Penalties}
+Because multiple residues are often inserted or deleted at the same time, {\em affine gap penalties} are often used:
+\[\mbox{GP} = \mbox{GO}+ l\mbox{GE} \]
+ where: 
+\begin{itemize}
+	\item GP is the gap penalty.
+	\item GO is the ``gap-opening penalty''
+	\item GE is the ``gap-extension penalty''
+	\item $l$ is the length of the gap
+\end{itemize}
+
+
+\myNewSlide
+\section*{Finding an optimal alignment}
+\begin{picture}(0,0)(0,0)  \put(0,-60){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/needlemanwunch.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Aligning two sequences, each with length = 1}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccc}
+   &              & D             & \\   
+   & $\bullet$    & $\rightarrow$ & $\bullet$\\
+E  & $\downarrow$ & $\searrow$    & $\downarrow$ \\
+   & $\bullet$    & $\rightarrow$ & $\bullet$
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+\section*{Alignment 1}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{ccccp{1in}c}
+   &              & D             &  & & \\   
+   & {\color{red} $\bullet$}    & {\color{red}$\rightarrow$} & {\color{red}$\bullet$} & & {\tt D-}\\
+E  & $\downarrow$ & $\searrow$    & {\color{red} $\downarrow$ } & & {\tt -E} \\
+   & $\bullet$    & $\rightarrow$ & { \color{red}  $\bullet$ } & &
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+\section*{Alignment 2}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{ccccp{1in}c}
+   &              & D             &  & & \\   
+   & {\color{red} $\bullet$}    & {\color{black}$\rightarrow$} & {\color{black}$\bullet$} & & {\tt D}\\
+E  & $\downarrow$ & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ } & & {\tt E} \\
+   & $\bullet$    & $\rightarrow$ & { \color{red}  $\bullet$ } & &
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 3}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{ccccp{1in}c}
+   &              & D             &  & & \\   
+   & {\color{red} $\bullet$}    & {\color{black}$\rightarrow$} & {\color{black}$\bullet$} & & {\tt -D}\\
+E  & {\color{red} $\downarrow$} & $\searrow$    & {\color{black} $\downarrow$ } & & {\tt E-} \\
+   & {\color{red}$\bullet$ }& {\color{red}$\rightarrow$} & { \color{red}  $\bullet$ } & &
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+\section*{Longer sequences -- up to 2 amino acids!}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{ccccccc}
+   &              & V            &  & D & \\   
+   & {\color{black} $\bullet$}    & {\color{black}$\rightarrow$} & {\color{black}$\bullet$}      & {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } \\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 1}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{red}$\rightarrow$}   & {\color{red}$\bullet$} &   {\color{red}$\rightarrow$} & {\color{red}$\bullet$}  \\
+V  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ }  && {\tt VD--}\\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ }  && {\tt --VE} \\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 2}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{red}$\rightarrow$}   & {\color{red}$\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt VD-} \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } & & {\tt -VE} \\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 3}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{red}$\rightarrow$}   & {\color{red} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt V-D-}\\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red}  $\bullet$ } & & {\tt -V-E}\\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+\section*{Alignment 4}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{red}$\rightarrow$}   & {\color{red} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt V-D} \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } & & {\tt -VE}\\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 5}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{red}$\rightarrow$}   & {\color{red} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & & {\tt V--D} \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } & & {\tt -VE-}\\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 6}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{black}$\rightarrow$}   & {\color{black} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{black} $\downarrow$} & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt VD-}\\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red}  $\bullet$ } & & {\tt V-E}\\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 7}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{black}$\rightarrow$}   & {\color{black} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{black} $\downarrow$} & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt VD}\\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } & & {\tt VE} \\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+\section*{Alignment 8}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{black}$\rightarrow$}   & {\color{black} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{black} $\downarrow$} & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt V-D} \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } & & {\tt VE-} \\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 9}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{black}$\rightarrow$}   & {\color{black} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{red} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt -VD-} \\
+   & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} &    {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red}  $\bullet$ } & & {\tt V--E}\\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+\section*{Alignment 10}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{black}$\rightarrow$}   & {\color{black} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{red} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt -VD} \\
+   & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} &    {\color{red} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } & & {\tt V-E} \\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 11}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{black}$\rightarrow$}   & {\color{black} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{red} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt -V-D}\\
+   & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} &    {\color{red} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } & & {\tt V-E-}\\   
+E  & {\color{black} $\downarrow$} & {\color{black}$\searrow$}    & {\color{red} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+\section*{Alignment 12}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{black}$\rightarrow$}   & {\color{black} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{red} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & & {\tt -VD}  \\
+   & {\color{red} $\bullet$ }   & {\color{black}$\rightarrow$} &    {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } & & {\tt VE-} \\   
+E  & {\color{black} $\downarrow$} & {\color{red}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+\myNewSlide
+\section*{Alignment 13}
+
+{
+\huge
+\begin{center}
+\begin{tabular}{cccccccp{1in}c}
+   &              & V            &  & D & \\   
+   & {\color{red} $\bullet$}      & {\color{black}$\rightarrow$}   & {\color{black} $\bullet$}        &   {\color{black}$\rightarrow$} & {\color{black}$\bullet$} \\
+V  & {\color{red} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  & & {\tt --VD} \\
+   & {\color{red} $\bullet$ }   & {\color{black}$\rightarrow$} &    {\color{black} $\bullet$ }   & {\color{black}$\rightarrow$} & {\color{black}  $\bullet$ } & & {\tt VE--} \\   
+E  & {\color{red} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ } & {\color{black}$\searrow$}    & {\color{black} $\downarrow$ }  \\
+   & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red} $\bullet$ }   & {\color{red}$\rightarrow$} & {\color{red}  $\bullet$ } \\   
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+{\tt
+\small
+\begin{tabular}{lcccccccccccccccccccc}
+{\em Pongo} &V&D&E&V&G&G&E&L&G&R&L&F&V&V&P&T&Q\\ 
+{\em Gorilla} &V&E&V&A&G&D&L&G&R&L&L&I&V&Y&P&S&R\\
+\hline
+{\bf Score} &4&2&-2&0&6&-6&-3&-4&-2&-2&4&0&4&-1&7&4&1\\
+\end{tabular}
+}
+\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/ungapped_path.pdf}}}
+\end{picture}
+\myNewSlide
+{\tt
+\small
+\begin{tabular}{lcccccccccccccccccccccc}
+{\em Pongo} &V&D&E&V&G&G&E&L&G&R&L&- &F&V&V&P&T&Q\\ 
+{\em Gorilla} &V&- &E&V&A&G&D&L&G&R&L&L&I&V&Y&P&S&R\\
+\hline
+{\bf Score} &4&-8&5&5&0&6&2&4&6&5&4&-8&0&4&-1&7&4&1\\
+\end{tabular}
+}
+\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/gapped_path.pdf}}}
+\end{picture}
+
+\myNewSlide
+\begin{tabular}{c|c|r}
+length Seq \# 1 &length Seq \# 2 & \# alignments\\
+\hline
+1 & 1 &    3 \\
+2 & 2 &   13 \\
+3 & 3 &   63 \\
+4 & 4 &  321 \\
+5 & 5 & 1,683 \\
+6 & 6 & 8,989 \\
+7 & 7 & 48,639 \\
+8 & 8 & 265,729 \\
+9 & 9 & 1,462,563 \\
+$\vdots$ &$\vdots$ & $\vdots$\\
+17 & 17 & 1,425,834,724,419
+\end{tabular}
+
+\myNewSlide
+\section*{Needleman-Wunsch algorithm (paraphrased)}
+{\large
+\begin{compactitem}
+	\item Work from the top left (beginning of both sequences)
+	\item For each cell store the highest score possible for that cell and a ``back'' pointer to tell point to the previous step in the best path 	\item When you reach the lower right corner, you know the optimal score and the back pointers tell you the alignment.
+\end{compactitem}
+
+The highest-score calculation at each cell only depends on its the cell's three possible previous neighbors.
+
+If one sequence is length $N$, and the other is length $M$, then Needleman-Wunsch only takes $\approx 6 NM$ calculations.
+
+But there are a {\bf much} larger number of possible alignments.
+}
+\myNewSlide
+{
+\normalsize
+\begin{center}
+\begin{tabular}{ccccccccccccccc}
+   &              & V             &  & D & & E & & V & & G & & G \\   
+   & {\color{black} 0}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+E  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+A  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+G  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+D  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+{
+\normalsize
+\begin{center}
+\begin{tabular}{lclclclclclclcl}
+   &              & V             &  & D & & E & & V & & G & & G \\   
+   & {\color{black} 0}      & {\color{green}$\leftarrow$}   & -5    &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{green} $\uparrow$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -5      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+E  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+A  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+G  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+D  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+{
+\normalsize
+\begin{center}
+\begin{tabular}{lclclclclclclcl}
+   &              & V             &  & D & & E & & V & & G & & G \\   
+   & {\color{black} 0}      & {\color{green}$\leftarrow$}   & -5 &   {\color{green}$\leftarrow$} & -10 &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{green} $\uparrow$} & {\color{green}$\nwarrow$}    & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -5     &  & 4        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+E  & {\color{green} $\uparrow$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -10 &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+A  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+G  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+D  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+\end{tabular}
+\end{center}
+}
+
+
+
+\myNewSlide
+{
+\normalsize
+\begin{center}
+\begin{tabular}{lclclclclclclcl}
+   &              & V             &  & D & & E & & V & & G & & G \\   
+   & {\color{black} 0}      & {\color{green}$\leftarrow$}   & -5 &   {\color{green}$\leftarrow$} & -10 &   {\color{green}$\leftarrow$} & -15 &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{green} $\uparrow$} & {\color{green}$\nwarrow$}    & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -5     &  & 4        &   {\color{green}$\leftarrow$} & -1 &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+E  & {\color{green} $\uparrow$} &     & {\color{green} $\uparrow$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -10 &    & -1        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{green} $\uparrow$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -15      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+A  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+G  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+D  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+  & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+\end{tabular}
+\end{center}
+}
+
+
+
+\myNewSlide
+{
+\normalsize
+\begin{center}
+\begin{tabular}{lclclclclclclcl}
+   &              & V             &  & D & & E & & V & & G & & G \\   
+   & {\color{black} 0}      & {\color{green}$\leftarrow$}   & -5 &   {\color{green}$\leftarrow$} & -10 &   {\color{green}$\leftarrow$} & -15 &   {\color{green}$\leftarrow$} & -20&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{green} $\uparrow$} & {\color{green}$\nwarrow$}    & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -5     &  & 4        &   {\color{green}$\leftarrow$} & -1 &   {\color{green} $\leftarrow$} & -6&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+E  & {\color{green} $\uparrow$} &     & {\color{green} $\uparrow$ } & {\color{green}$\nwarrow$}    & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -10 &    & -1        &    & 6 &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{green} $\uparrow$} & {\color{green} $\nwarrow$}    & {\color{green} $\uparrow$} &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -15      &    & -6        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+A  & {\color{green} $\uparrow$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -20      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+G  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+D  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+  & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+\end{tabular}
+\end{center}
+}
+
+
+
+
+\myNewSlide
+{
+\normalsize
+\begin{center}
+\begin{tabular}{lclclclclclclcl}
+   &              & V             &  & D & & E & & V & & G & & G \\   
+   & {\color{black} 0}      & {\color{green}$\leftarrow$}   & -5 &   {\color{green}$\leftarrow$} & -10 &   {\color{green}$\leftarrow$} & -15 &   {\color{green}$\leftarrow$} & -20& {\color{green}$\leftarrow$} & -25 &    & {\color{black}$\bullet$} \\
+V  & {\color{green} $\uparrow$} & {\color{green}$\nwarrow$}    & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -5     &  & 4        &   {\color{green}$\leftarrow$} & -1 &   {\color{green} $\leftarrow$} & -6&  {\color{green}$\leftarrow$}  & -11&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+E  & {\color{green} $\uparrow$} &     & {\color{green} $\uparrow$ } & {\color{green}$\nwarrow$}    &  & {\color{green} $\nwarrow$ } &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -10 &    & -1        &    & 6 &    & 4&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+V  & {\color{green} $\uparrow$} & {\color{green} $\nwarrow$}    & {\color{green} $\uparrow$} &     & {\color{green} $\uparrow$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -15      &    & -6        &    & 1 &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+A  & {\color{green} $\uparrow$} &     & {\color{green} $\uparrow$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -20      &    & -11        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+G  & {\color{green} $\uparrow$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+   & -25      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+D  & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &     & {\color{black} $$ } & {\color{black} $$} &     & {\color{black} $$ } &       \\
+ & {\color{black} $\bullet$}      &    & {\color{black} $\bullet$}        &    & {\color{black}$\bullet$} &    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$}&    & {\color{black}$\bullet$} \\
+\end{tabular}
+\end{center}
+}
+
+
+\myNewSlide
+{\tiny
+\begin{tabular}{p{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}cp{1mm}c}
+& & V& & D& & E& & V& & G& & G& & E& & L& & G& & R& & L& & F& & V& & V& & P& & T& & Q & \\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+ &  0 &  $\leftarrow$ &  -5 &  $\leftarrow$ &  -10 &  $\leftarrow$ &  -15 &  $\leftarrow$ &  -20 &  $\leftarrow$ &  -25 &  $\leftarrow$ &  -30 &  $\leftarrow$ &  -35 &  $\leftarrow$ &  -40 &  $\leftarrow$ &  -45 &  $\leftarrow$ &  -50 &  $\leftarrow$ &  -55 &  $\leftarrow$ &  -60 &  $\leftarrow$ &  -65 &  $\leftarrow$ &  -70 &  $\leftarrow$ &  -75 &  $\leftarrow$ &  -80 &  $\leftarrow$ &  -85 & \\
+V  &   $\uparrow$ &  {\color{red}$\nwarrow$} &  &  &  &  &  &  $\nwarrow$ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  $\nwarrow$ &  &  $\nwarrow$ &  &  &  &  &  &  &  &  & \\
+ &  -5 &  &  4 &  {\color{red} $\leftarrow$} &  -1 &  $\leftarrow$ &  -6 &  &  -11 &  $\leftarrow$ &  -16 &  $\leftarrow$ &  -21 &  $\leftarrow$ &  -26 &  $\leftarrow$ &  -31 &  $\leftarrow$ &  -36 &  $\leftarrow$ &  -41 &  $\leftarrow$ &  -46 &  $\leftarrow$ &  -51 &  &  -56 &  &  -61 &  $\leftarrow$ &  -66 &  $\leftarrow$ &  -71 &  $\leftarrow$ &  -76 & \\
+E  &   $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  {\color{red}$\nwarrow$} &  &  &  &  &  &  &  &  $\nwarrow$ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+ &  -10 &  &  -1 &  &  6 &  &  4 &  $\leftarrow$ &  -1 &  $\leftarrow$ &  -6 &  $\leftarrow$ &  -11 &  &  -16 &  $\leftarrow$ &  -21 &  $\leftarrow$ &  -26 &  $\leftarrow$ &  -31 &  $\leftarrow$ &  -36 &  $\leftarrow$ &  -41 &  $\leftarrow$ &  -46 &  $\leftarrow$ &  -51 &  $\leftarrow$ &  -56 &  $\leftarrow$ &  -61 &  $\leftarrow$ &  -66 & \\
+V  &   $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  $\nwarrow$ &  &  {\color{red}$\nwarrow$} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  $\nwarrow$ &  &  $\nwarrow$ &  &  &  &  &  &  &  &  & \\
+ &  -15 &  &  -6 &  &  1 &  &  4 &  &  8 &  $\leftarrow$ &  3 &  $\leftarrow$ &  -2 &  $\leftarrow$ &  -7 &  $\leftarrow$ &  -12 &  $\leftarrow$ &  -17 &  $\leftarrow$ &  -22 &  $\leftarrow$ &  -27 &  $\leftarrow$ &  -32 &  &  -37 &  &  -42 &  $\leftarrow$ &  -47 &  $\leftarrow$ &  -52 &  $\leftarrow$ &  -57 & \\
+A  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  $\nwarrow$ &  &  {\color{red}$\nwarrow$} &  &  $\nwarrow$ &  &  &  &  &  &  $\nwarrow$ &  &  &  &  &  &  &  &  $\nwarrow$ &  &  $\nwarrow$ &  &  &  &  $\nwarrow$ &  &  &  &  & \\
+ &  -20 &  &  -11 &  &  -4 &  &  0 &  &  4 &  &  8 &  &  3 &  $\leftarrow$ &  -2 &  $\leftarrow$ &  -7 &  &  -12 &  $\leftarrow$ &  -17 &  $\leftarrow$ &  -22 &  $\leftarrow$ &  -27 &  &  -32 &  &  -37 &  $\leftarrow$ &  -42 &  &  -47 &  $\leftarrow$ &  -52 & \\
+G  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  {\color{red}$\nwarrow$} &  &  &  &  &  &  $\nwarrow$ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+ &  -25 &  &  -16 &  &  -9 &  &  -5 &  &  -1 &  &  10 &  &  14 &  $\leftarrow$ &  9 &  $\leftarrow$ &  4 &  &  -1 &  $\leftarrow$ &  -6 &  $\leftarrow$ &  -11 &  $\leftarrow$ &  -16 &  $\leftarrow$ &  -21 &  $\leftarrow$ &  -26 &  $\leftarrow$ &  -31 &  $\leftarrow$ &  -36 &  $\leftarrow$ &  -41 & \\
+D  &   $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  {\color{red}$\nwarrow$} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+ &  -30 &  &  -21 &  &  -10 &  &  -7 &  &  -6 &  &  5 &  &  9 &  &  16 &  $\leftarrow$ &  11 &  $\leftarrow$ &  6 &  $\leftarrow$ &  1 &  $\leftarrow$ &  -4 &  $\leftarrow$ &  -9 &  $\leftarrow$ &  -14 &  $\leftarrow$ &  -19 &  $\leftarrow$ &  -24 &  $\leftarrow$ &  -29 &  $\leftarrow$ &  -34 & \\
+L  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  {\color{red}$\nwarrow$} &  &  &  &  &  &  $\nwarrow$ &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+ &  -35 &  &  -26 &  &  -15 &  &  -12 &  &  -6 &  &  0 &  &  4 &  &  11 &  &  20 &  $\leftarrow$ &  15 &  $\leftarrow$ &  10 &  &  5 &  $\leftarrow$ &  0 &  $\leftarrow$ &  -5 &  $\leftarrow$ &  -10 &  $\leftarrow$ &  -15 &  $\leftarrow$ &  -20 &  $\leftarrow$ &  -25 & \\
+G  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  $\nwarrow$ &  &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  {\color{red}$\nwarrow$} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+ &  -40 &  &  -31 &  &  -20 &  &  -17 &  &  -11 &  &  0 &  &  6 &  &  6 &  &  15 &  &  26 &  $\leftarrow$ &  21 &  $\leftarrow$ &  16 &  $\leftarrow$ &  11 &  $\leftarrow$ &  6 &  $\leftarrow$ &  1 &  $\leftarrow$ &  -4 &  $\leftarrow$ &  -9 &  $\leftarrow$ &  -14 & \\
+R  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  {\color{red}$\nwarrow$} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+ &  -45 &  &  -36 &  &  -25 &  &  -20 &  &  -16 &  &  -5 &  &  1 &  &  6 &  &  10 &  &  21 &  &  31 &  $\leftarrow$ &  26 &  $\leftarrow$ &  21 &  $\leftarrow$ &  16 &  $\leftarrow$ &  11 &  $\leftarrow$ &  6 &  $\leftarrow$ &  1 &  $\leftarrow$ &  -4 & \\
+L  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  {\color{red}$\nwarrow$} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+ &  -50 &  &  -41 &  &  -30 &  &  -25 &  &  -19 &  &  -10 &  &  -4 &  &  1 &  &  10 &  &  16 &  &  26 &  &  35 &  $\leftarrow$ &  30 &  $\leftarrow$ &  25 &  $\leftarrow$ &  20 &  $\leftarrow$ &  15 &  $\leftarrow$ &  10 &  $\leftarrow$ &  5 & \\
+L  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  {\color{red}$\nwarrow$} &  &  $\nwarrow$ &  &  $\nwarrow$ &  &  &  &  &  &  &  &  & \\
+ &  -55 &  &  -46 &  &  -35 &  &  -30 &  &  -24 &  &  -15 &  &  -9 &  &  -4 &  &  5 &  &  11 &  &  21 &  &  30 &  &  35 &  &  31 &  &  26 &  $\leftarrow$ &  21 &  $\leftarrow$ &  16 &  $\leftarrow$ &  11 & \\
+I  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  {\color{red}$\nwarrow$} &  &  $\nwarrow$ &  &  &  &  &  &  &  &  & \\
+ &  -60 &  &  -51 &  &  -40 &  &  -35 &  &  -27 &  &  -20 &  &  -14 &  &  -9 &  &  0 &  &  6 &  &  16 &  &  25 &  &  30 &  &  38 &  &  34 &  $\leftarrow$ &  29 &  $\leftarrow$ &  24 &  $\leftarrow$ &  19 & \\
+V  &   $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  {\color{red}$\nwarrow$} &  &  &  &  &  &  &  &  & \\
+ &  -65 &  &  -56 &  &  -45 &  &  -40 &  &  -31 &  &  -25 &  &  -19 &  &  -14 &  &  -5 &  &  1 &  &  11 &  &  20 &  &  25 &  &  34 &  &  42 &  $\leftarrow$ &  37 &  $\leftarrow$ &  32 &  $\leftarrow$ &  27 & \\
+Y  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  {\color{red}$\uparrow$} &  $\nwarrow$ &  &  $\nwarrow$ &  &  $\nwarrow$ &  &  & \\
+ &  -70 &  &  -61 &  &  -50 &  &  -45 &  &  -36 &  &  -30 &  &  -24 &  &  -19 &  &  -10 &  &  -4 &  &  6 &  &  15 &  &  23 &  &  29 &  &  37 &  &  39 &  &  35 &  &  31 & \\
+P  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  {\color{red}$\nwarrow$} &  &  &  &  $\nwarrow$ &  &  & \\
+ &  -75 &  &  -66 &  &  -55 &  &  -50 &  &  -41 &  &  -35 &  &  -29 &  &  -24 &  &  -15 &  &  -9 &  &  1 &  &  10 &  &  18 &  &  24 &  &  32 &  &  44 &  $\leftarrow$ &  39 &  &  34 & \\
+S  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  {\color{red}$\nwarrow$} &  &  &  &  & \\
+ &  -80 &  &  -71 &  &  -60 &  &  -55 &  &  -46 &  &  -40 &  &  -34 &  &  -29 &  &  -20 &  &  -14 &  &  -4 &  &  5 &  &  13 &  &  19 &  &  27 &  &  39 &  &  45 &  $\leftarrow$ &  40 & \\
+R  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  {\color{red}$\nwarrow$} &  &  & \\
+ &  -85 &  &  -76 &  &  -65 &  &  -60 &  &  -51 &  &  -45 &  &  -39 &  &  -34 &  &  -25 &  &  -19 &  &  -9 &  &  0 &  &  8 &  &  14 &  &  22 &  &  34 &  &  40 &  &  46 & \\
+\end{tabular}
+}
+
+\myNewSlide
+\section*{Aligning multiple sequences}
+\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/progressive_tree.pdf}}}
+\end{picture}
+
+
+
+\myNewSlide
+\section*{Progressive alignment}
+\normalsize
+Devised by Feng and Doolittle 1987 and Higgins and Sharp, 1988. 
+An approximate method for producing multiple sequence alignments using a guide tree.
+\begin{itemize}
+	\item Perform pairwise alignments to produce a distance matrix
+	\item Produce a guide tree from the distances
+	\item Use the guide tree to specify the ordering used for aligning sequences, closest to furthest.
+\end{itemize}
+
+\myNewSlide
+\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/ProgressiveOverview.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Alignment stage of progressive alignments}
+\large
+Sequences of clades become grouped into ``profiles'' as the algorithm descends the tree.
+The next youngest internal nodes is selected at each step to create a new profile. Alignment at each step involves
+\begin{itemize}
+	\item Sequence-Sequence
+	\item Sequence-Profile
+	\item Profile-Profile
+\end{itemize}
+
+\myNewSlide
+\section*{Aligning multiple sequences}
+\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/progressive_tree_label.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Profile to Profile alignment}
+\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/needlemanwunch_profile.pdf}}}
+\end{picture}
+
+
+
+
+\myNewSlide
+\section*{Profile to profile alignments}
+\large
+Adding a gap to a profile means that every member of that group of sequences gets a gap at that position of the sequence.
+
+Usually the scores for each edge in the Needleman-W\"unsch graph are calculated using a ``sum of pairs'' scoring system.
+
+{\tt clustal W}\footnote{Thompson, Higgins, and Gibson. {\bf Nuc. Acids. Res}. 1994} uses weights assigned to each sequence in a profile group to downweight closely related sequences so that they are not overrepresented.
+
+\myNewSlide
+\begin{center}
+{\tt
+\begin{tabular}{c|c}
+Profile 1 & Profile 2 \\
+\begin{tabular}{rcc}
+	Seq & weight & AA \\
+\hline
+	taxon A & $0.3$ & V \\
+	taxon C & $0.24$ & A \\	
+	taxon E & $0.19$ & I \\
+\end{tabular} & 
+\begin{tabular}{rcc}
+	Seq & weight & AA \\
+\hline
+	taxon B & $0.15$ & V \\
+	taxon D & $0.25$ & M \\
+\end{tabular}\\
+\hline
+\end{tabular}
+}
+\end{center}
+\begin{eqnarray*}
+D_{P1,P2} & = & \frac{\sum_{i}\sum_{j}w_{i}w_{j}d_{ij}}{n_{i}n_{j}}\\
+	& = & \frac{1}{6}\left[d(V,V)w_{A}w_{B} + d(V,M)w_{A}w_{D} + d(A,V)w_{C}w_{B}\ldots\right.\\
+	& = & \left.\ldots d(A,M)w_{C}w_{D} + d(I,V)w_{E}w_{B} + d(I,M)w_{E}w_{D}\right]\\
+	& = & \frac{1}{6}({\mathbf4}\times0.3\times0.15 +{\mathbf1}\times0.3\times0.25 + {\mathbf0}\times0.24\times0.15\ldots\\
+	& = & \ldots{\mathbf-1}\times 0.24\times0.25 +{\mathbf3}\times0.19\times0.15 + {\mathbf1}\times0.19\times0.15)\\
+	& = & 1.46225
+\end{eqnarray*}
+
+%\myNewSlide
+%\section*{Tricks clustal uses to produce better alignments}
+%\large
+%\begin{itemize}
+%	\item Chooses substitution matrix (PAM or BLOSUM series for amino acids) based on sequence similarity
+%	\item Guide tree is constructed using neighbor-joining.
+%	\item AA residues in a neighborhood affect gap opening penalty (easier to have gaps in hydrophilic loops)
+%	\item Gap penalties are raised if a column has no gaps, but there are gaps nearby.
+%	\item Low scoring alignments may be postponed until a later stage.
+%\end{itemize}
+
+%\myNewSlide
+%\section*{Terminal gaps}
+%Using normal gap costs causes problems if one sequence is missing the starting or ending residues:\par
+%{
+%\begin{center}{\tt
+%\begin{tabular}{ll}
+%	{\em Pongo} & VDEFKLIVEGELGRLFVVPTQ\\ 
+%	{\em Gorilla} & VD-------GELGRLFVVPTQ\\
+%\end{tabular}
+%}\end{center}\par
+%instead of :\par
+%\begin{center}{\tt
+%\begin{tabular}{ll}
+%	{\em Pongo} &	VDEFKLIVEGELGRLFVVPTQ\\ 
+%	{\em Gorilla} &  -------VDGELGRLFVVPTQ\\
+%\end{tabular}
+%}
+%\end{center}
+
+%clustalw uses free terminal gaps to avoid this problem, but you have to watch out for: \par
+%
+%\begin{center}{\tt
+%\begin{tabular}{ll}
+%	{\em Pongo} &	VDEPFRFKLTNRGTSHIILVAPR\\ 
+%	{\em Gorilla} &        ------VDEPNRGTSHIILVAPR\\
+%\end{tabular}
+%}
+%\end{center}
+
+\myNewSlide
+\section*{Dealing with alignment ambiguity\footnote{from M. S. Y. Lee, {\em TREE}, 2001}}
+\begin{picture}(0,0)(0,0)
+	\put(60,-20){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeSeqsIn.pdf}}}
+	\put(-10,-90){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeePossible1.pdf}}}
+	\put(120,-90){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeePossible2.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Dealing with alignment ambiguity\footnote{from M. S. Y. Lee, {\em TREE}, 2001} - deletion}
+\begin{picture}(0,0)(0,0)
+	\put(60,-20){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeSeqsIn.pdf}}}
+	\put(-20,-90){\makebox(0,0)[l]{\includegraphics[scale=.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeDelAll.pdf}}}
+	\put(100,-90){\makebox(0,0)[l]{\includegraphics[scale=.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeDelSome.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Dealing with alignment ambiguity\footnote{from M. S. Y. Lee, {\em TREE}, 2001}}
+Elision method (Wheeler, 1995) involves simply concatenating matrices.
+
+\begin{picture}(0,0)(0,0)
+	\put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeElision.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Simultaneous tree inference and alignment}
+
+\begin{itemize}
+	\item Ideally we would address uncertainty in both types of inference at the same time
+	\item Allows for application of statistical models to improve inference and assessments of reliability
+	\item Just now becoming feasible: {\tt POY} (Wheeler, Gladstein, Laet, 2002), {\tt Handel} (Holmes and Bruno, 2001), {\tt BAliPhy} (Redelings and Suchard, 2005), and {\tt BEAST}(Lunter {\em et al.}, 2005, Drummond and Rambaut, 2003). SATe (Liu {\em et al} 2009; Yu and Holder software).
+\end{itemize}
+
+\myNewSlide
+\bibliography{phylo}
+
+\end{document}
+
