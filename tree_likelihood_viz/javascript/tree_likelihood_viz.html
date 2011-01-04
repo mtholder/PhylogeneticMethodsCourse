@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Tree Likelihood Viz</title>
+<title>Tree Likelihood Visualization</title>
 <style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
@@ -36,7 +36,7 @@ body {
   <header>
 	<h2>Pattern probabilities</h2>
   </header>
-  <canvas width="400" height="300" id="patternProbCanvas"></canvas>
+  <canvas width="400" height="30" id="patternProbCanvas"></canvas>
 </div>
 <div id="treeAB">
 	<h2>AB|CD</h2>
@@ -73,63 +73,99 @@ body {
 <script type="text/javascript">
 var DEBUGGING = true;
 YUI({debug : DEBUGGING}).use('console', 'slider','node', function(Y) {
+	// load a console in debug mode, so we see the Y.log messages
 	if (DEBUGGING) {
 	    new Y.Console().render();
 	}
  
-
-
-	var input, slider;
-	var suffixArray = ['a', 'b', 'c', 'd', 'internal'];
-	var valMax = 0.5;
-	const slider2InputDenom = 10000;
-	const sliderMax = slider2InputDenom*valMax;
-	var sliderLength = 200;
-	const sliderBinSize = 1/sliderLength;
-	// Function to pass input value back to the Slider
-	function updateSliderAfterKey( e ) {
-		var data   = this.getData();
-		var slider = data.slider;
-		var value  = parseFloat(this.get("value"));
-		var sliderVal = slider2InputDenom*value;
-		//Y.log('updateSliderAfterKey with value=' + value + ' sliderVal=' + sliderVal);
-		if (value == value) {
-			if (data.wait) {
-				data.wait.cancel();
-			}
-			// Update the Slider on a delay to allow time for typing
-			data.wait = Y.later( 200, slider, function () {
-				data.wait = null;
-				this.set( "value", sliderVal );
-			});
-		}
-	}
-	// If the slider has moved enough to change the value substantially, then
-	//	we update `this` which is the input.  We make sure the change is at least
-	//	sliderBinSize because, setting the input triggers the slider to move 
-	//	which then rounds off to the nearest sliderBinSize and calls this.
-	function updateInputAfterSlider( e ) {
-		var oldValue  = parseFloat(this.get("value"));
-		var nv = e.newVal/slider2InputDenom;
-		//Y.log('updateInputAfterSlider with e.newVal=' + e.newVal + '   oldValue=' + oldValue + '  nv='+nv);
-		if (Math.abs(oldValue - nv) > sliderBinSize) {
-			this.set( "value", nv );
-		}
-	}
-	for (var i = 0; i < suffixArray.length; ++i) {
+	/// default config = {valueMax : 1.0, 
+	///					  valueMin : 0.0,
+	///					  valueInitial : 10% of the way from valueMin to valueMax,
+	///					  sliderLength : 200,
+	///					  input : object or inputSelector: query for Y.one()
+	///					  sliderSelector : arg to render
+	///					}
+	function createSliderForInput(config) {
+		Y.log('createSliderForInput called config = ' + config);
+		var input, slider;
+		var valueMax = (config.valueMax == null ? 1.0 : config.valueMax);
+		var valueMin = (config.valueMin == null ? 0.0 : config.valueMin);
+		const valueRange = valueMax - valueMin;
+		const slider2InputDenom = 10000;
+		const sliderMin = 0.0;
+		const sliderMax = sliderMin + slider2InputDenom*valueRange;
 		// Create a horizontal Slider using all defaults
-		const iniVal = 0.10*sliderMax;
-		slider = new Y.Slider({value : iniVal, max : sliderMax, length : sliderLength});
-		var suffix = suffixArray[i];
-		input = Y.one( "#horiz_value_" +  suffix);
-		//Y.log('Created slider for ' + suffix);
-		input.setData( { slider: slider } );
+		const valueInitial = (config.valueInitial == null ? valueMin + 0.1*valueRange : config.valueInitial);
+		const sliderInitial = sliderMin + slider2InputDenom*(valueInitial - valueMin);
+		const sliderLength = (config.sliderLength == null ? 200 : sliderLength);
+		const sliderBinSize = 1/sliderLength;
+
+		// Function to pass input value back to the Slider
+		function updateSliderAfterKey( e ) {
+			var value  = parseFloat(this.get("value"));
+			Y.log('updateSliderAfterKey with value=' + value);
+			if (value == value && value <= valueMax && value >= valueMin) {
+				var data   = this.getData();
+				var slider = data.slider;
+				var sliderValue = sliderMin + slider2InputDenom*(value - valueMin);
+				Y.log('updateSliderAfterKey sliderValue=' + sliderValue);
+				this.setStyle('color', 'black');
+				if (data.wait) {
+					data.wait.cancel();
+				}
+				// Update the Slider on a delay to allow time for typing
+				data.wait = Y.later( 200, slider, function () {
+					data.wait = null;
+					this.set( "value", sliderValue );
+				});
+			}
+			else { // out of range
+				this.setStyle('color', 'red');
+			}
+		}
+		// If the slider has moved enough to change the value substantially, then
+		//	we update `this` which is the input.  We make sure the change is at least
+		//	sliderBinSize because, setting the input triggers the slider to move 
+		//	which then rounds off to the nearest sliderBinSize and calls this.
+		function updateInputAfterSlider( e ) {
+			var oldValue  = parseFloat(this.get("value"));
+			var nv = valueMin + ((e.newVal - sliderMin)/slider2InputDenom);
+			Y.log('updateInputAfterSlider with e.newVal=' + e.newVal + '   oldValue=' + oldValue + '  nv='+nv);
+			if (Math.abs(oldValue - nv) > sliderBinSize/2) {
+				if (nv <= valueMax && nv >= valueMin) {
+					this.setStyle('color', 'black');
+				}
+				this.set( "value", nv );
+			}
+		}
+
+		slider = new Y.Slider({value : sliderInitial, max : sliderMax, length : sliderLength});
+		input = (config.input == null ? Y.one(config.inputSelector) : config.input);
+		input.setData( { slider: slider} );
 		// Pass the aInput as the 'this' object inside updateInputAfterSlider
 		slider.after( "valueChange", updateInputAfterSlider, input );
 		input.on( "keyup", updateSliderAfterKey );
-		input.set("value", iniVal/slider2InputDenom);
+		input.set("value", sliderInitial/slider2InputDenom);
 		// Render the Slider next to the input
-		slider.render('#horiz_slider_' + suffix);
+		slider.render(config.sliderSelector);
+		Y.log('slider rendered at ' + config.sliderSelector);
+	}
+	Y.log('about to loop over suffixes');
+
+	var suffixArray = ['a', 'b', 'c', 'd', 'internal'];
+	for (var i = 0; i < suffixArray.length; ++i) {
+		var suffix = suffixArray[i];
+		try {
+			createSliderForInput({
+				valueMax : 0.5,
+				inputSelector :  "#horiz_value_" +  suffix,
+				sliderSelector : '#horiz_slider_' + suffix,
+			});
+		}
+		catch (e) {
+			Y.log("Exception in createSliderForInput: " + e);
+			throw e;
+		}
 	}	
 
 	
