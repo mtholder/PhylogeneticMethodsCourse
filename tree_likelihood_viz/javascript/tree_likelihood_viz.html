@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Tree Likelihood Viz</title>
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+<script src="/lib/modernizr.min.js" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="./lib/yui3/build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="./lib/yui3/build/yui/yui-min.js"></script>
+
+<style type="text/css">
+    #demo input {
+        width: 2em;
+    }
+    .horiz_slider {
+        margin-left: 1ex;
+        margin-right: 1ex;
+    }
+</style>
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Visualization of the likelihood of phylogenetic trees</h1>
+<div id="patterprobsdiv">
+  <header>
+	<h2>Pattern probabilities</h2>
+  </header>
+  <canvas width="400" height="300" id="patternProbCanvas"></canvas>
+</div>
+<div id="treeAB">
+	<h2>AB|CD</h2>
+	<h4></h4>
+	<div>
+		<span class="horiz_slider" id="horiz_slider_a"></span>
+		<input id="horiz_value_a" value="0">
+		<label for="horiz_value_a">Branch A length</label>
+	</div>
+	<div>
+		<span class="horiz_slider" id="horiz_slider_b"></span>
+		<input id="horiz_value_b" value="0">
+		<label for="horiz_value_b">Branch B length</label>
+	</div>
+	<div>
+		<span class="horiz_slider" id="horiz_slider_c"></span>
+		<input id="horiz_value_c" value="0">
+		<label for="horiz_value_c">Branch C length</label>
+	</div>
+	<div>
+		<span class="horiz_slider" id="horiz_slider_d"></span>
+		<input id="horiz_value_d" value="0">
+		<label for="horiz_value_d">Branch D length</label>
+	</div>
+	<div>
+		<span class="horiz_slider" id="horiz_slider_internal"></span>
+		<input id="horiz_value_internal" value="0">
+		<label for="horiz_value_internal">Internal Branch length</label>
+	</div>
+  <canvas width="400" height="300" id="treeABCanvas"></canvas>
+</div>
+
+
+<script type="text/javascript">
+var DEBUGGING = true;
+YUI({debug : DEBUGGING}).use('console', 'slider','node', function(Y) {
+	if (DEBUGGING) {
+	    new Y.Console().render();
+	}
+ 
+
+
+	var input, slider;
+	var suffixArray = ['a', 'b', 'c', 'd', 'internal'];
+	var valMax = 0.5;
+	const slider2InputDenom = 10000;
+	const sliderMax = slider2InputDenom*valMax;
+	var sliderLength = 200;
+	const sliderBinSize = 1/sliderLength;
+	// Function to pass input value back to the Slider
+	function updateSliderAfterKey( e ) {
+		var data   = this.getData();
+		var slider = data.slider;
+		var value  = parseFloat(this.get("value"));
+		var sliderVal = slider2InputDenom*value;
+		//Y.log('updateSliderAfterKey with value=' + value + ' sliderVal=' + sliderVal);
+		if (value == value) {
+			if (data.wait) {
+				data.wait.cancel();
+			}
+			// Update the Slider on a delay to allow time for typing
+			data.wait = Y.later( 200, slider, function () {
+				data.wait = null;
+				this.set( "value", sliderVal );
+			});
+		}
+	}
+	// If the slider has moved enough to change the value substantially, then
+	//	we update `this` which is the input.  We make sure the change is at least
+	//	sliderBinSize because, setting the input triggers the slider to move 
+	//	which then rounds off to the nearest sliderBinSize and calls this.
+	function updateInputAfterSlider( e ) {
+		var oldValue  = parseFloat(this.get("value"));
+		var nv = e.newVal/slider2InputDenom;
+		//Y.log('updateInputAfterSlider with e.newVal=' + e.newVal + '   oldValue=' + oldValue + '  nv='+nv);
+		if (Math.abs(oldValue - nv) > sliderBinSize) {
+			this.set( "value", nv );
+		}
+	}
+	for (var i = 0; i < suffixArray.length; ++i) {
+		// Create a horizontal Slider using all defaults
+		const iniVal = 0.10*sliderMax;
+		slider = new Y.Slider({value : iniVal, max : sliderMax, length : sliderLength});
+		var suffix = suffixArray[i];
+		input = Y.one( "#horiz_value_" +  suffix);
+		//Y.log('Created slider for ' + suffix);
+		input.setData( { slider: slider } );
+		// Pass the aInput as the 'this' object inside updateInputAfterSlider
+		slider.after( "valueChange", updateInputAfterSlider, input );
+		input.on( "keyup", updateSliderAfterKey );
+		input.set("value", iniVal/slider2InputDenom);
+		// Render the Slider next to the input
+		slider.render('#horiz_slider_' + suffix);
+	}	
+
+	
+	return;
+	function PatternProbBundle(patProbDiv, canvas) {
+		this.groupingDiv = patProbDiv;
+		this.canvas = canvas;
+
+	}
+	var patternProb = new PatternProbBundle(Y.one('#patternprobsdiv'), 
+									    Y.one('#patternProbCanvas'));
+});
+</script>
+
+</body>
+</html>
+

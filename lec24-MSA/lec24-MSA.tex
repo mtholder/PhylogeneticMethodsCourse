@@ -98,6 +98,35 @@
 
 
 \myNewSlide
+\section*{$^{\ast}$BEAST overview}
+Goal: approximate $\Pr(S|X)$
+\begin{eqnarray*}
+\Pr(S|X) & \propto & \Pr(X|S)\Pr(S) \\
+ & = & \int\Pr(X|G)\Pr(G|S)\Pr(S)dG \\
+ & = & \int\int\Pr(X|G)\Pr(G|S,\bm{\theta})\Pr(S)dGd{\bm{\theta}} \\
+ & = & \int\int\int\Pr(X|G,\bm{\Lambda})\Pr(G|S,\bm{\theta})\Pr(S)dGd{\bm{\theta}}d\bm{\Lambda} \\
+\bm{\theta} & = & \{N_1, N_2, \ldots, \} \\
+\bm{\Lambda} & = & \{\kappa, \bm{\pi}, \ldots\} \\
+\end{eqnarray*}
+
+
+\myNewSlide
+\section*{$\Pr(S)$ from speciation model}
+\begin{picture}(0,0)(0,0)
+	\put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1SpT.pdf}}}
+	\put(20,-122){$S$}
+\end{picture}
+
+\myNewSlide
+\section*{$\Pr(G|S)$}
+\begin{picture}(0,0)(0,0)
+	\put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1SpT.pdf}}}
+	\put(120,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1GT.pdf}}}
+	\put(20,-122){$S$}
+	\put(150,-120){$G$}
+\end{picture}
+
+\myNewSlide
 \section*{Gene tree in a species tree w/ variable population size}
 \begin{picture}(0,0)(0,0)
 	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Mod.pdf}}}
@@ -114,6 +143,59 @@
 	\put(103,-122){{\color{grey}\small B2}}
 	\put(125,-122){{\color{grey}\small B1}}
 	\put(148,-122){{\color{grey}\small B3}}
+	\put(150,-50){$\Pr(G|S) = \prod_i^{b}\Pr(G_i|S_i)$}
+	\put(-20,-50){$G$ in grey}
+	\put(-20,-60){$S$ in black}
+\end{picture}
+
+\myNewSlide
+\section*{In Species A}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modparta.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{In Species C}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartc.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{In Species B}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartb.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{In ancestor of AC}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartac.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{In ancestor of ACB}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartabc.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Gene tree in a species tree w/ variable population size}
+\begin{picture}(0,0)(0,0)
+	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Mod.pdf}}}
+	\put(-20,-140){{\tiny Figure modified from Heled and Drummond 2010}}
+	\put(33,-132){{\color{black}\small A}}
+	\put(65,-132){{\color{black}\small C}}
+	\put(120,-132){{\color{black}\small B}}
+	\put(23,-122){{\color{grey}\small A1}}
+	\put(33,-122){{\color{grey}\small A2}}
+	\put(43,-122){{\color{grey}\small A3}}
+	\put(53,-122){{\color{grey}\small C1}}
+	\put(68,-122){{\color{grey}\small C2}}
+	\put(83,-122){{\color{grey}\small C3}}
+	\put(103,-122){{\color{grey}\small B2}}
+	\put(125,-122){{\color{grey}\small B1}}
+	\put(148,-122){{\color{grey}\small B3}}
+	\put(150,-50){$\Pr(G|S) = \prod_i^{b}\Pr(G_i|S_i)$}
 	\put(-20,-50){$G$ in grey}
 	\put(-20,-60){$S$ in black}
 \end{picture}
@@ -201,7 +283,7 @@ Both will be very sensitive to migration, but they represent the state-of-the-ar
 \section*{Multiple Sequence Alignment tools}
 \begin{compactitem}
 	\item clustal variants are popular, but not very reliable.
-	\item simultaneous inference of MSA and tree is the most defensible (but computationally demanding
+	\item simultaneous inference of MSA and tree is the most defensible (but computationally demanding)
 	\item Promising tools for MSA (roughly in order of computational tractability):
 	\begin{compactenum}
 		\item Simultaneous MSA + Trees (Handel, BAliPhy, BEAST, AliFritz$\ldots$)
