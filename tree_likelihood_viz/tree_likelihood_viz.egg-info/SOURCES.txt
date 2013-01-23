@@ -1,6 +1,15 @@
 setup.cfg
 setup.py
 tree_likelihood_viz/__init__.py
+tree_likelihood_viz/app_for_model.py
+tree_likelihood_viz/graphics_util.py
+tree_likelihood_viz/histo_window.py
+tree_likelihood_viz/model.py
+tree_likelihood_viz/optimizer.py
+tree_likelihood_viz/simple_tree.py
+tree_likelihood_viz/simple_tree_drawing.py
+tree_likelihood_viz/trace_window.py
+tree_likelihood_viz/utility.py
 tree_likelihood_viz.egg-info/PKG-INFO
 tree_likelihood_viz.egg-info/SOURCES.txt
 tree_likelihood_viz.egg-info/dependency_links.txt
