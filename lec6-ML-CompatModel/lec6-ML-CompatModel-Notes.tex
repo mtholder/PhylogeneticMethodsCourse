@@ -374,7 +374,7 @@ This means that we can rephrase equation \ref{prodOverPatterns} as:
 	\Pr(X|T_j)  & = & \prod_{i=1}^{|\variablePatternSpace|}\Pr(d_i|\theta)^{c_i} \\
 				& = & \left(\prod_{d_i\in D(T_j)}\Pr(d_i|\theta)^{c_i} \right) \left(\prod_{d_i\notin D(T_j)}\Pr(d_i|\theta)^{c_i} \right)\\
 				& = & \left(\prod_{d_i\in D(T_j)}[\phi\epsilon/7] \right) \left(\prod_{d_i\notin D(T_j)}[\epsilon/7] \right)\\
-				& = & \phi^{C(T_j)}\left(\frac{\epsilon}{7}\right)^{| \variablePatternSpace|} \label{simpleCompatLike}
+				& = & \phi^{C(T_j)}\left(\frac{\epsilon}{7}\right)^{M} \label{simpleCompatLike}
 \end{eqnarray}
 where $C(T_j)$ is the sum of the counts of the characters that are compatible with tree $T_j$:
 \begin{eqnarray}

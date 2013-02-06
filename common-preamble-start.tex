@@ -1,22 +1,22 @@
-\newif\ifpdf
-\ifx\pdfoutput\undefined
-\pdffalse % we are not running PDFLaTeX
-\else
-\pdfoutput=1 % we are running PDFLaTeX
-\pdftrue
-\fi
+%\newif\ifpdf
+%\ifx\pdfoutput\undefined
+%\pdffalse % we are not running PDFLaTeX
+%\else
+%\pdfoutput=1 % we are running PDFLaTeX
+%\pdftrue
+%\fi
 
-\ifpdf
+%\ifpdf
 \usepackage[pdftex]{graphicx}
-\else
-\usepackage{graphicx}
-\fi
+%\else
+%\usepackage{graphicx}
+%\fi
 
-\ifpdf
+%\ifpdf
 \DeclareGraphicsExtensions{.pdf, .jpg, .tif, .png}
-\else
-\DeclareGraphicsExtensions{.eps, .jpg}
-\fi
+%\else
+%\DeclareGraphicsExtensions{.eps, .jpg}
+%\fi
 
 %\usepackage{pslatex}
 \usepackage{tabularx,dcolumn, graphicx, amsfonts,amsmath}  
