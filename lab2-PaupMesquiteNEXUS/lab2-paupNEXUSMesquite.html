@@ -484,7 +484,7 @@ end;</span></pre>
             <li>
                 First create a folder.
                 <li>
-                    Copy the <span class="filename">angio35.txt</span> file from the data folder into your own newly-created folder. (If you are not in the computer lab, you can download the file by right-clicking <a href="../data/angio35.txt">here</a> and using your browser's <span class="menu">Save Target As...</span> menu option)
+                    Copy the <span class="filename">angio35.txt</span> file from the data folder into your own newly-created folder. (If you are not in the computer lab, you can download the file by right-clicking the link<a href="http://phylo.bio.ku.edu/slides/data/angio35.txt">http://phylo.bio.ku.edu/slides/data/angio35.txt</a> and using your browser's <span class="menu">Save Target As...</span> menu option)
                 </li>
                 <li>
                     Open the <span class="filename">angio35.txt</span> file in a <b>text editor</b> (not microsoft word). Note that the file is not in NEXUS format yet. It contains 35 DNA sequences. These are rbcL gene sequences from various green plants. The important thing to notice is that the format is quite simple: each line consists of a taxon name followed by at least one blank space, which is followed by the sequence for that taxon. Note that the blank space is important: <span class="makeconspicuous">taxon names cannot contain embedded spaces</span>, because spaces are used to <span class="makeconspicuous">separate</span> taxon names from the corresponding sequences.
@@ -524,7 +524,10 @@ end;</span></pre>
                     </p>
                 </li>
                 <li>
-                    Now execute the data file by invoking paup and typing the execute command: <pre><span class="command">execute angio35.nex ;</span></pre> If your assumptions block is correct, the output should include a statement saying that 309 characters have been excluded. If you set up your sets block correctly you should be able to enter this command: <pre><span class="command">exclude all;</span>
+                    Now execute the data file by invoking paup and typing the execute command: <pre><span class="command">execute angio35.nex ;</span></pre> 
+                </li>
+                <li>
+                    If your assumptions block is correct, the output should include a statement saying that 309 characters have been excluded. If you set up your sets block correctly you should be able to enter this command: <pre><span class="command">exclude all;</span>
 <span class="command">include rbcL;</span></pre>
                     <p>
                         and get no errors. In addition, PAUP* should tell you that 5093 characters were excluded (as a result of the <span class="command">exclude all</span> command) and 1406 were re-included (as a result of the <span class="command">include rbcL</span> command). For the rest of the exercise, we will be working with the data from the first 3 genes, so re-include the nad4 and rps4 data:
@@ -552,9 +555,9 @@ end;</span></pre>
                 <li>
                     Now try heuristic searching. This approach does not attempt to look at all possible trees, but instead only examines trees that are in the realm of possibility (which can still be a lot of trees!):
                     <br>
-                    <pre>hsearch;</pre>
+                    <pre class="command">hsearch;</pre>
                     <p>
-                        The search progress will be displayed in a dialog box. When the button says Close rather than Stop, take a look at the numbers summarizing this search. <span class="question">What is the parsimony score of the best tree found during the search? </span>(Write down this score somewhere for later reference.) <span class="question">How many trees were examined (look at # Rearrangements tried)?</span>
+                        If you are using a GUI version of PAUP, the search progress will be displayed in a dialog box. When the button says "Close" rather than "Stop", take a look at the numbers summarizing this search. <span class="question">What is the parsimony score of the best tree found during the search? </span>(Write down this score somewhere for later reference.) <span class="question">How many trees were examined (look at # Rearrangements tried)?</span>
                     </p>
                 </li>
                 <li>
@@ -618,7 +621,7 @@ quit;</span></pre> Now we'll look at Mesquite a bit.
                 Download Mesquite and launch it by double-clicking on the Mesquite icon.
             </li>
             <li>
-                Copy the file <span class="filename">angio35.txt</span> to <span class="filename">original-angio35.txt</span> so that if Mesquite modifies the file in an unexpected way we can get back the original data.
+                Copy the file <span class="filename">angio35.nex</span> to <span class="filename">original-angio35.nex</span> so that if Mesquite modifies the file in an unexpected way we can get back the original data.
             </li>
             <li>
                 Open the file using <span class="command">File &gt;&gt; Open File...</span>
@@ -642,7 +645,7 @@ quit;</span></pre> Now we'll look at Mesquite a bit.
                 <span class="command">Taxa&amp;Trees &gt;&gt; Import File With Trees &gt;&gt; Link Contents... </span> and the browse to the <span class="filename">pars.tre</span> file. This should result in a Trees panel in the project tab. By selecting "Show Trees" you should be able to examine the trees in a new window.
             </li>
             <li>
-                Use <span class="command">Analysis &gt;&gt; Values for Current Tree... &gt;&gt; Treelength </span> to make the tree window display the number of steps required to explain the tree.
+                Use <span class="command">Analysis:Tree &gt;&gt; Values for Current Tree... &gt;&gt; Treelength </span> to make the tree window display the number of steps required to explain the tree.
                 <p class="question">
                     Does the tree length agree with the parsimony score in PAUP? If not, why not?
                 </p>
@@ -651,13 +654,13 @@ quit;</span></pre> Now we'll look at Mesquite a bit.
                 <p class="question">
                     Is the tree rooted on the outgroup (<i>Funaria hygrometrica</i>)? If not, why not?
                 </p>
-                Get familiar with the tools in the tree window's tool bar. Find the rerooting tool and use it to redraw the tree such that <i>Funaria hygrometrica</i> is the outgroup.
+                Get familiar with the tools in the tree window's tool bar. Find the rerooting tool and use it to redraw the tree such that <i>Funaria hygrometrica</i> is the outgroup, or change another taxon to be the sister to rest of the tree.
                 <p class="question">
                     Did the tree length change when you rerooted the tree?
                 </p>
             </li>
             <li>
-                To look at a most parsimonious reconstruction of the character states, we can use <span class="command">Analysis &gt;&gt; Stored Characters &gt;&gt; Trace Character History &gt;&gt; Parsimony Ancestral Character States </span>. The tree should now be colored (something other than black). The legend in the bottom corner of the window shows how the colors map to the states, what character is being traced, and the number of steps required to explain this character. Find a variable character and look at several rerootings of the tree.
+                To look at a most parsimonious reconstruction of the character states, we can use <span class="command">Analysis : Tree&gt;&gt; Trace Character History &gt;&gt; Parsimony Ancestral Character States </span>. The tree should now be colored (something other than black). The legend in the bottom corner of the window shows how the colors map to the states, what character is being traced, and the number of steps required to explain this character. Find a variable character and look at several rerootings of the tree.
                 <p class="question">
                     Does the tree length for the character ever change?
                 </p>
