@@ -11,6 +11,6 @@ then
 fi
 n=`basename $1`
 posted_name="BIOL848-${n}"
-scp "$1" "phylo.bio.ku.edu:/var/www/html/slides/${posted_name}"
+scp "$1" "mholder@phylo.bio.ku.edu:/var/www/html/BIOL848/${posted_name}"
 echo "Posted as"
-echo "http://phylo.bio.ku.edu/slides/${posted_name}"
+echo "http://phylo.bio.ku.edu/BIOL848/${posted_name}"
