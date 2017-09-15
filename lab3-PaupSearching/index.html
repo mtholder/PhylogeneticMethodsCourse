@@ -1,243 +1,621 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<title>EEB 848: Phylogenetic Methods</title> 
-	<link href="../lab2-PaupMesquiteNEXUS/EEB349.css" rel="stylesheet" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>EEB 848: Phylogenetic Methods</title>
+    <link href="../lab2-PaupMesquiteNEXUS/EEB349.css" rel="stylesheet" type="text/css">
+    <style>
+span.filename {
+  font-family: monospace;
+  background-color: lightblue;
+}
+span.command {
+  font-family: monospace;
+  background-color: yellow;
+}
+</style>
 </head>
+
 <body>
-<table width="972" height="160" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-		<td height="49" colspan="2" valign="top">
-			<p>
-				<span class="pagetitle">BIOL 848: Phylogenetic Methods</span><span class="pagetitle"></span> 
-			</p>
-		</td>
-	</tr>
-	<tr>
-	</tr>
-</table>
-<div class="editable">
-	<p>
-		This lab was written by Paul O. Lewis and being used in BIOL 848 (with slight modifications) by Mark Holder with Paul's permission (the original lab is <a href="http://hydrodictyon.eeb.uconn.edu/eebedia/index.php/Phylogenetics:_Parsimony_Lab">here</a>). 
-	</p>
-	<h1>Lab 3: Tree searching using PAUP (and parsimony).</h1> This lab consists of two parts: 
-	<ul>
-		<li>
-			<a href="#checkhomework">Part A: Using PAUP* to check your answers for homework #4</a> 
-		</li>
-		<li>
-			<a href="#parssearching">Part B: Searching under the parsimony criterion</a> 
-		</li>
-	</ul>
-	<a name="#checkhomework"></a><h2> <span class="mw-headline"> Part A: Using PAUP* to check your answers for homework #4 </span></h2> 
-	<ol>
-		<li>
-			Create a NEXUS data file containing the data for the one DNA site you examined for homework assignment #4. To do this, open TextEdit (or any other text editor) File &gt; New from the main menu to create an empty file. Referring to the description of a nexus <a href="../lab2-PaupMesquiteNEXUS/lab2-paupNEXUSMesquite.html#datablock" class="external text" rel="nofollow">data block from the previous lab</a>, build a NEXUS file containing 4 taxa and 1 character corresponding to the data in homework assignment #4. Be sure to save the file, giving it a name like <span class="filename">homework4.nex</span>. 
-			<br />
-			<br />
-		</li>
-		<li>
-			Execute your new data file to make sure there were no mistakes: 
-			<ol>
-				<li>
-					change your working directory to the directory with your file 
-				</li>
-				<li>
-					launch PAUP* 
-				</li>
-				<li>
-<pre><span class="command">execute homework4.nex ;</span></pre> 
-				</li>
-			</ol>
-			Even though you are not yet finished setting up the file, it is always a good idea to periodically check to make sure PAUP* can interpret the contents. If you wait too long before doing this check, then you end up making multiple mistakes and it gets increasingly hard to figure out how to fix all of them! If your file executes successfully, you should see a line such as the following: <pre>Processing of file &quot;homework4.nex&quot; completed.</pre> 
-			<br />
-			<br />
-		</li>
-		<li>
-			Go back to your text editor, and add a stepmatrix definition to specify that transitions should cost 1 step while transvesions should cost 2 steps. Add an <a href="../lab2-PaupMesquiteNEXUS/lab2-paupNEXUSMesquite.html#assumptionsblock" class="external text" rel="nofollow">assumptions block</a> to your data file (note: do not add another "#NEXUS" to your file, this should appear only as the first thing in a NEXUS file). Your assumptions block should look like this: <pre>begin assumptions;&#10; usertype my_ctype stepmatrix=4&#10;     A C G T&#10; [A] . 2 1 2&#10; [C] 2 . 2 1&#10; [G] 1 2 . 2&#10; [T] 2 1 2 .&#10;&nbsp;;&#10;end;</pre>Feel free to replace "my_ctype" with a name of your choosing (but avoid using spaces or punctuation; note that I used an underscore character instead of a space). Save your file (using &lt;Ctrl-s&gt; is easiest), then re-execute using &lt;Ctrl-r&gt; to ensure that you haven't made any mistakes. 
-			<br />
-			<br />
-		</li>
-		<li>
-			Execute the file in PAUP again. Now we will apply the newly-defined stepmatrix to character 1. First use the PAUP* cstatus command to examine the current status of your single character:<pre class="command">cstatus full</pre> The full keyword produces a list showing information about each character individually. What is the current type of character? Which variant of parsimony would you be using were you to perform an analysis at this point (Wagner, Fitch, Transversion, or Ordered)? Use the PAUP* ctype command to apply your new usertype to character 1 as follows:<pre class="command">ctype my_ctype: 1;</pre> PAUP* will not respond with any confirmation, but check to make sure that your stepmatrix has been applied to character 1 using the cstatus command again. Note that this time PAUP* says <pre>All characters are of user-defined type &quot;my ctype&quot;</pre> You may be wondering where the underscore character went: when producing output, PAUP* converts underscore characters to spaces in taxon, tree, character, and usertype names. 
-			<br />
-			<br />
-		</li>
-		<li>
-			Create a PAUP block in your data file so that the usertype can be applied automatically each time you execute the file. The next time you open and execute this file, the usertype will be defined but it will not be applied to any characters. Adding a paup block to the file allows you to perform some operations (such as applying a usertype to one or more characters) each time you execute the file. Create a paup block after your assumptions and data blocks in the file <span class="filename">homework4.nex</span>. Add two commands to your paup block: 1) the <tt>ctype</tt> command above that applies your usertype to character 1; and 2) the <tt>cstatus full</tt> command. Be sure to end each command with a semicolon! After saving your work, quit PAUP* and relaunch it, executing <span class="filename">homework4.nex</span> after PAUP* starts up. Notice that it is now clear that your usertype has been applied already. 
-			<br />
-			<br />
-		</li>
-		<li>
-			Search through all possible trees for the one having the best parsimony score. Use the <tt>alltrees</tt> command for this. With so few possible trees to consider, PAUP* will finish this almost immediately 
-			<br />
-			PAUP* will present a histogram in which each bar represents trees of a given length (i.e. number of steps). The tree length is the number at the base of the bar (to the left). The number in parentheses at the top of a bar (to the right) is the number of trees having that length. Do these results agree with your hand calculations? 
-			<br />
-			<br />
-		</li>
-		<li>
-			Use PAUP* to verify ancestral character state assignments. You found that there was some ambiguity about ancestral character states for tree 1 (the tree that places taxon 1 with taxon 2. In particular, you found that both C and T were equally viable possibilities for one of the interior nodes, whereas only A was viable at the other interior node. To get PAUP* to verify this, use the following command:<pre class="command">describetrees 1 / mprsets</pre>This tells PAUP* to describe tree 1, and the option mprsets tells PAUP* to show what character state assignments are possible at each interior node (the Most Parsimonious Reconstruction sets). Is the result what you expected based on the hand calculations you performed for the homework assignment? 
-		</li>
-	</ol>
-	<a name="#parssearching"></a><h2> <span class="mw-headline"> Part B: Searching under the parsimony criterion </span></h2> 
-	<ol>
-		<li>
-			<b>Create the data file.</b> Download the file from <a href="../data/angio35b.nex" class="external text" rel="nofollow">here</a> and save it on the machine that you are working on. 
-		</li>
-		<li>
-			<b>Create a command file.</b> Create a blank file, then type in the following text, saving this as <span class="filename">run.nex</span>: <pre>#nexus&#10;&#10;begin paup;&#10;  log file=output.txt start replace;&#10;  execute angio35b.nex;&#10;end;</pre> in the same directory that holds the 
-			<sapan class="filename">
-				angio35b.nex 
-			</sapan>
-			file that you downloaded 
-		</li>
-		<li>
-			<b>Execute run.nex, which will in turn execute angio35b.nex.</b> There at least a couple of advantages to creating little NEXUS files like run.nex. For now, the only advantage is that executing run.nex automatically starts a log file so that you will have a record of what you did. Later, when you get in the habit of putting commands in paup blocks, you will appreciate the separation of the data from the commands that initiate analyses (I have many times opened a data file, forgetting about the embedded paup block that then starts a long search, overwrites my previous log file, and otherwise creates havoc). 
-			<br />
-			<br />
-			Note that because we used the replace keyword in the log command, the file 
-			<sapan class="filename">
-				output.txt 
-			</sapan>
-			will be overwritten without warning if it exists. This is called <i>living dangerously</i>, so you may want to refrain from using the replace keyword so that PAUP* asks before overwriting files. 
-		</li>
-		<li>
-			<b>Delete all taxa except the first five.</b> Using this command<pre>delete 6-.</pre>will cause PAUP* to ignore all taxa except Ephedrasinica, Gnetum_gnemJS, WelwitschiaJS, Ginkgo_biloba, and Pinus_ellCH. 
-		</li>
-		<li>
-			<b>Perform an exhaustive search using parsimony.</b> Use the <span class="command">alltrees</span> command for this. This should go fast because you now have only 5 taxa. 
-			<ul>
-				<li>
-					<i>How many separate tree topologies did PAUP* examine?</i> 
-				</li>
-				<li>
-					<i>What is the parsimony treelength of the best tree? The worst tree?</i> 
-				</li>
-				<li>
-					<i>How many steps separate the best tree from the next best?</i> 
-				</li>
-			</ul>
-		</li>
-		<li>
-			<b>Perform an heuristic search using NNI branch swapping.</b> Before you start, use the <span class="command">describe</span> command to show you the tree obtained from the exhaustive enumeration. 
-			<ul>
-				<li>
-					<i>Draw this tree on a piece of paper and then draw the 4 possible NNI rearrangements</i> 
-				</li>
-			</ul>
-		</li>
-		<li>
-			<b>Find all NNI rearrangements of the best tree.</b> Note that because we performed an exhaustive enumeration, we now know which tree is the globally most parsimonious tree. We are thus guaranteed to never find a better tree were we to start an heuristic search with this tree. Let's do an experiment: perform an NNI heuristic search, starting with the best tree, and have PAUP* save all the trees it encounters in this search. In the end, PAUP* will have in memory 5 trees: the starting tree and the 4 trees corresponding to all possible NNI rearrangements of that starting tree: <span class="command">hsearch start=1 swap=nni nbest=15;</span>
-			<ul>
-				<li>
-					<tt>start=1</tt> starts the search from the tree currently in memory (i.e., the best tree resulting from your exhaustive search using the parsimony criterion) 
-				</li>
-				<li>
-					<tt>swap=nni</tt> causes the Nearest-Neighbor Interchange (NNI) method to be used for branch swapping 
-				</li>
-				<li>
-					<tt>nbest=15</tt> saves the 15 best trees found during the search. Thus, were PAUP* to examine every possible tree, we would end up saving all of them in memory. The reason this command is needed is that PAUP* ordinarily does not save trees that are worse than the best one it has seen thus far. Here, we are interested in seeing the trees that are examined during the course of the search, even if they are not as good as the starting tree. 
-				</li>
-			</ul>
-		</li>
-		<li>
-			<b>Show all 5 trees in memory.</b> Use the <span class="command">describe all</span> command to plot the 5 trees currently in memory. The reason we are using the <tt>describe</tt> command rather than the <tt>showtrees</tt> command is because we want PAUP* to show us the numbers it has assigned to the internal nodes, something that <tt>showtrees</tt> doesn't do. 
-			<ul>
-				<li>
-					<i>Which tree was the original tree?</i> 
-				</li>
-				<li>
-					<i>Which trees correspond to NNI rearrangments of which internal edges on the original tree?</i> 
-				</li>
-			</ul>
-		</li>
-		<li>
-			<b>Find the most parsimonious tree for all 35 taxa.</b> Restore all taxa using the restore all command (this will wipe out the 5 trees you currently have stored in memory, but that is ok), then conduct a heuristic search having the following characteristics: 
-			<ul>
-				<li>
-					The starting trees are each generated by the stepwise addition method, using random addition of sequences 
-				</li>
-				<li>
-					Swap using NNI branch swapping 
-				</li>
-				<li>
-					Reset the <tt>nbest</tt> option to <tt>all</tt> because we want to be saving just the best trees, not suboptimal trees (yes, this option is a little confusing). 
-				</li>
-				<li>
-					Set the random number seed to 5555 (this determines the sequence of pseudorandom numbers used for the random additions; ordinarily you would not need to set the random number seed, but we will do this here to ensure that we all get the same results) 
-				</li>
-				<li>
-					Do 500 replicate searches; each replicate represents an independent search starting from a different random-addition tree
-					<br />
-					Here is the full command implementing this search: <span class="command">hsearch start=stepwise addseq=random swap=nni nbest=all rseed=5555 nreps=500;</span> 
-				</li>
-				<li>
-					<i>How many tree islands were found?</i> 
-				</li>
-				<li>
-					<i>How long did the search take?</i> 
-				</li>
-				<li>
-					<i>How many rearrangements were tried?</i> 
-				</li>
-			</ul>
-		</li>
-		<li>
-			<b>Conduct a second search with SPR swapping.</b> Be sure to reset the random number seed to 5555. You should be able to figure out how to do this using the output from <tt>hsearch&nbsp;?</tt>. Note that to save typing you can call up previously entered commands using the little buttons on the right of the command line edit control. 
-			<ul>
-				<li>
-					<i>How many tree islands were found?</i> 
-				</li>
-				<li>
-					<i>What are the scores of the trees in each island?</i> 
-				</li>
-				<li>
-					<i>How long did the search take this time?</i> 
-				</li>
-				<li>
-					<i>How many rearrangements were tried?</i> 
-				</li>
-			</ul>
-		</li>
-		<li>
-			<b>Now conduct a third search with TBR swapping.</b> 
-			<ul>
-				<li>
-					<i>How many tree islands were found?</i> 
-				</li>
-				<li>
-					<i>What are the scores of the trees in each island?</i> 
-				</li>
-				<li>
-					<i>How long did the search take this time?</i> 
-				</li>
-				<li>
-					<i>How many rearrangements were tried?</i> 
-				</li>
-				<li>
-					<i>How many trees are currently in memory (use the treeinfo command)?</i> 
-				</li>
-				<li>
-					<i>Has PAUP* saved trees from all islands discovered during this search?</i> (Hint: compare "Number of trees retained" to the sum of the "Size" column in the Tree-island profile.) Explain why PAUP* saved the number of trees it did.
-					<br />
-					<br />
-					Wondering about that warning "Multiple hits on islands of unsaved trees may in fact represent different islands"? When PAUP* encounters a new island, it will find all trees composing that particular island in the process of branch swapping. Thus, if (in a new search) it encounters any trees already stored in memory, it knows that it has hit an island that it found previously. Note that it would be pointless to continue on this tack, because it will only find all the trees on that island again. For trees retained in memory, PAUP* can keep track of which island they belong to (remember that it is possible for trees with the same parsimony score to be in different tree islands!). But for trees that are not retained in memory, PAUP* only knows that it has encountered an island of trees having score X; it has no way of finding out how many islands are actually represented amongst the trees having score X. 
-				</li>
-				<li>
-					<i>Of the three types of branch swapping (NNI, SPR, TBR), which is the most thorough? Least thorough?</i> 
-				</li>
-				<li>
-					<i>How many TBR rearrangements can PAUP* examine on the computer you are using in one second (on average)?</i> 
-				</li>
-				<li>
-					<i>Based on this, how long would it take to examine all possible trees if only 20 sequences were included?</i> 
-				</li>
-			</ul>
-		</li>
-	</ol>
-	Feel free to look at the NEXUS datasets that cause multiple NNI islands (<a href="./nni_islands.nex">here</a>) and the cause star decomposition to fail even in the absence of homoplasy (<a href="./perfect_decomp_mistake.nex">here</a>).
-</div>
+    <table width="972" height="160" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td height="49" colspan="2" valign="top">
+                <p>
+                    <span class="pagetitle">BIOL 848: Phylogenetic Methods</span><span class="pagetitle"></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+    <div class="editable">
+        <p>This lab was written by Paul O. Lewis and being used in BIOL 848 (with slight modifications) by Mark Holder with Paul's permission (the original lab is <a href="http://hydrodictyon.eeb.uconn.edu/eebedia/index.php/Phylogenetics:_Parsimony_Lab">here</a>).
+        </p>
+        <h1>Lab 3: Parsimony and distance searching using PAUP.</h1>
+        <table id="toc" class="toc" summary="Contents">
+            <tr>
+                <td>
+                    <div id="toctitle">
+                        <h2>Contents</h2>
+                    </div>
+                    <ul>
+                        <li class="toclevel-1">
+                            <a href="#parssearching">Part A: Searching under the parsimony criterion</a>
+                        </li>
+                        <li class="toclevel-1">
+                            <a href="#basicdist"><span class="tocnumber">1</span> <span class="toctext">Part B: Basic distance analyses in PAUP</span></a>
+                            <ul>
+                                <li class="toclevel-2">
+                                    <a href="#Create_the_data_file"><span class="tocnumber">1.1</span> <span class="toctext">Open/recreate the data file</span></a>
+                                </li>
+                                <li class="toclevel-2">
+                                    <a href="#Create_a_PAUP.2A_command_file"><span class="tocnumber">1.2</span> <span class="toctext">Create a PAUP* command file</span></a>
+                                </li>
+                                <li class="toclevel-2">
+                                    <a href="#Calculate_JC_distances"><span class="tocnumber">1.3</span> <span class="toctext">Calculate JC distances</span></a>
+                                </li>
+                                <li class="toclevel-2">
+                                    <a href="#Estimate_edge_lengths_using_weighted_least_squares"><span class="tocnumber">1.4</span> <span class="toctext">Estimate edge lengths using weighted least squares</span></a>
+                                </li>
+                                <li class="toclevel-2">
+                                    <a href="#Searching_under_the_minimum_evolution_criterion"><span class="tocnumber">1.5</span> <span class="toctext">Searching under the minimum evolution criterion</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="toclevel-1">
+                            <a href="#Part_C:_Analysis_of_algae.nex"><span class="tocnumber">2</span> <span class="toctext">Part C: Analysis of algae.nex</span></a>
+                            <ul>
+                                <li class="toclevel-2">
+                                    <a href="#Create_the_data_file_algae.nex"><span class="tocnumber">2.1</span> <span class="toctext">Create the data file algae.nex</span></a>
+                                </li>
+                                <li class="toclevel-2">
+                                    <a href="#Create_a_PAUP.2A_command_file."><span class="tocnumber">2.2</span> <span class="toctext">Create a PAUP* command file.</span></a>
+                                </li>
+                                <li class="toclevel-2">
+                                    <a href="#Perform_an_exhaustive_search_under_the_minimum_evolution_and_least_squares_criteria"><span class="tocnumber">2.3</span> <span class="toctext">Perform an exhaustive search under the minimum evolution and least squares criteria</span></a>
+                                </li>
+                                <li class="toclevel-2">
+                                    <a href="#Perform_a_bootstrap_analysis"><span class="tocnumber">2.4</span> <span class="toctext">Perform a bootstrap analysis</span></a>
+                                </li>
+                                <li class="toclevel-2">
+                                    <a href="#Compare_NJ_with_a_comparable_heuristic_search"><span class="tocnumber">2.5</span> <span class="toctext">Compare NJ with a comparable heuristic search</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="toclevel-1">
+                            <a href="#Part_C:_Fastme"><span class="tocnumber">3</span> <span class="toctext">Part C: Balanced minimum evolution search in FastME</span></a>
+                        </li>
+                        <li class="toclevel-1">
+                            <a href="#References_cited"><span class="tocnumber">4</span> <span class="toctext">References cited</span></a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <a name="#parssearching"></a>
+        <h2> <span class="mw-headline"> Part A: Searching under the parsimony criterion </span></h2>
+        <ol>
+            <li>
+                <b>Create the data file.</b> Download the file from <a href="http://phylo.bio.ku.edu/slides/data/angio35b.nex" class="external text" rel="nofollow">http://phylo.bio.ku.edu/slides/data/angio35b.nex</a> and save it on the machine that you are working on.
+            </li>
+            <li>
+                <b>Create a command file.</b> Create a blank file, then type in the following text, saving this as <span class="filename">run.nex</span>: <span class="command"><br/>#NEXUS<br />
+                begin paup;<br />
+                  log file=output.txt start append;<br />
+            	  execute angio35b.nex; <br />
+            	end;</span><br />
+            	in the same directory that holds the
+                <span class="filename">
+                    angio35b.nex
+                </span>
+                file that you downloaded
+            </li>
+            <li>
+                <b>Execute run.nex, which will in turn execute angio35b.nex.</b> There at least a couple of advantages to creating little NEXUS files like run.nex. For now, the only advantage is that executing run.nex automatically starts a log file so that you will have a record of what you did. Later, when you get in the habit of putting commands in paup blocks, you will appreciate the separation of the data from the commands that initiate analyses (I have many times opened a data file, forgetting about the embedded paup block that then starts a long search, overwrites my previous log file, and otherwise creates havoc).
+                <br />
+            </li>
+            <li>
+                <b>Delete all taxa except the first five.</b> Using this command<span class="command"> delete 6-. </span> will cause PAUP* to ignore all taxa except Ephedrasinica, Gnetum_gnemJS, WelwitschiaJS, Ginkgo_biloba, and Pinus_ellCH.
+            </li>
+            <li>
+                <b>Perform an exhaustive search using parsimony.</b> Use the <span class="command">alltrees fd=bar</span> command for this. This should go fast because you now have only 5 taxa.
+                <ul>
+                    <li>
+                        <i>How many separate tree topologies did PAUP* examine?</i>
+                    </li>
+                    <li>
+                        <i>What is the parsimony treelength of the best tree? The worst tree?</i>
+                    </li>
+                    <li>
+                        <i>How many steps separate the best tree from the next best?</i>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <b>Perform an heuristic search using NNI branch swapping.</b> Before you start, use the <span class="command">describe</span> command to show you the tree obtained from the exhaustive enumeration.
+                <ul>
+                    <li>
+                        <i>Draw this tree on a piece of paper and then draw the 4 possible NNI rearrangements</i>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <b>Find all NNI rearrangements of the best tree.</b> Note that because we performed an exhaustive enumeration, we now know which tree is the globally most parsimonious tree. We are thus guaranteed to never find a better tree were we to start an heuristic search with this tree. Let's do an experiment: perform an NNI heuristic search, starting with the best tree, and have PAUP* save all the trees it encounters in this search. In the end, PAUP* will have in memory 5 trees: the starting tree and the 4 trees corresponding to all possible NNI rearrangements of that starting tree: <span class="command">hsearch start=1 swap=nni nbest=15;</span>
+                <ul>
+                    <li>
+                        <tt>start=1</tt> starts the search from the tree currently in memory (i.e., the best tree resulting from your exhaustive search using the parsimony criterion)
+                    </li>
+                    <li>
+                        <tt>swap=nni</tt> causes the Nearest-Neighbor Interchange (NNI) method to be used for branch swapping
+                    </li>
+                    <li>
+                        <tt>nbest=15</tt> saves the 15 best trees found during the search. Thus, were PAUP* to examine every possible tree, we would end up saving all of them in memory. The reason this command is needed is that PAUP* ordinarily does not save trees that are worse than the best one it has seen thus far. Here, we are interested in seeing the trees that are examined during the course of the search, even if they are not as good as the starting tree.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <b>Show all 5 trees in memory.</b> Use the <span class="command">describe all</span> command to plot the 5 trees currently in memory. The reason we are using the
+                <tt>describe</tt> command rather than the
+                <tt>showtrees</tt> command is because we want PAUP* to show us the numbers it has assigned to the internal nodes, something that
+                <tt>showtrees</tt> doesn't do.
+                <ul>
+                    <li>
+                        <i>Which tree was the original tree?</i>
+                    </li>
+                    <li>
+                        <i>Which trees correspond to NNI rearrangments of which internal edges on the original tree?</i>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <b>Find the most parsimonious tree for all 35 taxa.</b>
+                <span class="command">Quit</span> Paup.
+                Relaunch it and reexecute <span class="filename">run.nex</span> to restor all  taxa, then conduct a heuristic search having the following characteristics:
+                <ul>
+                    <li>
+                        The starting trees are each generated by the stepwise addition method, using random addition of sequences
+                    </li>
+                    <li>
+                        Swap using NNI branch swapping
+                    </li>
+                    <li>
+                        Reset the
+                        <tt>nbest</tt> option to
+                        <tt>all</tt> because we want to be saving just the best trees, not suboptimal trees (yes, this option is a little confusing).
+                    </li>
+                    <li>
+                        Set the random number seed to 5555 (this determines the sequence of pseudorandom numbers used for the random additions; ordinarily you would not need to set the random number seed, but we will do this here to ensure that we all get the same results)
+                    </li>
+                    <li>
+                        Do 500 replicate searches; each replicate represents an independent search starting from a different random-addition tree
+                        <br /> Here is the full command implementing this search: <span class="command">hsearch start=stepwise addseq=random swap=nni nbest=all rseed=5555 nreps=500;</span>
+                    </li>
+                    <li>
+                        <i>How many tree islands were found?</i>
+                    </li>
+                    <li>
+                        <i>How long did the search take?</i>
+                    </li>
+                    <li>
+                        <i>How many rearrangements were tried?</i>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <b>Conduct a second search with SPR swapping.</b> Be sure to reset the random number seed to 5555. You should be able to figure out how to do this using the output from
+                <span class="command">hsearch ?</span>. Note that to save typing you can call up previously entered commands using the little buttons on the right of the command line edit control.
+                <ul>
+                    <li>
+                        <i>How many tree islands were found?</i>
+                    </li>
+                    <li>
+                        <i>What are the scores of the trees in each island?</i>
+                    </li>
+                    <li>
+                        <i>How long did the search take this time?</i>
+                    </li>
+                    <li>
+                        <i>How many rearrangements were tried?</i>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <b>Now conduct a third search with TBR swapping.</b>
+                <ul>
+                    <li>
+                        <i>How many tree islands were found?</i>
+                    </li>
+                    <li>
+                        <i>What are the scores of the trees in each island?</i>
+                    </li>
+                    <li>
+                        <i>How long did the search take this time?</i>
+                    </li>
+                    <li>
+                        <i>How many rearrangements were tried?</i>
+                    </li>
+                    <li>
+                        <i>How many trees are currently in memory (use the treeinfo command)?</i>
+                    </li>
+                    <li>
+                        <i>Has PAUP* saved trees from all islands discovered during this search?</i> (Hint: compare "Number of trees retained" to the sum of the "Size" column in the Tree-island profile.) Explain why PAUP* saved the number of trees it did.
+                        <br />
+                        <br /> Wondering about that warning "Multiple hits on islands of unsaved trees may in fact represent different islands"? When PAUP* encounters a new island, it will find all trees composing that particular island in the process of branch swapping. Thus, if (in a new search) it encounters any trees already stored in memory, it knows that it has hit an island that it found previously. Note that it would be pointless to continue on this tack, because it will only find all the trees on that island again. For trees retained in memory, PAUP* can keep track of which island they belong to (remember that it is possible for trees with the same parsimony score to be in different tree islands!). But for trees that are not retained in memory, PAUP* only knows that it has encountered an island of trees having score X; it has no way of finding out how many islands are actually represented amongst the trees having score X.
+                    </li>
+                    <li>
+                        <i>Of the three types of branch swapping (NNI, SPR, TBR), which is the most thorough? Least thorough?</i>
+                    </li>
+                    <li>
+                        <i>How many TBR rearrangements can PAUP* examine on the computer you are using in one second (on average)?</i>
+                    </li>
+                    <li>
+                        <i>Based on this, how long would it take to examine all possible trees if only 20 sequences were included?</i>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        Feel free to look at the NEXUS datasets that cause multiple NNI islands (<a href="./nni_islands.nex">here</a>) and the cause star decomposition to fail even in the absence of homoplasy (<a href="./perfect_decomp_mistake.nex">here</a>).
+    </div>
+    <a name="basicdist"></a>
+    <h2>Part A: Basic distance analyses in PAUP</h2> <a name="Create_the_data_file"></a>
+    <h3> Download the data file </h3>
+    <p>
+        Download the <a href="../data/angio35b.nex" class="external text" rel="nofollow">angio35b.nex</a> that we used in the last lab week. Save the file to your local computer.
+    </p>
+    <a name="Create_a_PAUP.2A_command_file"></a>
+    <h3> Create a PAUP* command file </h3>
+    <p>
+        Use a text editor to create a new file. Save it as <span class="filename">run.nex</span> in the same directory as the <span class="filename">angiob.nex</span> file. This new file will be a NEXUS file that contains the PAUP block with the commands for PAUP. Here are the commands:
+    </p>
+    <pre>#NEXUS
+
+begin paup;
+  execute angio35b.nex;
+  dset dist=abs;
+  delete 5-.;
+  exclude missambig;  
+  showdist;
+end;
+</pre>
+    <p>
+        Type (or copy these commands in the file and save it as plain text -- not RTF).
+    </p>
+    <p>
+        The file run.nex tells PAUP* to:
+    </p>
+    <ul>
+        <li>
+            use the absolute number of nucleotide differences between taxa as the distance measure (
+            <tt>dset dist=abs</tt>);
+        </li>
+        <li>
+            delete all taxa except the first four (
+            <tt>delete 5-.</tt>);
+        </li>
+        <li>
+            exclude all sites that have missing or ambiguous data (
+            <tt>exclude missambig</tt>); and
+        </li>
+        <li>
+            show the distance matrix (
+            <tt>showdist</tt>)
+        </li>
+    </ul>
+    <p>
+        Save the <span class="filename">run.nex</span> file. Then execute it PAUP*, and examine the output.
+    </p>
+    <a name="Calculate_JC_distances"></a>
+    <h3> Calculate p distances and JC distances </h3>
+    <p>
+        To see the distances as a proportion of sites that differ for the sequences just change the distance measure from
+        <tt>abs</tt> to
+        <tt>p</tt> and re-execute <span class="filename">run.nex</span>.
+    </p>
+    <p>
+        Examine the resulting data matrix, change the distance correction in <span class="filename">run.nex</span> from
+        <tt>p</tt> to
+        <tt>jc</tt> to tell PAUP to use the Jukes-Cantor distance. Re-execute the file.
+    </p>
+    <ul>
+        <li>
+            <i>How do the JC distances compare with the p-distances? Does the ordering of distances change?</i>
+        </li>
+        <li>
+            <i>You have seen two distance measures that PAUP* can calculate, but how could you get a list of all the distance measures it can compute?</i>
+        </li>
+    </ul>
+    <p>
+        Execute the <span class="command">dset ?</span> command to see all of the distance settings that are available in PAUP. If you are confused by an option, you can check it out by downloading the PAUP manual from <a href="http://paup.csit.fsu.edu/Cmd_ref_v2.pdf">here</a> (or by asking me about an option).
+    </p>
+    <a name="Estimate_edge_lengths_using_weighted_least_squares"></a>
+    <h3> Estimate edge lengths using weighted least squares </h3>
+    <p>
+        Next, perform a search using weighted least squares (weighted usually implies that the power is 2 in the denominator of the sum-of-squares formula). Add the following line to your <span class="filename">run.nex</span> file, just below the
+        <tt>execute angiob35.nex;</tt> line:
+    </p>
+    <pre class="command">
+set criterion=distance ;
+</pre>
+    <p>
+        This command tells PAUP* to use the distance optimality criterion specified by the
+        <tt>objective</tt> option of the
+        <tt>dset</tt> command during the search. If you were to leave this out, PAUP* would use the default optimality criterion (parsimony). Now issue the command
+        <tt>dset&nbsp;?</tt> in PAUP* to get a listing of the current values of all distance settings.
+    </p>
+    <ul>
+        <li>
+            <i>What is the current setting for the <tt>power</tt> option?</i>
+        </li>
+    </ul>
+    <p>
+        If your answer is not 2, then add this line to your paup block, below the
+        <tt>execute</tt> command:
+    </p>
+    <pre class="command">dset power=2;
+</pre>
+    <ul>
+        <li>
+            <i>What is the current setting for the <tt>objective</tt> option?</i>
+        </li>
+    </ul>
+    <p>
+        If your answer is not
+        <tt>lsfit</tt>, then add this line to your paup block, also below the
+        <tt>execute</tt> command:
+    </p>
+    <pre class="command">dset objective=lsfit;
+</pre>
+    <p>
+        Finally, add the following two lines to the end of your paup block to perform the search and show the resulting best tree, including the estimated branch lengths:
+    </p>
+    <pre class="command">alltrees;
+describe 1 / brlens;
+</pre>
+    <p>
+        Save and re-execute the file.
+    </p>
+    <ul>
+        <li>
+            <i>Look for the line that begins "Weighted sum-of-squares =". This is the least-squares score for the tree.</i>
+        </li>
+        <li>
+            In its output, PAUP* also gives you the score that would have been used were we using the minimum evolution criterion. <i>Can you find it?</i> Ask for help if you need to; PAUP* does not make this obvious. Write the value down for comparison with the value you will obtain in the next section.
+        </li>
+    </ul>
+    <a name="Searching_under_the_minimum_evolution_criterion"></a>
+    <h3> Searching under the minimum evolution criterion </h3>
+    <p>
+        Before moving on to the next exercise, repeat the above search using the minimum evolution (or ME) criterion. To do this, you will need to add the
+        <tt>objective=ME</tt> option to your
+        <tt>dset</tt> command (be sure to remove the previous
+        <tt>dset objective=lsfit</tt> if you had to put it in) and re-execute run.nex.
+    </p>
+    <ul>
+        <li>
+            <i>Is the result what you expected based on your answer to the last question in the previous section?</i> (Note: it is ok if the results differ slightly in the 5th. decimal place.)
+        </li>
+    </ul>
+    <a name="Part_C:_Analysis_of_algae.nex"></a>
+    <h2> Part B: Analysis of algae.nex </h2> <a name="Create_the_data_file_algae.nex"></a>
+    <h3> Create the data file algae.nex </h3>
+    <p>
+        Click <a href="../data/algae.nex">here</a> to get the data file. Save it as <span class="filename">algae.nex</span> in a new folder on your local hard drive. These data were originally used in a 1994 study by Lockhart et al.<sup id="_ref-0" class="reference"><a href="#_note-0" title="">[1]</a></sup> and comprise eight 16S ribosomal RNA sequences:
+    </p>
+    <table>
+        <tr>
+            <td>
+                <i>Anacystis</i>
+            </td>
+            <td>
+                a cyanobacterium (has chlorophyll a but not b or c)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i>Olithodiscus</i>
+            </td>
+            <td>
+                a chloroplast from a chromophyte alga (chlorophylls a and c)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i>Euglena</i>
+            </td>
+            <td>
+                a chloroplast from a photosynthetic euglenophyte protist (chlorophylls a and b)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i>Chlorella</i>
+            </td>
+            <td>
+                a chloroplast from a a chlorophyte green alga (chlorophylls a and b)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i>Chlamydomonas</i>
+            </td>
+            <td>
+                a chloroplast from a chlorophyte green alga (chlorophylls a and b)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i>Marchantia</i>
+            </td>
+            <td>
+                a chloroplast from a thallose liverwort (chlorophylls a and b)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i>Oryza</i>
+            </td>
+            <td>
+                a chloroplast from a monocot (chlorophylls a and b)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i>Nicotiana</i>
+            </td>
+            <td>
+                a chloroplast from a dicot (chlorophylls a and b)
+            </td>
+        </tr>
+    </table>
+    <p>
+        All of these organisms except <i>Anacystis</i> and <i>Olithodiscus</i> have chlorophylls a <i>and</i> b. Based on independent evidence, it is probable that all chlorophyll a/b-containing chloroplasts have a <i>common endosymbiotic origin</i>, so we would expect trees constructed from these data to show a branch separating <i>Anacystis</i> and <i>Olithodiscus</i> from everything else. The cyanobacterium <i>Anacystis</i> uses phycobilin accessory pigments rather than chlorophylls for photosynthesis, and the chromophyte alga <i>Olithodiscus</i> has chlorophylls a and c (but not b).
+    </p>
+    <a name="Create_a_PAUP.2A_command_file."></a>
+    <h3> Create a PAUP* command file.</h3> As you did above create a new <span class="filename">run.nex</span> file to serve as a PAUP command file. Copy the following text and paste it into the new text file window, then save this file as runalgae.nex, placing it in the same directory as algae.nex:<pre>
+#nexus
+
+begin paup;
+  log file=lab3.txt start replace;
+  set torder=right;
+  execute algae.nex;
+  outgroup Anacystis_nidulans;
+  set criterion=distance;
+  
+  [!
+  ****************************
+  ** JC Model, ME Criterion **
+  ****************************
+  ]
+  dset distance=jc objective=me;
+  alltrees;
+  describe 1;
+  
+  [other commands here]
+  log stop;
+end;</pre>
+    <p>
+        During the course of this lab, you can simply add commands to this paup block rather than creating a paup block in the data file itself. The
+        <tt>set torder=right</tt> command simply causes trees to be displayed so that the outgroup is at the top and the tree appears to flow to the right (this is often called <i>ladderizing right</i>). Try changing this to
+        <tt>set torder=left</tt> to see what <i>ladderizing left</i> looks like.
+    </p>
+    <a name="Perform_an_exhaustive_search_under_the_minimum_evolution_and_least_squares_criteria"></a>
+    <h3> Perform an exhaustive search under the minimum evolution and least squares criteria </h3>
+    <p>
+        Use both the JC and logdet models combined with both Minimum Evolution and Least Squares (using the default power of 2) optimality criteria. Use
+        <tt>dset dist=?</tt> to find out how to specify the model, and use
+        <tt>dset objective=?</tt> to find out how to specify which of the two distance-based optimality criteria to use. Set up all 4 analyses (2 models times 2 optimality criteria) in the paup block (the first one has already been done for you), then run them all at once by executing the file. Note the printable comment (it starts with an exclamation point). Making comments like this in your paup block will allow you to easily find where the results from each model start in the output.
+    </p>
+    <ul>
+        <li>
+            <i>Which of the 4 analyses produced an estimated tree placing the chlorophyll a/b clade together?</i>
+        </li>
+    </ul>
+    <p>
+        The main point here is that the model used can make a difference in whether you get the correct answer. The <b>logdet model</b> has not yet been discussed: a bit more background on models is needed before an explanation of the logdet model will make sense. For now, just know that the logdet model is one of the few models in common use that is not tricked by nucleotide composition that changes across the tree. Models like JC that assume nucleotide composition is constant tend to group taxa with similar nucleotide composition (e.g. GC-rich sequences) even if they are not closest relatives. Logdet is not so easily fooled in such circumstances, but can be tricked by other features of sequence evolution (such as among-site rate heterogeneity).
+    </p>
+    <a name="Perform_a_bootstrap_analysis"></a>
+    <h3> Perform a bootstrap analysis </h3>
+    <p> We will cover bootstrapping and majority-rule consensus trees later in the course. But here is some brief background info:</p>
+    <p>
+        Bootstrapping (introduced to phylogenetics by Joe Felsenstein in 1985<sup id="_ref-1" class="reference"><a href="#_note-1" title="">[2]</a></sup>) is one of the most common methods for assessing which parts (i.e. edges) of an estimated tree are best supported and which are poorly supported by the data. In bootstrapping, many new datasets are created by sampling (with replacement) characters from the original dataset. A tree is estimated from each bootstrap replicate dataset, and at the end a consensus tree is produced that has in it all splits showing up in a majority of the bootstrap trees. The idea is that the original dataset can be thought of as one sample of characters from a vast pool of characters, and producing other data sets by resampling comes as close as possible to collecting data from other genes similar to the one for which you did collect data. The majority-rule consensus tree does not include splits that were present in fewer than half of the trees estimated from bootstrap replicate data sets, but the bipartition table that is produced by PAUP* provides the relative frequency of these less common splits.
+    </p>
+    Perform a bootstrap analysis (500 replicates, heuristic search using least squares) under the F84 model. The commands for doing this are shown below. I suggest you copy these into a new paup block in your runalgae.nex file. Be sure to disable your previous paup block by renaming it; if you change the name of a paup block slightly, for example, changing
+    <tt>begin paup;</tt> to
+    <tt>begin _paup</tt>, PAUP* will skip it when executing the file.<pre>
+dset distance=f84 objective=lsfit power=2;
+bootstrap nrep=500 search=heuristic bseed=5555;</pre>
+    <ul>
+        <li>
+            <i>Examine the bipartition table PAUP* produces and locate the bootstrap proportion for the bipartition separating the chlorophyll a/b organisms from </i>Anacystis<i> and </i>Olithodiscus<i> </i>
+        </li>
+        <li>
+            <i>What is the bootstrap proportion for the bipartition separating </i>Olithodiscus<i> and </i>Euglena<i> from all the other taxa?</i>
+        </li>
+    </ul>
+    <p>
+        Sometimes a split will just barely fail to make the cut (e.g. it appeared in 49% of the bootstrap trees), and so it is a good idea to check the bipartition table to make sure you don't fail to notice these. In this case, the F84 model behaves much like JC, putting the chlorophyll a/c containing <i>Olithodiscus</i> inside the chlorophyll a/b clade. You should have found that the bootstrap support for the split separating the chlorophyll a/b clade from the remaining two taxa is 31.4% (i.e. not very close to the 50% mark required for inclusion in the majority-rule consensus tree).
+    </p>
+    <a name="Compare_NJ_with_a_comparable_heuristic_search"></a>
+    <h3> Compare NJ with a comparable heuristic search </h3>
+    <p>
+        In this exercise, you will conduct a Neighbor-joining (NJ) analysis using HKY distances and compare this with an heuristic search using the minimum evolution criterion. The goal of this section is to demonstrate that it is possible for heuristic searching to find a better tree than NJ, even using the same optimality criterion.
+    </p>
+    <p>
+        Please quit PAUP* and start it again. The reason for this will be made clear later, but mainly the purpose is to return all settings to their default values.
+    </p>
+    <p>
+        Put the commands below in a paup block in a new file. Note that we are again using the angio35.nex file:
+    </p>
+    <pre>execute angio35.nex;
+dset distance=hky objective=me;
+nj;
+dscores 1;
+hsearch start=1;
+dscores 1;
+</pre>
+    <ul>
+        <li>
+            <i>What is the minimum evolution score for the NJ tree?</i> (scroll down from the beginning of the PAUP* output looking for the phrase "ME-score" right after point where the NJ tree is displayed)
+        </li>
+        <li>
+            <i>What is the minimum evolution score for the tree found by heuristic search starting with the NJ tree?</i>
+        </li>
+        <li>
+            <i>What is wrong with this picture?</i> <i>Why is the minimum evolution score of the heuristic search worse than that of the starting tree?</i> (Hint: take a look at the "Heuristic search settings" section of the output.)
+        </li>
+    </ul>
+    <p>
+        Once you have figured out what is going on (ask us for help if you are stumped), fix your paup block and re-execute the file.
+    </p>
+    <p>
+        In your reanalysis, you should find that the heuristic search starting with the NJ tree found a better tree using the same optimality criterion (minimum evolution) being used by NJ. Neighbor-joining is very popular, but you should be wary of NJ trees involving large numbers of taxa. This analysis involved 35 taxa; for problem of this size or larger, it is almost certain that NJ will not find the best tree.
+    </p>
+    <a name="Part_C:_Fastme"></a>
+    <h2>Part C: Balanced minimum evolution search in FastME</h2> FastME is a program written by Desper and Gascuel. You can download it from <a href="http://atgc.lirmm.fr/fastme">here</a>. Among other analyses (such as BIONJ), it implements fast NNI searching under the balanced minimum evolution criterion. NJ is a quick and dirty search under this criterion, and FastME can do branch swapping to find even better trees. The program produces trees very quickly, and this is best demonstrated on large datasets.
+    <p>
+        Click <a href="../data/567Tx2153C.nex">here</a> to get a large (567 taxon, 2153 character) data file. Save it as <span class="filename">567Tx2153C.nex</span> in a new folder on your local hard drive.
+    </p>
+    <p> FastME does not analyze sequences directly. Instead we have to give it a distance matrix. We will use PAUP to create the input distance matrix.</p>
+    <p> Execute the <span class="filename">567Tx2153C.nex</span> file in PAUP. Tell PAUP to use the HKY distance and then export the data file in a format that FastME can read using the command:
+        <pre class="command">
+savedist format = phylip triangle = both diagonal file=dists.txt ;
+</pre>
+    </p>
+    <p>While you have PAUP open, do a nj search, score the tree using minimum evolution, ordinary (unweighted) least squares, and weighted least squares.
+    </p>
+    <p>Conduct a search under the weighted least squares criterion using the command:
+        <span class="command">HSearch NoMulTrees;</span> Score this tree under minimum evolution, ordinary (unweighted) least squares, and weighted least squares and note the amount of time the search took.
+    </p>
+    <p> Now we will run FastME on the distance matrix:
+        <pre class="command">
+FastME_MacOS
+</pre> The program should prompt you for the name of the input file. At this point enter <span class="file">dists.txt</span> and hit return. You should see a menu of options that let you choose what criterion to optimize and which algorithm to use. Conduct a Balanced Generalized Minimum Evolution search using the balanced NNI search. The program exits when it is finished (and it won't take long).
+    </p>
+    <p>It should produce two output files: <span class="file">dists.txt_stat.txt</span> and <span class="file">dists.txt_tree.txt</span>. Open both in a text editor. To get the tree into PAUP we will have to change the tree file into a NEXUS file. Fortunately all you have to do to accomplish this is add:
+        <pre>
+#NEXUS
+begin trees;
+tree fastme = [&U]
+</pre> to the file before the parenthetical notation, and
+        <pre>
+end;
+</pre> to the end of the file.
+    </p>
+    <p>
+        Execute the <span class="filename">567Tx2153C.nex</span> file and set the distance back to the HKY corrected distance. Use PAUP's <span class="command">GetTrees</span> command to do this. Score this tree under minimum evolution, ordinary (unweighted) least squares, and weighted least squares and note the amount of time the search took.
+    </p>
+    <p>How did the tree from FastME compare to the trees that you obtained by searching in PAUP?</p>
+    <a name="References_cited"></a>
+    <h2> References cited </h2>
+    <ol class="references">
+        <li id="_note-0"><a href="#_ref-0" title="">↑</a> Lockhart, P. J., M. A. Steel, M. D. Hendy, and D. Penny. 1994. Recovering evolutionary trees under a more realistic model of sequence evolution. <i>Molecular Biology and Evolution</i> 11:605-612.</li>
+        <li id="_note-1"><a href="#_ref-1" title="">↑</a> Felsenstein, J. 1985. Confidence intervals on phylogenies: an approach using the bootstrap. Evolution 39:783-791.</li>
+    </ol>
+    <p>
+        <br />
+    </p>
 </body>
+
 </html>
