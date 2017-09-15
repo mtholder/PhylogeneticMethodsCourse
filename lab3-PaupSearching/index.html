@@ -4,7 +4,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <title>EEB 848: Phylogenetic Methods</title>
+    <title>BIOL 848: Phylogenetic Methods</title>
     <link href="../lab2-PaupMesquiteNEXUS/EEB349.css" rel="stylesheet" type="text/css">
     <style>
 span.filename {
@@ -12,6 +12,10 @@ span.filename {
   background-color: lightblue;
 }
 span.command {
+  font-family: monospace;
+  background-color: yellow;
+}
+pre.command {
   font-family: monospace;
   background-color: yellow;
 }
@@ -101,11 +105,13 @@ span.command {
                 <b>Create the data file.</b> Download the file from <a href="http://phylo.bio.ku.edu/slides/data/angio35b.nex" class="external text" rel="nofollow">http://phylo.bio.ku.edu/slides/data/angio35b.nex</a> and save it on the machine that you are working on.
             </li>
             <li>
-                <b>Create a command file.</b> Create a blank file, then type in the following text, saving this as <span class="filename">run.nex</span>: <span class="command"><br/>#NEXUS<br />
-                begin paup;<br />
-                  log file=output.txt start append;<br />
-            	  execute angio35b.nex; <br />
-            	end;</span><br />
+                <b>Create a command file.</b> Create a blank file, then type in the following text, saving this as <span class="filename">run.nex</span>: <pre class="command">
+#NEXUS
+begin paup;
+    log file=output.txt start append;
+    execute angio35b.nex;
+end;
+</pre><br />
             	in the same directory that holds the
                 <span class="filename">
                     angio35b.nex
@@ -260,16 +266,12 @@ span.command {
     </div>
     <a name="basicdist"></a>
     <h2>Part A: Basic distance analyses in PAUP</h2> <a name="Create_the_data_file"></a>
-    <h3> Download the data file </h3>
-    <p>
-        Download the <a href="../data/angio35b.nex" class="external text" rel="nofollow">angio35b.nex</a> that we used in the last lab week. Save the file to your local computer.
-    </p>
     <a name="Create_a_PAUP.2A_command_file"></a>
-    <h3> Create a PAUP* command file </h3>
+    <h3> Modify your PAUP* command file </h3>
     <p>
-        Use a text editor to create a new file. Save it as <span class="filename">run.nex</span> in the same directory as the <span class="filename">angiob.nex</span> file. This new file will be a NEXUS file that contains the PAUP block with the commands for PAUP. Here are the commands:
+        Use a text editor to edit the <span class="filename">run.nex</span> in the same directory as the <span class="filename">angio35b.nex</span> file. This new file will be a NEXUS file that contains the PAUP block with the commands for PAUP. Here are the commands:
     </p>
-    <pre>#NEXUS
+    <pre class="command">#NEXUS
 
 begin paup;
   execute angio35b.nex;
@@ -327,7 +329,7 @@ end;
         </li>
     </ul>
     <p>
-        Execute the <span class="command">dset ?</span> command to see all of the distance settings that are available in PAUP. If you are confused by an option, you can check it out by downloading the PAUP manual from <a href="http://paup.csit.fsu.edu/Cmd_ref_v2.pdf">here</a> (or by asking me about an option).
+        Execute the <span class="command">dset ?</span> command to see all of the distance settings that are available in PAUP. If you are confused by an option, you can check it out by downloading the PAUP manual from <a href="http://phylosolutions.org/paup-documentation/paupmanual.pdf" target="_blank">here</a> (or by asking me about an option).
     </p>
     <a name="Estimate_edge_lengths_using_weighted_least_squares"></a>
     <h3> Estimate edge lengths using weighted least squares </h3>
@@ -340,9 +342,9 @@ set criterion=distance ;
 </pre>
     <p>
         This command tells PAUP* to use the distance optimality criterion specified by the
-        <tt>objective</tt> option of the
-        <tt>dset</tt> command during the search. If you were to leave this out, PAUP* would use the default optimality criterion (parsimony). Now issue the command
-        <tt>dset&nbsp;?</tt> in PAUP* to get a listing of the current values of all distance settings.
+        <span class="command">objective</span> option of the
+        <span class="command">dset</span> command during the search. If you were to leave this out, PAUP* would use the default optimality criterion (parsimony). Now issue the command
+        <span class="command">dset ?</span> in PAUP* to get a listing of the current values of all distance settings.
     </p>
     <ul>
         <li>
@@ -388,9 +390,9 @@ describe 1 / brlens;
     <h3> Searching under the minimum evolution criterion </h3>
     <p>
         Before moving on to the next exercise, repeat the above search using the minimum evolution (or ME) criterion. To do this, you will need to add the
-        <tt>objective=ME</tt> option to your
-        <tt>dset</tt> command (be sure to remove the previous
-        <tt>dset objective=lsfit</tt> if you had to put it in) and re-execute run.nex.
+        <span class="command">objective=ME</span> option to your
+        <span class="command">dset</span> command (be sure to remove the previous
+        <span class="command">dset objective=lsfit</span> if you had to put it in) and re-execute run.nex.
     </p>
     <ul>
         <li>
@@ -401,7 +403,7 @@ describe 1 / brlens;
     <h2> Part B: Analysis of algae.nex </h2> <a name="Create_the_data_file_algae.nex"></a>
     <h3> Create the data file algae.nex </h3>
     <p>
-        Click <a href="../data/algae.nex">here</a> to get the data file. Save it as <span class="filename">algae.nex</span> in a new folder on your local hard drive. These data were originally used in a 1994 study by Lockhart et al.<sup id="_ref-0" class="reference"><a href="#_note-0" title="">[1]</a></sup> and comprise eight 16S ribosomal RNA sequences:
+        Click <a href="http://phylo.bio.ku.edu/slides/data/algae.nex">http://phylo.bio.ku.edu/slides/data/algae.nex</a> to get the data file. Save it as <span class="filename">algae.nex</span> in a new folder on your local hard drive. These data were originally used in a 1994 study by Lockhart et al.<sup id="_ref-0" class="reference"><a href="#_note-0" title="">[1]</a></sup> and comprise eight 16S ribosomal RNA sequences:
     </p>
     <table>
         <tr>
@@ -473,7 +475,7 @@ describe 1 / brlens;
         All of these organisms except <i>Anacystis</i> and <i>Olithodiscus</i> have chlorophylls a <i>and</i> b. Based on independent evidence, it is probable that all chlorophyll a/b-containing chloroplasts have a <i>common endosymbiotic origin</i>, so we would expect trees constructed from these data to show a branch separating <i>Anacystis</i> and <i>Olithodiscus</i> from everything else. The cyanobacterium <i>Anacystis</i> uses phycobilin accessory pigments rather than chlorophylls for photosynthesis, and the chromophyte alga <i>Olithodiscus</i> has chlorophylls a and c (but not b).
     </p>
     <a name="Create_a_PAUP.2A_command_file."></a>
-    <h3> Create a PAUP* command file.</h3> As you did above create a new <span class="filename">run.nex</span> file to serve as a PAUP command file. Copy the following text and paste it into the new text file window, then save this file as runalgae.nex, placing it in the same directory as algae.nex:<pre>
+    <h3> Create a PAUP* command file.</h3> As you did above create a new <span class="filename">run.nex</span> file to serve as a PAUP command file. Copy the following text and paste it into the new text file window, then save this file as runalgae.nex, placing it in the same directory as algae.nex:<pre class="command">
 #nexus
 
 begin paup;
@@ -523,7 +525,7 @@ end;</pre>
     </p>
     Perform a bootstrap analysis (500 replicates, heuristic search using least squares) under the F84 model. The commands for doing this are shown below. I suggest you copy these into a new paup block in your runalgae.nex file. Be sure to disable your previous paup block by renaming it; if you change the name of a paup block slightly, for example, changing
     <tt>begin paup;</tt> to
-    <tt>begin _paup</tt>, PAUP* will skip it when executing the file.<pre>
+    <tt>begin _paup</tt>, PAUP* will skip it when executing the file.<pre class="command">
 dset distance=f84 objective=lsfit power=2;
 bootstrap nrep=500 search=heuristic bseed=5555;</pre>
     <ul>
@@ -548,7 +550,7 @@ bootstrap nrep=500 search=heuristic bseed=5555;</pre>
     <p>
         Put the commands below in a paup block in a new file. Note that we are again using the angio35.nex file:
     </p>
-    <pre>execute angio35.nex;
+    <pre class="command">execute angio35.nex;
 dset distance=hky objective=me;
 nj;
 dscores 1;
@@ -573,9 +575,9 @@ dscores 1;
         In your reanalysis, you should find that the heuristic search starting with the NJ tree found a better tree using the same optimality criterion (minimum evolution) being used by NJ. Neighbor-joining is very popular, but you should be wary of NJ trees involving large numbers of taxa. This analysis involved 35 taxa; for problem of this size or larger, it is almost certain that NJ will not find the best tree.
     </p>
     <a name="Part_C:_Fastme"></a>
-    <h2>Part C: Balanced minimum evolution search in FastME</h2> FastME is a program written by Desper and Gascuel. You can download it from <a href="http://atgc.lirmm.fr/fastme">here</a>. Among other analyses (such as BIONJ), it implements fast NNI searching under the balanced minimum evolution criterion. NJ is a quick and dirty search under this criterion, and FastME can do branch swapping to find even better trees. The program produces trees very quickly, and this is best demonstrated on large datasets.
+    <h2>Part C: Balanced minimum evolution search in FastME</h2> FastME is a program written by Desper and Gascuel. You can download it from <a href="http://atgc.lirmm.fr/fastme" target="_blank">here</a>. Among other analyses (such as BIONJ), it implements fast NNI searching under the balanced minimum evolution criterion. NJ is a quick and dirty search under this criterion, and FastME can do branch swapping to find even better trees. The program produces trees very quickly, and this is best demonstrated on large datasets.
     <p>
-        Click <a href="../data/567Tx2153C.nex">here</a> to get a large (567 taxon, 2153 character) data file. Save it as <span class="filename">567Tx2153C.nex</span> in a new folder on your local hard drive.
+        Click <a href="http://phylo.bio.ku.edu/slides/data/567Tx2153C.nex">here</a> to get a large (567 taxon, 2153 character) data file. Save it as <span class="filename">567Tx2153C.nex</span> in a new folder on your local hard drive.
     </p>
     <p> FastME does not analyze sequences directly. Instead we have to give it a distance matrix. We will use PAUP to create the input distance matrix.</p>
     <p> Execute the <span class="filename">567Tx2153C.nex</span> file in PAUP. Tell PAUP to use the HKY distance and then export the data file in a format that FastME can read using the command:
@@ -594,12 +596,12 @@ FastME_MacOS
 </pre> The program should prompt you for the name of the input file. At this point enter <span class="file">dists.txt</span> and hit return. You should see a menu of options that let you choose what criterion to optimize and which algorithm to use. Conduct a Balanced Generalized Minimum Evolution search using the balanced NNI search. The program exits when it is finished (and it won't take long).
     </p>
     <p>It should produce two output files: <span class="file">dists.txt_stat.txt</span> and <span class="file">dists.txt_tree.txt</span>. Open both in a text editor. To get the tree into PAUP we will have to change the tree file into a NEXUS file. Fortunately all you have to do to accomplish this is add:
-        <pre>
+        <pre  class="command">
 #NEXUS
 begin trees;
 tree fastme = [&U]
 </pre> to the file before the parenthetical notation, and
-        <pre>
+        <pre class="command">
 end;
 </pre> to the end of the file.
     </p>
@@ -610,8 +612,8 @@ end;
     <a name="References_cited"></a>
     <h2> References cited </h2>
     <ol class="references">
-        <li id="_note-0"><a href="#_ref-0" title="">↑</a> Lockhart, P. J., M. A. Steel, M. D. Hendy, and D. Penny. 1994. Recovering evolutionary trees under a more realistic model of sequence evolution. <i>Molecular Biology and Evolution</i> 11:605-612.</li>
-        <li id="_note-1"><a href="#_ref-1" title="">↑</a> Felsenstein, J. 1985. Confidence intervals on phylogenies: an approach using the bootstrap. Evolution 39:783-791.</li>
+        <li id="_note-0"><a href="#_ref-0" title="">*</a> Lockhart, P. J., M. A. Steel, M. D. Hendy, and D. Penny. 1994. Recovering evolutionary trees under a more realistic model of sequence evolution. <i>Molecular Biology and Evolution</i> 11:605-612.</li>
+        <li id="_note-1"><a href="#_ref-1" title="">*</a> Felsenstein, J. 1985. Confidence intervals on phylogenies: an approach using the bootstrap. Evolution 39:783-791.</li>
     </ol>
     <p>
         <br />
