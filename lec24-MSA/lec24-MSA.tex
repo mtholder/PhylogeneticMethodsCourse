@@ -12,259 +12,6 @@
 \unitlength=1mm
 
 \myNewSlide
-\includepdf[pages={17}]{../nonfreeimages/joe/joe-coal.pdf}
-\includepdf[pages={24}]{../nonfreeimages/joe/joe-coal.pdf}
-
-\myNewSlide
-\section*{``Skyline'' and ``Skyride'' plots in BEAST}
-\begin{picture}(0,0)(0,0)
-	\put(-50,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/MininBS2008.pdf}}}
-	\put(-20,-130){{\tiny Figure from Minin, Bloomquist, and Suchard 2008}}
-\end{picture}
-
-
-
-
-\myNewSlide
-\section*{BEST \citet{LiuP2007,EdwardsLP2007} }
-\begin{compactitem}
-	\item $X$ -- sequence data
-	\item $G$ -- a genealogy (gene tree -- with branch lengths)
-	\item $S$ -- a species tree
-	\item $\bm{\theta}$ -- demographic parameters
-	\item $\bm{\Lambda}$ -- parameters of molecular sequence evolution
-\end{compactitem}
-
-\begin{eqnarray*}
-	\Pr(S,\bm{\theta}|X) & =  & \frac{\Pr(S,\bm{\theta})\Pr(X|S,\bm{\theta})}{\Pr(X)} \\
-				& =  & \Pr(S)\Pr(\bm{\theta})\int\Pr(X|G)\Pr(G|S,\bm{\theta})dG \\
-				& \propto  & \Pr(S)\Pr(\bm{\theta})\int\left[\int \Pr(X|G, \bm{\Lambda}) \Pr(\bm{\Lambda}) d\bm{\Lambda}\right]\Pr(G|S,\bm{\theta})dG 
-\end{eqnarray*}
-
-\myNewSlide
-\section*{BEST -- importance sampling}
-\large
-\begin{compactenum}
-	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
-	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
-	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
-\end{compactenum}
-
-\myNewSlide
-\section*{BEST -- importance sampling}
-\begin{compactenum}
-	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
-		\begin{compactenum}
-		\item Use a tweaked version of MrBayes to sample $N$ sets of gene trees, $\bm{G}$, from \[\Pr^{\dag}(\bm{G}|X) = \frac{\Pr^{\dag}(\bm{G})\Pr(X|\bm{G})}{\Pr^{\dag}(X)}\]
-			\item $Pr^{\dag}(\bm{G})$ is an approximate prior on gene trees from using a ``maximal'' species tree.
-		\end{compactenum}
-	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
-	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
-\end{compactenum}
-
-\myNewSlide
-\section*{BEST -- importance sampling}
-\begin{compactenum}
-	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
-	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
-		\begin{compactenum}
-		\item From each set of gene trees (${G}_j$ for $1\leq j\leq N$) generate $k$ species trees using coalescent theory:
-			 \[\Pr(S_i|\bm{G}_j) = \frac{\Pr(S_i)\Pr(\bm{G}_j|S_i)}{\Pr(\bm{G}_j)}\]
-		\end{compactenum}
-	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
-\end{compactenum}
-
-\myNewSlide
-\section*{BEST -- importance sampling}
-\normalsize
-\begin{compactenum}
-	\item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
-	\item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
-	\item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
-		\begin{compactenum}
-		\item Estimate $\widehat{\Pr}(\bm{G}_j)$ by using the harmonic mean estimator from the MCMC in step 2.
-		\item Compute a normalization factor \[\beta = \sum_{j=1}^N \frac{\widehat{\Pr}(\bm{G}_j)}{\Pr(\bm{G}_j)} \]
-		  \item Reweight all sampled species trees by \[ \frac{\widehat{\Pr}(\bm{G}_j)}{\Pr(\bm{G}_j)}\beta\]
-		\end{compactenum}
-\end{compactenum}
-
-\myNewSlide
-\section*{BEST -- conclusions}
-\large
-\begin{compactenum}
-	\item very expensive computationally (long MrBayes runs are needed)
-	\item should correctly deal with the variability in gene tree caused by the coalescent process.
-\end{compactenum}
-
-
-\myNewSlide
-\section*{$^{\ast}$BEAST overview}
-Goal: approximate $\Pr(S|X)$
-\begin{eqnarray*}
-\Pr(S|X) & \propto & \Pr(X|S)\Pr(S) \\
- & = & \int\Pr(X|G)\Pr(G|S)\Pr(S)dG \\
- & = & \int\int\Pr(X|G)\Pr(G|S,\bm{\theta})\Pr(S)dGd{\bm{\theta}} \\
- & = & \int\int\int\Pr(X|G,\bm{\Lambda})\Pr(G|S,\bm{\theta})\Pr(S)dGd{\bm{\theta}}d\bm{\Lambda} \\
-\bm{\theta} & = & \{N_1, N_2, \ldots, \} \\
-\bm{\Lambda} & = & \{\kappa, \bm{\pi}, \ldots\} \\
-\end{eqnarray*}
-
-
-\myNewSlide
-\section*{$\Pr(S)$ from speciation model}
-\begin{picture}(0,0)(0,0)
-	\put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1SpT.pdf}}}
-	\put(20,-122){$S$}
-\end{picture}
-
-\myNewSlide
-\section*{$\Pr(G|S)$}
-\begin{picture}(0,0)(0,0)
-	\put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1SpT.pdf}}}
-	\put(120,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1GT.pdf}}}
-	\put(20,-122){$S$}
-	\put(150,-120){$G$}
-\end{picture}
-
-\myNewSlide
-\section*{Gene tree in a species tree w/ variable population size}
-\begin{picture}(0,0)(0,0)
-	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Mod.pdf}}}
-	\put(-20,-140){{\tiny Figure modified from Heled and Drummond 2010}}
-	\put(33,-132){{\color{black}\small A}}
-	\put(65,-132){{\color{black}\small C}}
-	\put(120,-132){{\color{black}\small B}}
-	\put(23,-122){{\color{grey}\small A1}}
-	\put(33,-122){{\color{grey}\small A2}}
-	\put(43,-122){{\color{grey}\small A3}}
-	\put(53,-122){{\color{grey}\small C1}}
-	\put(68,-122){{\color{grey}\small C2}}
-	\put(83,-122){{\color{grey}\small C3}}
-	\put(103,-122){{\color{grey}\small B2}}
-	\put(125,-122){{\color{grey}\small B1}}
-	\put(148,-122){{\color{grey}\small B3}}
-	\put(150,-50){$\Pr(G|S) = \prod_i^{b}\Pr(G_i|S_i)$}
-	\put(-20,-50){$G$ in grey}
-	\put(-20,-60){$S$ in black}
-\end{picture}
-
-\myNewSlide
-\section*{In Species A}
-\begin{picture}(0,0)(0,0)
-	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modparta.pdf}}}
-\end{picture}
-
-\myNewSlide
-\section*{In Species C}
-\begin{picture}(0,0)(0,0)
-	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartc.pdf}}}
-\end{picture}
-
-\myNewSlide
-\section*{In Species B}
-\begin{picture}(0,0)(0,0)
-	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartb.pdf}}}
-\end{picture}
-
-\myNewSlide
-\section*{In ancestor of AC}
-\begin{picture}(0,0)(0,0)
-	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartac.pdf}}}
-\end{picture}
-
-\myNewSlide
-\section*{In ancestor of ACB}
-\begin{picture}(0,0)(0,0)
-	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartabc.pdf}}}
-\end{picture}
-
-\myNewSlide
-\section*{Gene tree in a species tree w/ variable population size}
-\begin{picture}(0,0)(0,0)
-	\put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Mod.pdf}}}
-	\put(-20,-140){{\tiny Figure modified from Heled and Drummond 2010}}
-	\put(33,-132){{\color{black}\small A}}
-	\put(65,-132){{\color{black}\small C}}
-	\put(120,-132){{\color{black}\small B}}
-	\put(23,-122){{\color{grey}\small A1}}
-	\put(33,-122){{\color{grey}\small A2}}
-	\put(43,-122){{\color{grey}\small A3}}
-	\put(53,-122){{\color{grey}\small C1}}
-	\put(68,-122){{\color{grey}\small C2}}
-	\put(83,-122){{\color{grey}\small C3}}
-	\put(103,-122){{\color{grey}\small B2}}
-	\put(125,-122){{\color{grey}\small B1}}
-	\put(148,-122){{\color{grey}\small B3}}
-	\put(150,-50){$\Pr(G|S) = \prod_i^{b}\Pr(G_i|S_i)$}
-	\put(-20,-50){$G$ in grey}
-	\put(-20,-60){$S$ in black}
-\end{picture}
-
-\myNewSlide
-\section*{MCMC update to gene tree}
-\begin{picture}(0,0)(0,0)
-	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
-	\put(105,-70){\Huge$\rightarrow$}
-	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModGene1.pdf}}}
-	\put(15,-135){\large Changing $G$ affects $\Pr(X|G,\bm{\Lambda})$ and $\Pr(G|S,\bm{\theta})$}
-\end{picture}
-
-\myNewSlide
-\section*{Another MCMC update to gene tree}
-\begin{picture}(0,0)(0,0)
-	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
-	\put(105,-70){\Huge$\rightarrow$}
-	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModGene2.pdf}}}
-	\put(-15,-135){\large Some changes to $G$ are incompatible with $S$ (and will be rejected).}
-\end{picture}
-
-
-\myNewSlide
-\section*{MCMC update to species tree}
-\begin{picture}(0,0)(0,0)
-	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
-	\put(105,-70){\Huge$\rightarrow$}
-	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModSp1.pdf}}}
-	\put(-20,-135){\large Changing $S$ affects $\Pr(G|S,\bm{\theta})$, but not $\Pr(X|G,\bm{\Lambda})$.}
-	\put(-20,-145){\large Note that the red dots are ``flags'' for when a lineage enters a new species;}
-	\put(-20,-155){\large the heights are determined by the species tree.}
-\end{picture}
-
-\myNewSlide
-\section*{Another MCMC update to species tree}
-\begin{picture}(0,0)(0,0)
-	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
-	\put(105,-70){\Huge$\rightarrow$}
-	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModSp2.pdf}}}
-	\put(-15,-135){\large Some changes to $S$ are incompatible with $C$ (and will be rejected).}
-\end{picture}
-
-\myNewSlide
-\section*{An MCMC update to the population size}
-\begin{picture}(0,0)(0,0)
-	\put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
-	\put(105,-70){\Huge$\rightarrow$}
-	\put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModPopSize.pdf}}}
-	\put(-15,-135){\large $N_e \in \bm{\theta}$, so changing $N_e$ affects $\Pr(G|S,\bm{\theta})$, but not $\Pr(X|G,\bm{\Lambda})$.}
-\end{picture}
-
-
-\myNewSlide
-\section*{Multiple gene tree in a species tree w/ variable population size}
-\begin{picture}(0,0)(0,0)
-	\put(-0,-130){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/HeledD2010Fig9.pdf}}}
-	\put(-20,-120){{\tiny Figure from modified Heled and Drummond 2010}}
-\end{picture}
-
-\myNewSlide
-\section*{$^{\ast}$BEST}
-Similar model to BEST, but {\em much} more efficient implementation.
-
-Both attempt to sample the posterior distribution of species trees, gene trees, demographic parameter values and mutational parameter values.
-
-Both will be very sensitive to migration, but they represent the state-of-the-art for estimating species trees from gene trees.
-
-\myNewSlide
 \section*{Multiple Sequence Alignment - main points}
 \begin{compactitem}
 	\item The goal of MSA is to introduce gaps such that residues in the same column are homologous (all residues in the column descended from a residue in their common ancestor).
@@ -305,7 +52,7 @@ orang &  {\tt KPRV} \\
 \end{center}
 
 \myNewSlide
-\begin{picture}(0,0)(0,0)  \put(0,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/PrunedFourTaxonAlignMatters.pdf}}}
+\begin{picture}(0,0)(0,0)  \put(0,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/PrunedFourTaxonAlignMatters.pdf}}}
 \end{picture}
 
 \myNewSlide
@@ -491,7 +238,7 @@ Because multiple residues are often inserted or deleted at the same time, {\em a
 
 \myNewSlide
 \section*{Finding an optimal alignment}
-\begin{picture}(0,0)(0,0)  \put(0,-60){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/needlemanwunch.pdf}}}
+\begin{picture}(0,0)(0,0)  \put(0,-60){\makebox(0,0)[l]{\includegraphics[scale=.8]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/needlemanwunch.pdf}}}
 \end{picture}
 
 \myNewSlide
@@ -810,7 +557,7 @@ E  & {\color{red} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} 
 {\bf Score} &4&2&-2&0&6&-6&-3&-4&-2&-2&4&0&4&-1&7&4&1\\
 \end{tabular}
 }
-\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/ungapped_path.pdf}}}
+\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/ungapped_path.pdf}}}
 \end{picture}
 \myNewSlide
 {\tt
@@ -822,7 +569,7 @@ E  & {\color{red} $\downarrow$} & {\color{black}$\searrow$}    & {\color{black} 
 {\bf Score} &4&-8&5&5&0&6&2&4&6&5&4&-8&0&4&-1&7&4&1\\
 \end{tabular}
 }
-\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/gapped_path.pdf}}}
+\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/gapped_path.pdf}}}
 \end{picture}
 
 \myNewSlide
@@ -1035,7 +782,7 @@ R  &   $\uparrow$ &  &  $\uparrow$ &  &  $\uparrow$ &  $\nwarrow$ &  &  &  $\upa
 
 \myNewSlide
 \section*{Aligning multiple sequences}
-\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/progressive_tree.pdf}}}
+\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/progressive_tree.pdf}}}
 \end{picture}
 
 
@@ -1052,7 +799,7 @@ An approximate method for producing multiple sequence alignments using a guide t
 \end{itemize}
 
 \myNewSlide
-\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/ProgressiveOverview.pdf}}}
+\begin{picture}(0,0)(0,0)  \put(0,-75){\makebox(0,0)[l]{\includegraphics[scale=.8]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/ProgressiveOverview.pdf}}}
 \end{picture}
 
 \myNewSlide
@@ -1068,12 +815,12 @@ The next youngest internal nodes is selected at each step to create a new profil
 
 \myNewSlide
 \section*{Aligning multiple sequences}
-\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/progressive_tree_label.pdf}}}
+\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/progressive_tree_label.pdf}}}
 \end{picture}
 
 \myNewSlide
 \section*{Profile to Profile alignment}
-\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/needlemanwunch_profile.pdf}}}
+\begin{picture}(0,0)(0,0)  \put(0,-65){\makebox(0,0)[l]{\includegraphics[scale=.8]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/needlemanwunch_profile.pdf}}}
 \end{picture}
 
 
@@ -1162,17 +909,17 @@ D_{P1,P2} & = & \frac{\sum_{i}\sum_{j}w_{i}w_{j}d_{ij}}{n_{i}n_{j}}\\
 \myNewSlide
 \section*{Dealing with alignment ambiguity\footnote{from M. S. Y. Lee, {\em TREE}, 2001}}
 \begin{picture}(0,0)(0,0)
-	\put(60,-20){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeSeqsIn.pdf}}}
-	\put(-10,-90){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeePossible1.pdf}}}
-	\put(120,-90){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeePossible2.pdf}}}
+	\put(60,-20){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeSeqsIn.pdf}}}
+	\put(-10,-90){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeePossible1.pdf}}}
+	\put(120,-90){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeePossible2.pdf}}}
 \end{picture}
 
 \myNewSlide
 \section*{Dealing with alignment ambiguity\footnote{from M. S. Y. Lee, {\em TREE}, 2001} - deletion}
 \begin{picture}(0,0)(0,0)
-	\put(60,-20){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeSeqsIn.pdf}}}
-	\put(-20,-90){\makebox(0,0)[l]{\includegraphics[scale=.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeDelAll.pdf}}}
-	\put(100,-90){\makebox(0,0)[l]{\includegraphics[scale=.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeDelSome.pdf}}}
+	\put(60,-20){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeSeqsIn.pdf}}}
+	\put(-20,-90){\makebox(0,0)[l]{\includegraphics[scale=.5]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeDelAll.pdf}}}
+	\put(100,-90){\makebox(0,0)[l]{\includegraphics[scale=.5]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeDelSome.pdf}}}
 \end{picture}
 
 \myNewSlide
@@ -1180,7 +927,7 @@ D_{P1,P2} & = & \frac{\sum_{i}\sum_{j}w_{i}w_{j}d_{ij}}{n_{i}n_{j}}\\
 Elision method (Wheeler, 1995) involves simply concatenating matrices.
 
 \begin{picture}(0,0)(0,0)
-	\put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/Users/mholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeElision.pdf}}}
+	\put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=2.5]{/home/mtholder/Documents/storage/talks/teaching/portugal/new_lectures/msa/images/LeeElision.pdf}}}
 \end{picture}
 
 \myNewSlide
@@ -1197,3 +944,258 @@ Elision method (Wheeler, 1995) involves simply concatenating matrices.
 
 \end{document}
 
+
+
+
+\myNewSlide
+\includepdf[pages={17}]{../nonfreeimages/joe/joe-coal.pdf}
+\includepdf[pages={24}]{../nonfreeimages/joe/joe-coal.pdf}
+
+\myNewSlide
+\section*{``Skyline'' and ``Skyride'' plots in BEAST}
+\begin{picture}(0,0)(0,0)
+    \put(-50,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/MininBS2008.pdf}}}
+    \put(-20,-130){{\tiny Figure from Minin, Bloomquist, and Suchard 2008}}
+\end{picture}
+
+
+
+
+\myNewSlide
+\section*{BEST \citet{LiuP2007,EdwardsLP2007} }
+\begin{compactitem}
+    \item $X$ -- sequence data
+    \item $G$ -- a genealogy (gene tree -- with branch lengths)
+    \item $S$ -- a species tree
+    \item $\bm{\theta}$ -- demographic parameters
+    \item $\bm{\Lambda}$ -- parameters of molecular sequence evolution
+\end{compactitem}
+
+\begin{eqnarray*}
+    \Pr(S,\bm{\theta}|X) & =  & \frac{\Pr(S,\bm{\theta})\Pr(X|S,\bm{\theta})}{\Pr(X)} \\
+                & =  & \Pr(S)\Pr(\bm{\theta})\int\Pr(X|G)\Pr(G|S,\bm{\theta})dG \\
+                & \propto  & \Pr(S)\Pr(\bm{\theta})\int\left[\int \Pr(X|G, \bm{\Lambda}) \Pr(\bm{\Lambda}) d\bm{\Lambda}\right]\Pr(G|S,\bm{\theta})dG 
+\end{eqnarray*}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\large
+\begin{compactenum}
+    \item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+    \item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+    \item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\begin{compactenum}
+    \item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+        \begin{compactenum}
+        \item Use a tweaked version of MrBayes to sample $N$ sets of gene trees, $\bm{G}$, from \[\Pr^{\dag}(\bm{G}|X) = \frac{\Pr^{\dag}(\bm{G})\Pr(X|\bm{G})}{\Pr^{\dag}(X)}\]
+            \item $Pr^{\dag}(\bm{G})$ is an approximate prior on gene trees from using a ``maximal'' species tree.
+        \end{compactenum}
+    \item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+    \item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\begin{compactenum}
+    \item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+    \item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+        \begin{compactenum}
+        \item From each set of gene trees (${G}_j$ for $1\leq j\leq N$) generate $k$ species trees using coalescent theory:
+             \[\Pr(S_i|\bm{G}_j) = \frac{\Pr(S_i)\Pr(\bm{G}_j|S_i)}{\Pr(\bm{G}_j)}\]
+        \end{compactenum}
+    \item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- importance sampling}
+\normalsize
+\begin{compactenum}
+    \item Generate a collection of gene trees, $\bm{G}$, using an approximation of the coalescent prior
+    \item Sample from the distribution of the species trees conditional on the gene trees, $\bm{G}$.
+    \item Use ``importance weights'' to correct the sample for the fact that an approximate prior was used
+        \begin{compactenum}
+        \item Estimate $\widehat{\Pr}(\bm{G}_j)$ by using the harmonic mean estimator from the MCMC in step 2.
+        \item Compute a normalization factor \[\beta = \sum_{j=1}^N \frac{\widehat{\Pr}(\bm{G}_j)}{\Pr(\bm{G}_j)} \]
+          \item Reweight all sampled species trees by \[ \frac{\widehat{\Pr}(\bm{G}_j)}{\Pr(\bm{G}_j)}\beta\]
+        \end{compactenum}
+\end{compactenum}
+
+\myNewSlide
+\section*{BEST -- conclusions}
+\large
+\begin{compactenum}
+    \item very expensive computationally (long MrBayes runs are needed)
+    \item should correctly deal with the variability in gene tree caused by the coalescent process.
+\end{compactenum}
+
+
+\myNewSlide
+\section*{$^{\ast}$BEAST overview}
+Goal: approximate $\Pr(S|X)$
+\begin{eqnarray*}
+\Pr(S|X) & \propto & \Pr(X|S)\Pr(S) \\
+ & = & \int\Pr(X|G)\Pr(G|S)\Pr(S)dG \\
+ & = & \int\int\Pr(X|G)\Pr(G|S,\bm{\theta})\Pr(S)dGd{\bm{\theta}} \\
+ & = & \int\int\int\Pr(X|G,\bm{\Lambda})\Pr(G|S,\bm{\theta})\Pr(S)dGd{\bm{\theta}}d\bm{\Lambda} \\
+\bm{\theta} & = & \{N_1, N_2, \ldots, \} \\
+\bm{\Lambda} & = & \{\kappa, \bm{\pi}, \ldots\} \\
+\end{eqnarray*}
+
+
+\myNewSlide
+\section*{$\Pr(S)$ from speciation model}
+\begin{picture}(0,0)(0,0)
+    \put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1SpT.pdf}}}
+    \put(20,-122){$S$}
+\end{picture}
+
+\myNewSlide
+\section*{$\Pr(G|S)$}
+\begin{picture}(0,0)(0,0)
+    \put(-20,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1SpT.pdf}}}
+    \put(120,-50){\makebox(0,0)[l]{\includegraphics[scale=1.1]{../images/heledDFig1GT.pdf}}}
+    \put(20,-122){$S$}
+    \put(150,-120){$G$}
+\end{picture}
+
+\myNewSlide
+\section*{Gene tree in a species tree w/ variable population size}
+\begin{picture}(0,0)(0,0)
+    \put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Mod.pdf}}}
+    \put(-20,-140){{\tiny Figure modified from Heled and Drummond 2010}}
+    \put(33,-132){{\color{black}\small A}}
+    \put(65,-132){{\color{black}\small C}}
+    \put(120,-132){{\color{black}\small B}}
+    \put(23,-122){{\color{grey}\small A1}}
+    \put(33,-122){{\color{grey}\small A2}}
+    \put(43,-122){{\color{grey}\small A3}}
+    \put(53,-122){{\color{grey}\small C1}}
+    \put(68,-122){{\color{grey}\small C2}}
+    \put(83,-122){{\color{grey}\small C3}}
+    \put(103,-122){{\color{grey}\small B2}}
+    \put(125,-122){{\color{grey}\small B1}}
+    \put(148,-122){{\color{grey}\small B3}}
+    \put(150,-50){$\Pr(G|S) = \prod_i^{b}\Pr(G_i|S_i)$}
+    \put(-20,-50){$G$ in grey}
+    \put(-20,-60){$S$ in black}
+\end{picture}
+
+\myNewSlide
+\section*{In Species A}
+\begin{picture}(0,0)(0,0)
+    \put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modparta.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{In Species C}
+\begin{picture}(0,0)(0,0)
+    \put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartc.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{In Species B}
+\begin{picture}(0,0)(0,0)
+    \put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartb.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{In ancestor of AC}
+\begin{picture}(0,0)(0,0)
+    \put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartac.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{In ancestor of ACB}
+\begin{picture}(0,0)(0,0)
+    \put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Modpartabc.pdf}}}
+\end{picture}
+
+\myNewSlide
+\section*{Gene tree in a species tree w/ variable population size}
+\begin{picture}(0,0)(0,0)
+    \put(-0,-50){\makebox(0,0)[l]{\includegraphics[scale=1.5]{../images/heledDFig1Mod.pdf}}}
+    \put(-20,-140){{\tiny Figure modified from Heled and Drummond 2010}}
+    \put(33,-132){{\color{black}\small A}}
+    \put(65,-132){{\color{black}\small C}}
+    \put(120,-132){{\color{black}\small B}}
+    \put(23,-122){{\color{grey}\small A1}}
+    \put(33,-122){{\color{grey}\small A2}}
+    \put(43,-122){{\color{grey}\small A3}}
+    \put(53,-122){{\color{grey}\small C1}}
+    \put(68,-122){{\color{grey}\small C2}}
+    \put(83,-122){{\color{grey}\small C3}}
+    \put(103,-122){{\color{grey}\small B2}}
+    \put(125,-122){{\color{grey}\small B1}}
+    \put(148,-122){{\color{grey}\small B3}}
+    \put(150,-50){$\Pr(G|S) = \prod_i^{b}\Pr(G_i|S_i)$}
+    \put(-20,-50){$G$ in grey}
+    \put(-20,-60){$S$ in black}
+\end{picture}
+
+\myNewSlide
+\section*{MCMC update to gene tree}
+\begin{picture}(0,0)(0,0)
+    \put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+    \put(105,-70){\Huge$\rightarrow$}
+    \put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModGene1.pdf}}}
+    \put(15,-135){\large Changing $G$ affects $\Pr(X|G,\bm{\Lambda})$ and $\Pr(G|S,\bm{\theta})$}
+\end{picture}
+
+\myNewSlide
+\section*{Another MCMC update to gene tree}
+\begin{picture}(0,0)(0,0)
+    \put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+    \put(105,-70){\Huge$\rightarrow$}
+    \put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModGene2.pdf}}}
+    \put(-15,-135){\large Some changes to $G$ are incompatible with $S$ (and will be rejected).}
+\end{picture}
+
+
+\myNewSlide
+\section*{MCMC update to species tree}
+\begin{picture}(0,0)(0,0)
+    \put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+    \put(105,-70){\Huge$\rightarrow$}
+    \put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModSp1.pdf}}}
+    \put(-20,-135){\large Changing $S$ affects $\Pr(G|S,\bm{\theta})$, but not $\Pr(X|G,\bm{\Lambda})$.}
+    \put(-20,-145){\large Note that the red dots are ``flags'' for when a lineage enters a new species;}
+    \put(-20,-155){\large the heights are determined by the species tree.}
+\end{picture}
+
+\myNewSlide
+\section*{Another MCMC update to species tree}
+\begin{picture}(0,0)(0,0)
+    \put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+    \put(105,-70){\Huge$\rightarrow$}
+    \put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModSp2.pdf}}}
+    \put(-15,-135){\large Some changes to $S$ are incompatible with $C$ (and will be rejected).}
+\end{picture}
+
+\myNewSlide
+\section*{An MCMC update to the population size}
+\begin{picture}(0,0)(0,0)
+    \put(-43,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1Mod.pdf}}}
+    \put(105,-70){\Huge$\rightarrow$}
+    \put(110,-50){\makebox(0,0)[l]{\includegraphics[scale=1.3]{../images/heledDFig1ModPopSize.pdf}}}
+    \put(-15,-135){\large $N_e \in \bm{\theta}$, so changing $N_e$ affects $\Pr(G|S,\bm{\theta})$, but not $\Pr(X|G,\bm{\Lambda})$.}
+\end{picture}
+
+
+\myNewSlide
+\section*{Multiple gene tree in a species tree w/ variable population size}
+\begin{picture}(0,0)(0,0)
+    \put(-0,-130){\makebox(0,0)[l]{\includegraphics[scale=1.2]{../images/HeledD2010Fig9.pdf}}}
+    \put(-20,-120){{\tiny Figure from modified Heled and Drummond 2010}}
+\end{picture}
+
+\myNewSlide
+\section*{$^{\ast}$BEST}
+Similar model to BEST, but {\em much} more efficient implementation.
+
+Both attempt to sample the posterior distribution of species trees, gene trees, demographic parameter values and mutational parameter values.
+
+Both will be very sensitive to migration, but they represent the state-of-the-art for estimating species trees from gene trees.
