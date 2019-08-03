@@ -101,53 +101,52 @@ For $N$ taxa:
 	\item Neighbor-joining is star decomposition under the balanced minimum evolution criterion
 \end{itemize}
 
-\myNewSlide
-\begin{picture}(0,0)(0,0)
-\put(-30,-90){\makebox(0,0)[l]{\includegraphics{../images/first_100_num_first_step_star_decomp.pdf}}}
-\end{picture}
+% \myNewSlide
+% \begin{picture}(0,0)(0,0)
+% \put(-30,-90){\makebox(0,0)[l]{\includegraphics{../images/first_100_num_first_step_star_decomp.pdf}}}
+% \end{picture}
 
-\myNewSlide
+% % \myNewSlide
+% % \begin{picture}(0,0)(0,0)
+% % \put(-30,-90){\makebox(0,0)[l]{\includegraphics{../images/first_100_num_star_decomp.pdf}}}
+% % \end{picture}
 
-\begin{picture}(0,0)(0,0)
-\put(-30,-90){\makebox(0,0)[l]{\includegraphics{../images/first_100_num_star_decomp.pdf}}}
-\end{picture}
+% \myNewSlide
 
-\myNewSlide
+% \begin{picture}(0,0)(0,0)
+% \put(-30,-90){\makebox(0,0)[l]{\includegraphics{../images/num_star_decomp_loglog.pdf}}}
+% \end{picture}
 
-\begin{picture}(0,0)(0,0)
-\put(-30,-90){\makebox(0,0)[l]{\includegraphics{../images/num_star_decomp_loglog.pdf}}}
-\end{picture}
-
-\myNewSlide
-\section*{Star decomposition}Number of trees scored for $N$ taxa (if we decrease $i$ in the summation):
-	\begin{eqnarray*}
-	\#\mbox{ trees scored}	& = & 3 \sum_{i=N}^{5} {i \choose 2} \\
-		& = & 3\sum_{i=N}^{5} \frac{i(i-1)}{2} 
-	\end{eqnarray*}
-		Thus, star decomposition is $O(N^3)$. 
+% \myNewSlide
+% \section*{Star decomposition}Number of trees scored for $N$ taxa (if we decrease $i$ in the summation):
+% 	\begin{eqnarray*}
+% 	\#\mbox{ trees scored}	& = & 3 \sum_{i=N}^{5} {i \choose 2} \\
+% 		& = & 3\sum_{i=N}^{5} \frac{i(i-1)}{2} 
+% 	\end{eqnarray*}
+% 		Thus, star decomposition is $O(N^3)$. 
 		
-		For N=10:
-		\[158 = 45 + 36 + 28 + 21 + 15 + 10 + 3\]
+% 		For N=10:
+% 		\[158 = 45 + 36 + 28 + 21 + 15 + 10 + 3\]
 
-\myNewSlide
-\section*{Star decomposition can fail even when there is no homoplasy}
-\begin{center}\begin{table}[htdp]
-\begin{center}
-\begin{tabular}{|c|c|}
-\hline
-A &	0000{\color{red}00} \\
-B &	0000{\color{red} 00} \\
-C &	1100{\color{red} 00} \\
-D &	1100{\color{red} 00} \\
-E &	1010{\color{red} 11} \\
-F &	1011{\color{red} 11} \\ 
-G &	1011{\color{red} ??} \\ 
-\hline
-\end{tabular}
-\end{center}
-\end{table}%
-\end{center}
-Star decomposition (under parsimony) will join E and F in the first step based on characters 5 and 6 (shown in red), even though (((A,B),(C,D)),E,(F,G)) shows no homoplasy.
+% \myNewSlide
+% \section*{Star decomposition can fail even when there is no homoplasy}
+% \begin{center}\begin{table}[htdp]
+% \begin{center}
+% \begin{tabular}{|c|c|}
+% \hline
+% A &	0000{\color{red}00} \\
+% B &	0000{\color{red} 00} \\
+% C &	1100{\color{red} 00} \\
+% D &	1100{\color{red} 00} \\
+% E &	1010{\color{red} 11} \\
+% F &	1011{\color{red} 11} \\ 
+% G &	1011{\color{red} ??} \\ 
+% \hline
+% \end{tabular}
+% \end{center}
+% \end{table}%
+% \end{center}
+% Star decomposition (under parsimony) will join E and F in the first step based on characters 5 and 6 (shown in red), even though (((A,B),(C,D)),E,(F,G)) shows no homoplasy.
 \myNewSlide
 \section*{Stepwise addition}
 \begin{picture}(0,0)(0,0)
@@ -166,79 +165,83 @@ Star decomposition (under parsimony) will join E and F in the first step based o
 \put(-10,-50){\makebox(0,0)[l]{\includegraphics{../images/stepwise3.pdf}}}
 \end{picture}
 
+% \myNewSlide
+% \section*{Stepwise addition}
+% \begin{itemize}
+% 	\item Greedy, but can introduce a new taxon on the path between taxa that have already been joined.
+% 	\item The tree can depend on the input order of the taxa
+% 	\item Number of trees scored for $N$ taxa :
+% 	\begin{eqnarray*}
+% 	 \#\mbox{ trees scored}	& = & \sum_{i=3}^{N-1} {(2i-3)} \\
+% 		& = & (N-1)(N-3) 
+% 	\end{eqnarray*}
+% 		Thus, stepwise addition is $O(N^2)$. For N=10:
+% 		\[63 = 3 + 5 + 7 + 9 + 11 + 13 + 15\]
+% \end{itemize}
+
+
+% \myNewSlide
+% \section*{Branch and bound}
+% \begin{picture}(0,0)(0,0)
+% \put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-1.pdf}}}
+% \put(80, 0){\normalsize Construct and score an initial estimate of the tree}
+% \end{picture}
+
+% \myNewSlide
+% \section*{Branch and bound}
+% \begin{picture}(0,0)(0,0)
+% \put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-2.pdf}}}
+% \put(40, -15){\normalsize Initial tree}
+% \put(80, 0){\normalsize Start building a new tree of three taxa}
+% \end{picture}
+
+% \myNewSlide
+% \section*{Branch and bound}
+% \begin{picture}(0,0)(0,0)
+% \put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-2-5.pdf}}}
+% \put(40, -15){\normalsize Initial tree}
+% \put(80, 0){\normalsize Consider all positions for the next taxon}
+% \end{picture}
+
+% \myNewSlide
+% \section*{Branch and bound}
+% \begin{picture}(0,0)(0,0)
+% \put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-3.pdf}}}
+% \put(40, -15){\normalsize Initial tree}
+% \put(80, 0){\normalsize Score all of these trees}
+% \end{picture}
+
+% \myNewSlide
+% \section*{Branch and bound}
+% \begin{picture}(0,0)(0,0)
+% \put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-4.pdf}}}
+% \put(40, -15){\normalsize Initial tree}
+% \put(70, 0){\normalsize Consider adding the next taxon to all viable backbone trees}
+% \put(105, -41){\normalsize Reject for exceeding}
+% \put(105, -51){\normalsize the bound}
+% \put(105, -80){\normalsize Reject for exceeding}
+% \put(105, -90){\normalsize the bound}
+% \end{picture}
+
+% \myNewSlide
+% \section*{Branch and bound}
+% \begin{itemize}
+% 	\item Guaranteed to find all of the optimal trees.
+% 	\item Relies on the fact that the score always gets worse as you add taxa.
+% 	\item Can be as fast as stepwise addition (if you have lots of very clean data).
+% 	\item Can be as slow as an exhaustive search (if you have little data and/or data with lots of conflict).
+% 	\item Bound can be tightened by adding a lower bound on the number of steps to be added when you add more taxa to the tree (based on new forms of character conflict in unattached taxa).
+% \end{itemize}
+
 \myNewSlide
-\section*{Stepwise addition}
-\begin{itemize}
-	\item Greedy, but can introduce a new taxon on the path between taxa that have already been joined.
-	\item The tree can depend on the input order of the taxa
-	\item Number of trees scored for $N$ taxa :
-	\begin{eqnarray*}
-	 \#\mbox{ trees scored}	& = & \sum_{i=3}^{N-1} {(2i-3)} \\
-		& = & (N-1)(N-3) 
-	\end{eqnarray*}
-		Thus, stepwise addition is $O(N^2)$. For N=10:
-		\[63 = 3 + 5 + 7 + 9 + 11 + 13 + 15\]
-\end{itemize}
+\section*{Heuristic hill-climbing}
+Problem:
+\begin{compactitem}
+   \item Stepwise addition and star decomp. may not return the best tree
+   \item exhaustive searching is infeasible.
+\end{compactitem}
 
-
-\myNewSlide
-\section*{Branch and bound}
-\begin{picture}(0,0)(0,0)
-\put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-1.pdf}}}
-\put(80, 0){\normalsize Construct and score an initial estimate of the tree}
-\end{picture}
-
-\myNewSlide
-\section*{Branch and bound}
-\begin{picture}(0,0)(0,0)
-\put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-2.pdf}}}
-\put(40, -15){\normalsize Initial tree}
-\put(80, 0){\normalsize Start building a new tree of three taxa}
-\end{picture}
-
-\myNewSlide
-\section*{Branch and bound}
-\begin{picture}(0,0)(0,0)
-\put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-2-5.pdf}}}
-\put(40, -15){\normalsize Initial tree}
-\put(80, 0){\normalsize Consider all positions for the next taxon}
-\end{picture}
-
-\myNewSlide
-\section*{Branch and bound}
-\begin{picture}(0,0)(0,0)
-\put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-3.pdf}}}
-\put(40, -15){\normalsize Initial tree}
-\put(80, 0){\normalsize Score all of these trees}
-\end{picture}
-
-\myNewSlide
-\section*{Branch and bound}
-\begin{picture}(0,0)(0,0)
-\put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/bandb-4.pdf}}}
-\put(40, -15){\normalsize Initial tree}
-\put(70, 0){\normalsize Consider adding the next taxon to all viable backbone trees}
-\put(105, -41){\normalsize Reject for exceeding}
-\put(105, -51){\normalsize the bound}
-\put(105, -80){\normalsize Reject for exceeding}
-\put(105, -90){\normalsize the bound}
-\end{picture}
-
-\myNewSlide
-\section*{Branch and bound}
-\begin{itemize}
-	\item Guaranteed to find all of the optimal trees.
-	\item Relies on the fact that the score always gets worse as you add taxa.
-	\item Can be as fast as stepwise addition (if you have lots of very clean data).
-	\item Can be as slow as an exhaustive search (if you have little data and/or data with lots of conflict).
-	\item Bound can be tightened by adding a lower bound on the number of steps to be added when you add more taxa to the tree (based on new forms of character conflict in unattached taxa).
-\end{itemize}
-
-\myNewSlide
-\section*{Trying to improve a tree}
-Neither stepwise addition is guaranteed to return the best tree(s), but branch-and-bound (or exhaustive searching) is frequently infeasible.
-
-Heuristic hill-climbing searches can work quite well:
+hill-climbing:
 \begin{compactenum}
 	\item Start with a tree
 	\item Score the tree
@@ -272,11 +275,13 @@ The most common way to explore the neighborhood of a tree is to swap the branche
 \put(-30,-50){\makebox(0,0)[l]{\includegraphics{../images/schoenberg.pdf}}}
 \end{picture}
 
-\myNewSlide
-\section*{Tree ``Islands'' possible}
-An $Op-L$ tree island \citep[{\em sensu}][]{Maddison1991}:
-A set of trees with score $\leq L$ that are connected to each other by $Op$ operations such that you can get from any tree in the set to any other tree by repeated $Op$ changes and all intermediate trees along the path are also members of the set.
+% \myNewSlide
+% \section*{Tree ``Islands'' possible}
+% An $Op-L$ tree island {\em sensu} Maddison( 1991):
+% A set of trees with score $\leq L$ that are connected to each other by $Op$ operations such that you can get from any tree in the set to any other tree by repeated $Op$ changes and all intermediate trees along the path are also members of the set.
 
+\myNewSlide
+\section*{Tree ``Islands'' (Maddison, 1991) are possible}
 The following Schoenberg graph shows the scores of the 15 trees on the following dataset (contrived data by POL):
 \begin{center}\begin{verbatim}
 A	ACGCAGGT
@@ -292,45 +297,33 @@ E	GTTCTGAG
 \put(-30,-50){\makebox(0,0)[l]{\includegraphics{../images/schoenberg_scored.pdf}}}
 \end{picture}
 
-\myNewSlide
-\section*{Schoenberg graph showing the single NNI-15 island}
-\begin{picture}(0,0)(0,0)
-\put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/schoenberg_15_island.pdf}}}
-\end{picture}
+% \myNewSlide
+% \section*{Schoenberg graph showing the single NNI-15 island}
+% \begin{picture}(0,0)(0,0)
+% \put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/schoenberg_15_island.pdf}}}
+% \end{picture}
 
-\myNewSlide
-\section*{Schoenberg graph showing the single NNI-14 island}
-\begin{picture}(0,0)(0,0)
-\put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/schoenberg_14_island.pdf}}}
-\end{picture}
+% \myNewSlide
+% \section*{Schoenberg graph showing the single NNI-14 island}
+% \begin{picture}(0,0)(0,0)
+% \put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/schoenberg_14_island.pdf}}}
+% \end{picture}
 
-\myNewSlide
-\section*{Schoenberg graph showing the both NNI-13 islands}
-\begin{picture}(0,0)(0,0)
-\put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/schoenberg_13_island.pdf}}}
-\end{picture}
+% \myNewSlide
+% \section*{Schoenberg graph showing the both NNI-13 islands}
+% \begin{picture}(0,0)(0,0)
+% \put(-10,-70){\makebox(0,0)[l]{\includegraphics{../images/schoenberg_13_island.pdf}}}
+% \end{picture}
 
 \myNewSlide
 \section*{Tree Islands implications}
+\Large
 \begin{compactenum}
-	\item Islands can be larger than 1 tree -- so we must consider ties if we want to find all trees that optimize the score.
-	\item There can be more than 1 island for good scores -- so even swapping to completion on all optimal trees found in a search is guaranteed to succeed.
+	\item Islands can be larger than 1 tree -- so we must consider ties if we want to find all optimal trees.
+	\item There can be more than 1 island for good scores: swapping to completion on all optimal trees found in a search is not guaranteed to succeed.
 	\item The delimitation of an island depends on tree changing operation used.
 \end{compactenum}
-
-\myNewSlide
-\section*{Heuristics explore ``Tree Space''}
-\begin{picture}(0,0)(0,0)
-\put(-10,-50){\makebox(0,0)[l]{\includegraphics{../images/landscape.pdf}}}
-\put(125, -20){\normalsize Most commonly used methods}
-\put(125, -30){\normalsize are ``hill-climbers.''}
-\put(125, -50){\normalsize Multiple optima found by}
-\put(125, -60){\normalsize repeating searches from}
-\put(125, -70){\normalsize different origins.}
-\put(125, -90){\normalsize Severity of the problem}
-\put(125, -100){\normalsize of multiple optima}
-\put(125, -110){\normalsize depends on step size.}
-\end{picture}
+\large
 
 
 \myNewSlide
@@ -356,188 +349,44 @@ E	GTTCTGAG
 \end{picture}
 
 \myNewSlide
-\section*{Many other heuristic strategies proposed}
-\begin{itemize}
-	\item Swapping need not include {\em all} neighbors (RAxML, {\tt reconlimit} in PAUP*)
-	\item ``lazy'' scoring of swaps (RAxML)
-	\item Ignoring (at some stage) interactions between different branch swaps (PHYML)
-	\item Stochastic searches
-	\begin{itemize}
-		\item Genetic algorithms (GAML, MetaPIGA, GARLI)
-		\item Simulated annealing
-	\end{itemize}
-	\item Divide and conquer methods (the sectortial searching of Goloboff, 1999; Rec-I-DCM3 Roshan {2004})
-	\item Data perturbation methods ({\em e.g.} Kevin Nixon's  ``ratchet'')
-\end{itemize}
-
-\myNewSlide
+\section*{Heuristics explore ``Tree Space''}
 \begin{picture}(0,0)(0,0)
-\put(-30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/gaVariablePop.pdf}}}
+\put(-10,-50){\makebox(0,0)[l]{\includegraphics{../images/landscape.pdf}}}
+\put(125, -20){\normalsize Many commonly-used methods}
+\put(125, -30){\normalsize are ``hill-climbers.''}
+\put(125, -50){\normalsize Multiple optima found by}
+\put(125, -60){\normalsize repeating searches from}
+\put(125, -70){\normalsize different origins.}
+\put(125, -90){\normalsize Severity of the problem}
+\put(125, -100){\normalsize of multiple optima}
+\put(125, -110){\normalsize depends on step size.}
 \end{picture}
 
 \myNewSlide
-\begin{picture}(0,0)(0,0)
-\put(-30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/gaScored.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)
-\put(-30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/gaFitness.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)
-\put(-30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/gaSelection.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)
-\put(-30,-80){\makebox(0,0)[l]{\includegraphics[scale=1.0]{../images/gaMutation.pdf}}}
-\end{picture}
+\section*{Branch-swapping tradeoff}
+\Large
+Using more drastic moves (such as TBR instead of NNI):
+\begin{compactitem}
+	\item[{\bf +}] you can jump between ``hills''
+	\item[{\bf --}] many neighboring trees to score
+	\item[{\bf --}] if your current tree is good, high \% of neighbors have much worse likelihood.
+\end{compactenum}
+\large
 
 
 \myNewSlide
-\section*{Divide-and-Conquer Methods}
-The basic outline of a phylogenetic  Divide-and-Conquer approach is:
-\begin{enumerate}
-	\item {\bf Decompose} a starting tree into subsets of the taxa.
-	\item {\bf Improve} the tree for each of the subsets of taxa.
-	\item {\bf Merge} the resulting trees into a tree for the full set of taxa.
-	\item {\bf Refine} the full tree (it will often have polytomies).
-	\item {\bf Improve} the full tree using a simple (and fast) heuristic.
-\end{enumerate}
-Examples include Rec-I-DCM3 by Roshan {\em et al.}(2004).
-See Goloboff and Pol ({\em Systematic Biology}, 2007) for a contrasting viewpoint about the relative efficiency of Rec-I-DCM3 compared to heuristics implemented in TNT.
+\section*{Nested optimizaton}
+Recall that we have to optimize parameters for each tree:
 
-\myNewSlide
-\section*{Step 1: Leaf set decomposition}
-In Rec-I-DCM3 Roshan {\em et al.} (2004):
-\begin{itemize}
-	\item A tree is divided (``decomposed'') into 4 trees around a central edge.  The edge is chosen such that it comes as close as possible to dividing the taxa into 2 equally-sized groups.
-	\item The short quartet (taxa closest to this edge in each of the 4 directions) is selected.
-	\item 4 sub-problems are produced.  Each contains 1 subtree connected to the central edge and all leaves that are a part of the short quartet.
-\end{itemize}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(40,0){\makebox(-0,-30)[l]{\includegraphics[scale=1]{../images/dcmTree.pdf}}}
-\end{picture}
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(40,0){\makebox(-0,-30)[l]{\includegraphics[scale=1]{../images/centralEdge.pdf}}}
-\end{picture}
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(40,0){\makebox(-0,-30)[l]{\includegraphics[scale=1]{../images/shortQuartet.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(40,0){\makebox(-0,-30)[l]{\includegraphics[scale=1]{../images/decomp0.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(40,0){\makebox(-0,-30)[l]{\includegraphics[scale=1]{../images/decomp1.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(40,0){\makebox(-0,-30)[l]{\includegraphics[scale=1]{../images/decomp2.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(40,0){\makebox(-0,-30)[l]{\includegraphics[scale=1]{../images/decomp3.pdf}}}
-\end{picture}
-
-\myNewSlide
-\section*{Step 2: Tree improvement}
-Simply a tree search on a smaller tree
-
-DCM is a ``meta-method'' that can be used with almost any type of large-scale tree inference. 
-
-\myNewSlide
-\section*{Step 3: Tree Merge (Supertree analysis)}
-The step of ``glueing'' the trees for subproblems together is a supertree analysis.  
-
-
-If there is no conflict between the input trees, the problem is trivial.
-
-Roshan et recommend using a Strict Consensus Merger - collapse the minimal number of edges required to make 2 trees display the same tree (for the leaves that they have in common).
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(0,0){\makebox(30,-160)[l]{\includegraphics[scale=0.8]{../images/scm.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(0,0)(0,0)  \put(0,0){\makebox(30,-160)[l]{\includegraphics[scale=0.8]{../images/scmResult.pdf}}}
-\end{picture}
+\url{http://phylo.bio.ku.edu/mephytis/brlen-opt.html}
 
 
 \myNewSlide
-\begin{picture}(0,0)(0,0)  \put(0,0){\makebox(-0,-150)[l]{\includegraphics[scale=0.9]{../images/scmCollision.pdf}}}
-\end{picture}
+\section*{Need to get branch support}
+Recall that bootstrapping is even more expensive:
 
-\myNewSlide
-\section*{Step 4: Tree Refine}
-Optional step - some tree searching methods require binary trees
-
-{\bf \large Step 5: Tree Improve}\\\rule[0.7\baselineskip]{\textwidth}{0.5mm}\\
-Another ``base method''  tree search (but with a large set of taxa, so the seach often has to be less thorough)
-
-\vskip3cm
-
-\myNewSlide
-\begin{picture}(10,20)(10,20)  \put(-40,0){\makebox(-0,-150)[l]{\includegraphics[scale=1.75]{../images/schematic0.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(10,20)(10,20)  \put(-40,0){\makebox(-0,-150)[l]{\includegraphics[scale=1.75]{../images/schematic1.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(10,20)(10,20)  \put(-40,0){\makebox(-0,-150)[l]{\includegraphics[scale=1.75]{../images/schematic2.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(10,20)(10,20)  \put(-40,0){\makebox(-0,-150)[l]{\includegraphics[scale=1.75]{../images/schematic3.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(10,20)(10,20)  \put(-40,0){\makebox(-0,-150)[l]{\includegraphics[scale=1.75]{../images/schematic4.pdf}}}
-\end{picture}
-
-\myNewSlide
-\begin{picture}(10,20)(10,20)  \put(-40,0){\makebox(-0,-150)[l]{\includegraphics[scale=1.75]{../images/schematic5.pdf}}}
-\end{picture}
-
-\myNewSlide
-\section*{Recursion}
-A {\em recursive} algorithm is one that calls (invokes) itself.
-
-A definition of the function to compute the factorial is the classic example:
-\begin{verbatim}
-def factorial(n):
-    if n == 1:
-        return 1
-    else:
-        return n * factorial(n - 1)
-\end{verbatim}
-
-Recursion is often used when it is easy to perform a few tasks, but then you are faced with the same problem you originally faced, but on a smaller scale.\\ 
-Recursive DCM3 arises from the recognition that, when we break our full set of taxa into subsets some of them may {\em still} be too large for thorough searching.  We can use another level of DCM to break them down into smaller problems. 
+\url{http://phylo.bio.ku.edu/mephytis/boot-sample.html}
 
 
-\myNewSlide
-\begin{picture}(10,20)(10,20)  \put(-40,0){\makebox(-0,-150)[l]{\includegraphics[scale=1.75]{../images/recSchematic.pdf}}}
-\end{picture}
+\end{document}
 
-
-\myNewSlide
-\section*{Iteration }
-Because the decompositions are sensitive to the starting tree, we may do a better job decomposing the tree into closely related subtrees if we have a better estimate of the tree. 
-
-So we can simply repeat the whole recursive DCM process
-
-\myNewSlide
-\begin{picture}(-10,20)(-10,20)  \put(-40,0){\makebox(-0,-150)[l]{\includegraphics[scale=1.]{../images/recIterSchematic.pdf}}}
-\end{picture}
-
-\myNewSlide
-\bibliography{phylo}
-\end{document}     
-     
